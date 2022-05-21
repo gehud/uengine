@@ -1,15 +1,15 @@
-workspace "uengine"
+workspace "UEngine"
 	configurations {
-		"debug",
-		"release"
+		"Debug",
+		"Release"
 	}
 	architecture "x64"
 	language "C++"
-	startproject "client"
+	startproject "Client"
 
 output_dir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "core"
 include "client"
-group "dependencies"
+group "Dependencies"
 	include "core/dependencies/glfw"

@@ -1,4 +1,4 @@
-project "core"
+project "Core"
 	kind "StaticLib"
 	systemversion "latest"
 	cppdialect "C++17"
@@ -20,7 +20,7 @@ project "core"
 	}
 
 	links {
-		"glfw"
+		"GLFW"
 	}
 
 	filter "system:windows"
@@ -28,14 +28,14 @@ project "core"
 			"UE_WINDOWS"
 		}
 
-	filter "configurations:debug"
+	filter "configurations:Debug"
 		defines {
 			"UE_DEBUG"
 		}
 		runtime "Debug"
 		symbols "on"
 	
-	filter "configurations:release"
+	filter "configurations:Release"
 		defines {
 			"UE_RELEASE"
 		}

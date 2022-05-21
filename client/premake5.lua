@@ -1,4 +1,4 @@
-project "client"
+project "Client"
 	kind "ConsoleApp"
 	systemversion "latest"
 	cppdialect "C++17"
@@ -21,7 +21,7 @@ project "client"
 	}
 
 	links {
-		"core"
+		"Core"
 	}
 
     filter "system:windows"
@@ -29,14 +29,14 @@ project "client"
 			"UE_WINDOWS"
 		}
 
-	filter "configurations:debug"
+	filter "configurations:Debug"
 		defines {
 			"UE_DEBUG"
 		}
 		runtime "Debug"
 		symbols "on"
 	
-	filter "configurations:release"
+	filter "configurations:Release"
 		defines {
 			"UE_RELEASE"
 		}
