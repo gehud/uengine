@@ -11,3 +11,5 @@ output_dir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "core"
 include "client"
+group "dependencies"
+	include "core/dependencies/glfw"

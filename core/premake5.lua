@@ -15,7 +15,12 @@ project "core"
 	includedirs {
 		"include",
 		"src",
-		"dependencies/spdlog/include"
+		"dependencies/spdlog/include",
+		"dependencies/glfw/include"
+	}
+
+	links {
+		"glfw"
 	}
 
 	filter "system:windows"
