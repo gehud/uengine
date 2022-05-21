@@ -16,6 +16,7 @@ project "client"
 		"include",
 		"src",
 		"../core/include",
+		"../core/dependencies/spdlog/include"
 	}
 
 	links {

@@ -14,7 +14,8 @@ project "core"
 
 	includedirs {
 		"include",
-		"src"
+		"src",
+		"dependencies/spdlog/include"
 	}
 
 	filter "system:windows"
