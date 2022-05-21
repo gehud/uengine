@@ -17,7 +17,8 @@ project "Client"
 		"src",
 		"../core/include",
 		"../core/dependencies/spdlog/include",
-		"../core/dependencies/glfw/include"
+		"../core/dependencies/glfw/include",
+		"../core/dependencies/glad/include"
 	}
 
 	links {

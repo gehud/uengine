@@ -9,6 +9,6 @@ class client_application : public ue::application
 public:
 	client_application() 
 	{
-
+		
 	}
 };

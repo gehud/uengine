@@ -2,6 +2,8 @@
 
 #include "uengine/log.h"
 
+#include <glad/glad.h>
+
 namespace ue 
 {
 	application::application() : _is_runing(true)
@@ -21,6 +23,8 @@ namespace ue
 	{
 		while (_is_runing)
 		{
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
 			_window->on_update();
 		}
 	}

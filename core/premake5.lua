@@ -16,11 +16,17 @@ project "Core"
 		"include",
 		"src",
 		"dependencies/spdlog/include",
-		"dependencies/glfw/include"
+		"dependencies/glfw/include",
+		"dependencies/glad/include"
 	}
 
 	links {
-		"GLFW"
+		"GLFW",
+		"Glad"
+	}
+
+	defines {
+		"GLFW_INCLUDE_NONE"
 	}
 
 	filter "system:windows"
