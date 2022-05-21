@@ -8,6 +8,7 @@ namespace ue
 	{
 		log::init();
 		_window = window::create(window_properties("UEngine", 1280, 720));
+		_window->on_close += new lambda<void>([this]() { close(); });
 		UE_CORE_INFO("Welcome to the UEngine!");
 	}
 

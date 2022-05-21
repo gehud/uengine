@@ -12,7 +12,7 @@ namespace ue
 		const char* _title;
 		unsigned int _width, _height;
 		GLFWwindow* _window;
-		bool _is_v_sync = false;
+		bool _is_vsync = false;
 	public:
 		windows_window(const window_properties& properties);
 
@@ -22,9 +22,9 @@ namespace ue
 
 		unsigned int get_height() const override { return _height; }
 
-		bool is_v_sync() const override { return _is_v_sync; }
+		bool is_vsync() const override { return _is_vsync; }
 
-		void set_v_sync(bool value) override;
+		void set_vsync(bool value) override;
 
 		void on_update() const override;
 

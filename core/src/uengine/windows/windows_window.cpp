@@ -31,6 +31,20 @@ namespace ue
 		glfwMakeContextCurrent(_window);
 
 		glfwSetWindowUserPointer(_window, this);
+
+		glfwSetWindowSizeCallback(_window, [](GLFWwindow* window, int width, int height) 
+		{
+			windows_window* this_window = static_cast<windows_window*>(glfwGetWindowUserPointer(window));
+			this_window->_width = static_cast<unsigned int>(width);
+			this_window->_height = static_cast<unsigned int>(height);
+			this_window->invoke_resize_event(this_window->_width, this_window->_height);
+		});
+
+		glfwSetWindowCloseCallback(_window, [](GLFWwindow* window) 
+		{
+			windows_window* this_window = static_cast<windows_window*>(glfwGetWindowUserPointer(window));
+			this_window->invoke_close_event();
+		});
 	}
 
 	windows_window::~windows_window()
@@ -38,10 +52,10 @@ namespace ue
 		glfwDestroyWindow(_window);
 	}
 
-	void windows_window::set_v_sync(bool value)
+	void windows_window::set_vsync(bool value)
 	{
-		_is_v_sync = value;
-		if (_is_v_sync)
+		_is_vsync = value;
+		if (_is_vsync)
 			glfwSwapInterval(1);
 		else
 			glfwSwapInterval(0);
