@@ -1,12 +1,11 @@
 #pragma once
 
 #include <vector>
-#include <utility>
 #include <functional>
 
 namespace ue 
 {
-	template<typename treturn, typename... targs>
+	template<typename treturn = void, typename... targs>
 	struct ifunction 
 	{
 		virtual treturn invoke(const targs&... args) const = 0;
@@ -17,7 +16,7 @@ namespace ue
 		}
 	};
 
-	template<typename treturn, typename... targs>
+	template<typename treturn = void, typename... targs>
 	class function_ptr : public ifunction<treturn, targs...>
 	{
 	private:
@@ -31,7 +30,7 @@ namespace ue
 		}
 	};
 
-	template<typename tclass, typename treturn, typename... targs>
+	template<typename tclass, typename treturn = void, typename... targs>
 	class method_ptr : public ifunction<treturn, targs...> 
 	{
 	private:
@@ -47,7 +46,7 @@ namespace ue
 		}
 	};
 
-	template<typename treturn, typename... targs>
+	template<typename treturn = void, typename... targs>
 	class lambda : public ifunction<treturn, targs...> 
 	{
 	private:
