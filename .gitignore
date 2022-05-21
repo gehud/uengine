@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+# Files
+**.obj
+**.exe
+**.exe.recipe
+**.lib
+**.lib.recipe
+**.ilk
+**.log
+**.tlog
+**.idb
+**.pdb
+GenerateProjects.bat
