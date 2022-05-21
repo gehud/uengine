@@ -6,4 +6,6 @@ class client_application : public ue::application
 {
 public:
 	client_application();
+
+	void foo(const int& a);
 };
