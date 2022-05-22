@@ -19,7 +19,8 @@ project "Client"
 		"../core/dependencies/spdlog/include",
 		"../core/dependencies/glfw/include",
 		"../core/dependencies/glad/include",
-		"../core/dependencies/glm"
+		"../core/dependencies/glm",
+		"../core/dependencies/stb"
 	}
 
 	links {

@@ -8,6 +8,7 @@
 #include <uengine/rendering/vertex_array.h>
 #include <uengine/rendering/vertex_buffer.h>
 #include <uengine/rendering/index_buffer.h>
+#include <uengine/rendering/texture_2d.h>
 #include <uengine/rendering/shader.h>
 #include <uengine/rendering/camera.h>
 
@@ -19,6 +20,7 @@ private:
 	std::shared_ptr<vertex_array> _vertex_array;
 	std::shared_ptr<vertex_buffer> _vertex_buffer;
 	std::shared_ptr<index_buffer> _index_buffer;
+	std::shared_ptr<texture_2d> _texture;
 	std::shared_ptr<shader> _shader;
 	camera _camera;
 public:
@@ -45,7 +47,10 @@ public:
 
 		_index_buffer = index_buffer::create(indices, sizeof(indices) / sizeof(unsigned int), sizeof(unsigned int));
 
-		_shader = shader::create("assets/shaders/color.glsl");
+		_texture = texture_2d::create("assets/textures/checkerboard.png");
+
+		_shader = shader::create("assets/shaders/texture.glsl");
+		_shader->set_int(0, "u_Texture");
 	}
 
 	void on_update() override 
@@ -53,10 +58,11 @@ public:
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
-		_camera.set_position({ 0.0f, 0.0f, -2.0f });
-		_camera.set_rotation({ 0.0f, 15.0f, 0.0f });
+		_camera.set_position({ 0.0f, 0.0f, -1.0f });
+		_camera.set_rotation({ 15.0f, 15.0f, 0.0f });
 
 		_shader->bind();
+		_texture->bind();
 		_shader->set_float4(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "u_Color");
 		_shader->set_mat4(_camera.get_view_projection(), "u_ViewProjection");
 		_vertex_array->bind();
