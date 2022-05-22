@@ -8,17 +8,17 @@ namespace ue
 	{
 		switch (format)
 		{
-			case vertex_attribute_format::bool1:		return GL_BOOL;
-			case vertex_attribute_format::int1:			return GL_INT;
-			case vertex_attribute_format::int2:			return GL_INT;
-			case vertex_attribute_format::int3:			return GL_INT;
-			case vertex_attribute_format::int4:			return GL_INT;
-			case vertex_attribute_format::float1:		return GL_FLOAT;
-			case vertex_attribute_format::float2:		return GL_FLOAT;
-			case vertex_attribute_format::float3:		return GL_FLOAT;
-			case vertex_attribute_format::float4:		return GL_FLOAT;
-			case vertex_attribute_format::matrix3x3:	return GL_FLOAT;
-			case vertex_attribute_format::matrix4x4:	return GL_FLOAT;
+			case vertex_attribute_format::bool1:	return GL_BOOL;
+			case vertex_attribute_format::int1:		return GL_INT;
+			case vertex_attribute_format::int2:		return GL_INT;
+			case vertex_attribute_format::int3:		return GL_INT;
+			case vertex_attribute_format::int4:		return GL_INT;
+			case vertex_attribute_format::float1:	return GL_FLOAT;
+			case vertex_attribute_format::float2:	return GL_FLOAT;
+			case vertex_attribute_format::float3:	return GL_FLOAT;
+			case vertex_attribute_format::float4:	return GL_FLOAT;
+			case vertex_attribute_format::mat3:		return GL_FLOAT;
+			case vertex_attribute_format::mat4:		return GL_FLOAT;
 		}
 	}
 

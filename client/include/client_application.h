@@ -8,6 +8,7 @@
 #include <uengine/rendering/vertex_array.h>
 #include <uengine/rendering/vertex_buffer.h>
 #include <uengine/rendering/index_buffer.h>
+#include <uengine/rendering/shader.h>
 
 using namespace ue;
 
@@ -17,27 +18,32 @@ private:
 	std::shared_ptr<vertex_array> _vertex_array;
 	std::shared_ptr<vertex_buffer> _vertex_buffer;
 	std::shared_ptr<index_buffer> _index_buffer;
+	std::shared_ptr<shader> _shader;
 public:
 	client_application() 
 	{
 		_vertex_array = vertex_array::create();
 		_vertex_array->bind();
 
-		float vertices[3 * 3] = 
+		float vertices[4 * 5] = 
 		{
-			-0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 		};
 
 		_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
 		_vertex_buffer->set_layout({
-			{ vertex_attribute_format::float3, "a_position"}
+			{ vertex_attribute_format::float3, "a_Position"},
+			{ vertex_attribute_format::float2, "a_UV"}
 		});
 
-		unsigned int indices[3] = { 0, 1, 2 };
+		unsigned int indices[6] = { 0, 1, 2, 0, 2, 3 };
 
 		_index_buffer = index_buffer::create(indices, sizeof(indices) / sizeof(unsigned int), sizeof(unsigned int));
+
+		_shader = shader::create("assets/shaders/color.glsl");
 	}
 
 	void on_update() override 
@@ -45,6 +51,8 @@ public:
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
+		_shader->bind();
+		_shader->set_float4(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "u_Color");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}

@@ -17,7 +17,8 @@ project "Core"
 		"src",
 		"dependencies/spdlog/include",
 		"dependencies/glfw/include",
-		"dependencies/glad/include"
+		"dependencies/glad/include",
+		"dependencies/glm"
 	}
 
 	links {

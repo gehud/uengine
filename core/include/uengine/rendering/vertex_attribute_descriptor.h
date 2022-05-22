@@ -15,25 +15,25 @@ namespace ue
 		float2,
 		float3,
 		float4,
-		matrix3x3,
-		matrix4x4,
+		mat3,
+		mat4,
 	};
 
 	static unsigned int get_vertex_attribute_format_size(vertex_attribute_format format) 
 	{
 		switch (format)
 		{
-			case vertex_attribute_format::bool1:		return 1;
-			case vertex_attribute_format::int1:			return 4;
-			case vertex_attribute_format::int2:			return 4 * 2;
-			case vertex_attribute_format::int3:			return 4 * 3;
-			case vertex_attribute_format::int4:			return 4 * 4;
-			case vertex_attribute_format::float1:		return 4;
-			case vertex_attribute_format::float2:		return 4 * 2;
-			case vertex_attribute_format::float3:		return 4 * 3;
-			case vertex_attribute_format::float4:		return 4 * 4;
-			case vertex_attribute_format::matrix3x3:	return 4 * 3 * 3;
-			case vertex_attribute_format::matrix4x4:	return 4 * 4 * 4;
+			case vertex_attribute_format::bool1:	return 1;
+			case vertex_attribute_format::int1:		return 4;
+			case vertex_attribute_format::int2:		return 4 * 2;
+			case vertex_attribute_format::int3:		return 4 * 3;
+			case vertex_attribute_format::int4:		return 4 * 4;
+			case vertex_attribute_format::float1:	return 4;
+			case vertex_attribute_format::float2:	return 4 * 2;
+			case vertex_attribute_format::float3:	return 4 * 3;
+			case vertex_attribute_format::float4:	return 4 * 4;
+			case vertex_attribute_format::mat3:		return 4 * 3 * 3;
+			case vertex_attribute_format::mat4:		return 4 * 4 * 4;
 		}
 	}
 
@@ -41,17 +41,17 @@ namespace ue
 	{
 		switch (format)
 		{
-			case vertex_attribute_format::bool1:		return 1;
-			case vertex_attribute_format::int1:			return 1;
-			case vertex_attribute_format::int2:			return 2;
-			case vertex_attribute_format::int3:			return 3;
-			case vertex_attribute_format::int4:			return 4;
-			case vertex_attribute_format::float1:		return 1;
-			case vertex_attribute_format::float2:		return 2;
-			case vertex_attribute_format::float3:		return 3;
-			case vertex_attribute_format::float4:		return 4;
-			case vertex_attribute_format::matrix3x3:	return 3 * 3;
-			case vertex_attribute_format::matrix4x4:	return 4 * 4;
+			case vertex_attribute_format::bool1:	return 1;
+			case vertex_attribute_format::int1:		return 1;
+			case vertex_attribute_format::int2:		return 2;
+			case vertex_attribute_format::int3:		return 3;
+			case vertex_attribute_format::int4:		return 4;
+			case vertex_attribute_format::float1:	return 1;
+			case vertex_attribute_format::float2:	return 2;
+			case vertex_attribute_format::float3:	return 3;
+			case vertex_attribute_format::float4:	return 4;
+			case vertex_attribute_format::mat3:		return 3 * 3;
+			case vertex_attribute_format::mat4:		return 4 * 4;
 		}
 	}
 

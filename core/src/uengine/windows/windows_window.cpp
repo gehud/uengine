@@ -34,6 +34,8 @@ namespace ue
 		int glad_init_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		UE_CORE_ASSERT(glad_init_status, "Failed to initialize Glad.");
 
+		set_vsync(true);
+
 		glfwSetWindowUserPointer(_window, this);
 
 		glfwSetWindowSizeCallback(_window, [](GLFWwindow* window, int width, int height) 
