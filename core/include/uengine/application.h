@@ -16,6 +16,8 @@ namespace ue
 
 		void run();
 
+		virtual void on_update() { }
+
 		void close();
 	};
 }

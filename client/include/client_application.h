@@ -4,11 +4,48 @@
 #include <uengine/events.h>
 #include <uengine/log.h>
 
-class client_application : public ue::application
+#include <uengine/rendering/gl.h>
+#include <uengine/rendering/vertex_array.h>
+#include <uengine/rendering/vertex_buffer.h>
+#include <uengine/rendering/index_buffer.h>
+
+using namespace ue;
+
+class client_application : public application
 {
+private:
+	std::shared_ptr<vertex_array> _vertex_array;
+	std::shared_ptr<vertex_buffer> _vertex_buffer;
+	std::shared_ptr<index_buffer> _index_buffer;
 public:
 	client_application() 
 	{
-		
+		_vertex_array = vertex_array::create();
+		_vertex_array->bind();
+
+		float vertices[3 * 3] = 
+		{
+			-0.5f, -0.5f, 0.0f,
+			 0.0f,  0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f
+		};
+
+		_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
+		_vertex_buffer->set_layout({
+			{ vertex_attribute_format::float3, "a_position"}
+		});
+
+		unsigned int indices[3] = { 0, 1, 2 };
+
+		_index_buffer = index_buffer::create(indices, sizeof(indices) / sizeof(unsigned int), sizeof(unsigned int));
+	}
+
+	void on_update() override 
+	{
+		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
+		gl::clear();
+
+		_vertex_array->bind();
+		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}
 };

@@ -1,0 +1,48 @@
+#include "uengine/rendering/opengl/opengl_graphics_api.h"
+
+#include "uengine/assertion.h"
+
+#include <glad/glad.h>
+
+namespace ue 
+{
+	void opengl_graphics_api::init() const
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glEnable(GL_DEPTH);
+	}
+
+	void opengl_graphics_api::clear_color(float r, float g, float b, float a) const
+	{
+		glClearColor(r, g, b, a);
+	}
+
+	void opengl_graphics_api::clear() const
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	int opengl_graphics_api::get_triangles_mode() const
+	{
+		return GL_TRIANGLES;
+	}
+
+	void opengl_graphics_api::draw_elements(int mode, int count, int type) const
+	{
+		UE_CORE_ASSERT(mode == GL_POINT || mode == GL_LINE_STRIP || mode == GL_LINE_LOOP
+			|| mode == GL_LINES || mode == GL_LINE_STRIP_ADJACENCY || mode == GL_TRIANGLE_STRIP
+			|| mode == GL_TRIANGLE_FAN || mode == GL_TRIANGLES || mode == GL_TRIANGLE_STRIP_ADJACENCY
+			|| mode == GL_TRIANGLES_ADJACENCY || mode == GL_PATCHES, "Unknown render mode.");
+		UE_CORE_ASSERT(count >= 0, "Count out of range.");
+		UE_CORE_ASSERT(type == GL_UNSIGNED_BYTE || type == GL_UNSIGNED_SHORT || type == GL_UNSIGNED_INT,
+			"Incorrect index type.");
+		glDrawElements(mode, count, type, NULL);
+	}
+
+	void opengl_graphics_api::viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) const
+	{
+		glViewport(x, y, width, height);
+	}
+}

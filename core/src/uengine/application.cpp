@@ -1,8 +1,7 @@
 #include "uengine/application.h"
 
 #include "uengine/log.h"
-
-#include <glad/glad.h>
+#include "uengine/rendering/gl.h"
 
 namespace ue 
 {
@@ -11,6 +10,7 @@ namespace ue
 		log::init();
 		_window = window::create(window_properties("UEngine", 1280, 720));
 		_window->on_close += new lambda<void>([this]() { close(); });
+		gl::init();
 		UE_CORE_INFO("Welcome to the UEngine!");
 	}
 
@@ -23,8 +23,7 @@ namespace ue
 	{
 		while (_is_runing)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			on_update();
 			_window->on_update();
 		}
 	}
