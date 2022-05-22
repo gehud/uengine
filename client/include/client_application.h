@@ -9,6 +9,7 @@
 #include <uengine/rendering/vertex_buffer.h>
 #include <uengine/rendering/index_buffer.h>
 #include <uengine/rendering/shader.h>
+#include <uengine/rendering/camera.h>
 
 using namespace ue;
 
@@ -19,8 +20,9 @@ private:
 	std::shared_ptr<vertex_buffer> _vertex_buffer;
 	std::shared_ptr<index_buffer> _index_buffer;
 	std::shared_ptr<shader> _shader;
+	camera _camera;
 public:
-	client_application() 
+	client_application() : _camera(16.0f / 9.0f)
 	{
 		_vertex_array = vertex_array::create();
 		_vertex_array->bind();
@@ -51,8 +53,12 @@ public:
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
+		_camera.set_position({ 0.0f, 0.0f, -2.0f });
+		_camera.set_rotation({ 0.0f, 15.0f, 0.0f });
+
 		_shader->bind();
 		_shader->set_float4(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "u_Color");
+		_shader->set_mat4(_camera.get_view_projection(), "u_ViewProjection");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}
