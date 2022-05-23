@@ -10,3 +10,6 @@
 [submodule "core/dependencies/stb"]
 	path = core/dependencies/stb
 	url = https://github.com/nothings/stb.git
+[submodule "core/dependencies/imgui"]
+	path = core/dependencies/imgui
+	url = https://github.com/Gehud/imgui.git

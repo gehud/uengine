@@ -19,12 +19,14 @@ project "Core"
 		"dependencies/glfw/include",
 		"dependencies/glad/include",
 		"dependencies/glm",
-		"dependencies/stb"
+		"dependencies/stb",
+		"dependencies/imgui"
 	}
 
 	links {
 		"GLFW",
-		"Glad"
+		"Glad",
+		"ImGui"
 	}
 
 	defines {
