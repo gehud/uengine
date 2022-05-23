@@ -34,11 +34,9 @@ namespace ue
 		glCreateTextures(GL_TEXTURE_2D, 1, &_id);
 		glTextureStorage2D(_id, 1, internalFormat, _width, _height);
 
-		glTextureParameteri(_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		set_wrap_mode(texture_wrap_mode::repeat);
 
-		glTextureParameteri(_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		set_filter_mode(texture_filter_mode::linear);
 
 		glTextureSubImage2D(_id, 0, 0, 0, _width, _height, dataFormat, GL_UNSIGNED_BYTE, data);
 
@@ -48,6 +46,42 @@ namespace ue
 	opengl_texture_2d::~opengl_texture_2d()
 	{
 		glDeleteTextures(1, &_id);
+	}
+
+	void opengl_texture_2d::set_wrap_mode(texture_wrap_mode value)
+	{
+		_wrap_mode = value;
+		switch (_wrap_mode)
+		{
+		case texture_wrap_mode::repeat:
+			glTextureParameteri(_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTextureParameteri(_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			break;
+		case texture_wrap_mode::mirror:
+			glTextureParameteri(_id, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+			glTextureParameteri(_id, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+			break;
+		case texture_wrap_mode::clamp:
+			glTextureParameteri(_id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(_id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+		}
+	}
+
+	void opengl_texture_2d::set_filter_mode(texture_filter_mode value)
+	{
+		_filter_mode = value;
+		switch (_filter_mode)
+		{
+		case ue::texture_filter_mode::nearest:
+			glTextureParameteri(_id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTextureParameteri(_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			break;
+		case ue::texture_filter_mode::linear:
+			glTextureParameteri(_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			break;
+		}
 	}
 
 	void opengl_texture_2d::bind(int slot) const
