@@ -8,6 +8,7 @@
 #include <uengine/rendering/vertex_array.h>
 #include <uengine/rendering/vertex_buffer.h>
 #include <uengine/rendering/index_buffer.h>
+#include <uengine/rendering/frame_buffer.h>
 #include <uengine/rendering/texture_2d.h>
 #include <uengine/rendering/shader.h>
 #include <uengine/rendering/camera.h>
@@ -22,6 +23,7 @@ private:
 	std::shared_ptr<vertex_array> _vertex_array;
 	std::shared_ptr<vertex_buffer> _vertex_buffer;
 	std::shared_ptr<index_buffer> _index_buffer;
+	std::shared_ptr<frame_buffer> _frame_buffer;
 	std::shared_ptr<texture_2d> _texture;
 	std::shared_ptr<shader> _shader;
 	camera _camera;
@@ -49,6 +51,8 @@ public:
 
 		_index_buffer = index_buffer::create(indices, sizeof(indices) / sizeof(unsigned int), sizeof(unsigned int));
 
+		_frame_buffer = frame_buffer::create(frame_buffer_descriptor(1280, 720));
+
 		_texture = texture_2d::create("assets/textures/checkerboard.png");
 		_texture->set_filter_mode(texture_filter_mode::nearest);
 
@@ -58,6 +62,8 @@ public:
 
 	void on_update() override 
 	{
+		_frame_buffer->bind();
+
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
@@ -70,12 +76,17 @@ public:
 		_shader->set_mat4(_camera.get_view_projection(), "u_ViewProjection");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
+
+		_frame_buffer->unbind();
+
+		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
+		gl::clear();
 	}
 
 	void on_gui() override 
 	{
 		ImGui::Begin("Test");
-		ImGui::Text("Hello world!");
+		ImGui::Image((void*)_frame_buffer->get_color_buffer_id(), ImVec2(640, 480), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 	}
 };
