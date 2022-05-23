@@ -31,7 +31,7 @@ namespace ue
 
 		virtual void on_update() const = 0;
 
-		virtual void* get_native_ptr() const = 0;
+		virtual void* get_native_window() const = 0;
 	protected:
 		void invoke_resize_event(unsigned int width, unsigned int height)
 		{

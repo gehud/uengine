@@ -28,6 +28,6 @@ namespace ue
 
 		void on_update() const override;
 
-		void* get_native_ptr() const override { return static_cast<void*>(_window); }
+		void* get_native_window() const override { return static_cast<void*>(_window); }
 	};
 }

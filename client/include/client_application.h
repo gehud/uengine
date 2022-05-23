@@ -12,6 +12,8 @@
 #include <uengine/rendering/shader.h>
 #include <uengine/rendering/camera.h>
 
+#include <imgui.h>
+
 using namespace ue;
 
 class client_application : public application
@@ -68,5 +70,12 @@ public:
 		_shader->set_mat4(_camera.get_view_projection(), "u_ViewProjection");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
+	}
+
+	void on_gui() override 
+	{
+		ImGui::Begin("Test");
+		ImGui::Text("Hello world!");
+		ImGui::End();
 	}
 };
