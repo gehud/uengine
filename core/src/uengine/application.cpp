@@ -2,6 +2,7 @@
 
 #include "uengine/assertion.h"
 #include "uengine/log.h"
+#include "uengine/input.h"
 #include "uengine/time.h"
 #include "uengine/rendering/gl.h"
 
@@ -36,6 +37,9 @@ namespace ue
 			time::_time = glfwGetTime();
 			time::_delta = time::_time - time::_last_frame_time;
 			time::_last_frame_time = time::_time;
+
+			input::mouse_delta = input::get_mouse_position() - input::last_mouse_position;
+			input::last_mouse_position = input::get_mouse_position();
 
 			on_update();
 

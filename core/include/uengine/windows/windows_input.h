@@ -12,5 +12,7 @@ namespace ue
 		bool is_mouse_button_pressed_impl(int button) override;
 
 		glm::vec2 get_mouse_position_impl() override;
+
+		glm::vec2 get_mouse_delta_impl() override { return mouse_delta; }
 	};
 }

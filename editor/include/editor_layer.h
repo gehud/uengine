@@ -35,6 +35,7 @@ private:
 	camera _camera;
 	glm::vec3 _camera_position = { 0.0f, 0.0f, -1.0f };
 	glm::vec3 _camera_rotation = { 0.0f, 0.0f, 0.0f };
+	float _mouse_sensitivity = 0.1f;
 public:
 	editor_layer() : _camera(16.0f / 9.0f)
 	{
@@ -85,6 +86,13 @@ public:
 			_camera_position.y -= time::get_delta();
 		else if (input::is_key_pressed(UE_KEY_E))
 			_camera_position.y += time::get_delta();
+
+		if (input::is_mouse_button_pressed(UE_MOUSE_BUTTON_RIGHT)) 
+		{
+			glm::vec2 delta = input::get_mouse_delta();
+			_camera_rotation.x = std::clamp(_camera_rotation.x - delta.y * _mouse_sensitivity, -90.0f, 90.0f);
+			_camera_rotation.y -= delta.x * _mouse_sensitivity;
+		}
 
 		_camera.set_position(_camera_position);
 		_camera.set_rotation(_camera_rotation);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uengine/events.h"
+#include "uengine/application.h"
 #include "uengine/windows/windows_window.h"
 
 #include <glm/vec2.hpp>
@@ -9,6 +10,7 @@ namespace ue
 {
 	class input
 	{
+		friend class application;
 		friend class windows_window;
 	public:
 		UE_DECLARE_EVENT(key_pressed_event, input, int, int)
@@ -26,6 +28,9 @@ namespace ue
 
 		UE_DECLARE_EVENT(mouse_scrolled_event, input, float, float)
 		static mouse_scrolled_event on_mouse_scrolled;
+	protected:
+		static glm::vec2 last_mouse_position;
+		static glm::vec2 mouse_delta;
 	private:
 		static input* _instance;
 	public:
@@ -43,12 +48,19 @@ namespace ue
 		{
 			return _instance->get_mouse_position_impl();
 		}
+
+		static glm::vec2 get_mouse_delta() 
+		{
+			return _instance->get_mouse_delta_impl();
+		}
 	protected:
 		virtual bool is_key_pressed_impl(int keycode) = 0;
 
 		virtual bool is_mouse_button_pressed_impl(int button) = 0;
 
 		virtual glm::vec2 get_mouse_position_impl() = 0;
+
+		virtual glm::vec2 get_mouse_delta_impl() = 0;
 	private:
 		static void invoke_key_pressed_event(int key, int repeat_count)
 		{
