@@ -2,7 +2,10 @@
 
 #include "uengine/assertion.h"
 #include "uengine/log.h"
+#include "uengine/time.h"
 #include "uengine/rendering/gl.h"
+
+#include <GLFW/glfw3.h>
 
 namespace ue 
 {
@@ -30,6 +33,10 @@ namespace ue
 	{
 		while (_is_runing)
 		{
+			time::_time = glfwGetTime();
+			time::_delta = time::_time - time::_last_frame_time;
+			time::_last_frame_time = time::_time;
+
 			on_update();
 
 			for (auto layer : _layers_stack)

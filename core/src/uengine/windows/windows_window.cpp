@@ -2,6 +2,7 @@
 
 #include "uengine/log.h"
 #include "uengine/assertion.h"
+#include "uengine/input.h"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -50,6 +51,55 @@ namespace ue
 		{
 			windows_window* this_window = static_cast<windows_window*>(glfwGetWindowUserPointer(window));
 			this_window->invoke_close_event();
+		});
+
+		glfwSetKeyCallback(_window, [](GLFWwindow* window, int key, int scanmode, int action, int mods)
+		{
+			switch (action)
+				{
+				case GLFW_PRESS:
+				{
+					input::invoke_key_pressed_event(key, 0);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					input::invoke_key_pressed_event(key, 1);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					input::invoke_key_released_event(key);
+					break;
+				}
+			}
+		});
+
+		glfwSetMouseButtonCallback(_window, [](GLFWwindow* window, int button, int action, int mods)
+		{
+			switch (action)
+			{
+				case GLFW_PRESS:
+				{
+					input::invoke_mouse_button_pressed_event(button);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					input::invoke_mouse_button_released_event(button);
+					break;
+				}
+			}
+		});
+
+		glfwSetScrollCallback(_window, [](GLFWwindow* window, double offset_x, double offset_y)
+		{
+			input::invoke_mouse_scrolled_event(static_cast<float>(offset_x), static_cast<float>(offset_y));
+		});
+
+		glfwSetCursorPosCallback(_window, [](GLFWwindow* window, double x, double y)
+		{
+			input::invoke_mouse_moved_event(static_cast<float>(x), static_cast<float>(y));
 		});
 	}
 
