@@ -17,6 +17,6 @@ namespace ue
 
 		virtual void draw_elements(int mode, int count, int type) const = 0;
 
-		virtual void viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) const = 0;
+		virtual void viewport(int x, int y, int width, int height) const = 0;
 	};
 }

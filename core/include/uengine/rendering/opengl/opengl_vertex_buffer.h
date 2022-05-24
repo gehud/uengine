@@ -23,6 +23,8 @@ namespace ue
 		const vertex_buffer_layout& get_layout() const override { return _layout; }
 		void set_layout(const vertex_buffer_layout& value) override;
 
+		void set_data(const void* data) override;
+
 		void bind() const override;
 		void unbind() const override;
 	};

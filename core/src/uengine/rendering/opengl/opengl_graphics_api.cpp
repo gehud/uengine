@@ -41,8 +41,12 @@ namespace ue
 		glDrawElements(mode, count, type, NULL);
 	}
 
-	void opengl_graphics_api::viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) const
+	void opengl_graphics_api::viewport(int x, int y, int width, int height) const
 	{
+		UE_CORE_ASSERT(x > -1, "X out of range.");
+		UE_CORE_ASSERT(y > -1, "Y out of range.");
+		UE_CORE_ASSERT(width > -1, "Width out of range.");
+		UE_CORE_ASSERT(height > -1, "Height out of range.");
 		glViewport(x, y, width, height);
 	}
 }

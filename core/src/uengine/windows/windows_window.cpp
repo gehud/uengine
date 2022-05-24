@@ -42,8 +42,8 @@ namespace ue
 		glfwSetWindowSizeCallback(_window, [](GLFWwindow* window, int width, int height) 
 		{
 			windows_window* this_window = static_cast<windows_window*>(glfwGetWindowUserPointer(window));
-			this_window->_width = static_cast<unsigned int>(width);
-			this_window->_height = static_cast<unsigned int>(height);
+			this_window->_width = width;
+			this_window->_height = height;
 			this_window->invoke_resize_event(this_window->_width, this_window->_height);
 		});
 

@@ -16,7 +16,7 @@ namespace ue
 	class window 
 	{
 	public:
-		UE_DECLARE_EVENT(resize_event, window, unsigned int, unsigned int)
+		UE_DECLARE_EVENT(resize_event, window, int, int)
 		resize_event on_resize;
 		UE_DECLARE_EVENT(close_event, window)
 		close_event on_close;
@@ -33,7 +33,7 @@ namespace ue
 
 		virtual void* get_native_window() const = 0;
 	protected:
-		void invoke_resize_event(unsigned int width, unsigned int height)
+		void invoke_resize_event(int width, int height)
 		{
 			on_resize.invoke(width, height);
 		}

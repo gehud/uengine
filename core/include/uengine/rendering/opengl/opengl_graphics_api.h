@@ -17,6 +17,6 @@ namespace ue
 
 		void draw_elements(int mode, int count, int type) const override;
 
-		void viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) const override;
+		void viewport(int x, int y, int width, int height) const override;
 	};
 }

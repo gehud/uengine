@@ -21,6 +21,6 @@ namespace ue
 
 		static void draw_elements(int mode, int count, int type) { _api->draw_elements(mode, count, type); }
 
-		static void viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) { _api->viewport(x, y, width, height); }
+		static void viewport(int x, int y, int width, int height) { _api->viewport(x, y, width, height); }
 	};
 }

@@ -55,6 +55,11 @@ namespace ue
 		}
 	}
 
+	void opengl_vertex_buffer::set_data(const void* data)
+	{
+		glBufferData(GL_ARRAY_BUFFER, _count * _stride, data, GL_STATIC_DRAW);
+	}
+
 	void opengl_vertex_buffer::bind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, _id);

@@ -21,7 +21,7 @@ class client_application : public application
 {
 private:
 	std::shared_ptr<vertex_array> _vertex_array;
-	std::shared_ptr<vertex_buffer> _vertex_buffer;
+	std::shared_ptr<vertex_buffer> _z_vertex_buffer;
 	std::shared_ptr<index_buffer> _index_buffer;
 	std::shared_ptr<frame_buffer> _frame_buffer;
 	std::shared_ptr<texture_2d> _texture;
@@ -41,8 +41,8 @@ public:
 			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 		};
 
-		_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
-		_vertex_buffer->set_layout({
+		_z_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
+		_z_vertex_buffer->set_layout({
 			{ vertex_attribute_format::float3, "a_Position"},
 			{ vertex_attribute_format::float2, "a_UV"}
 		});

@@ -18,6 +18,8 @@ namespace ue
 		virtual const vertex_buffer_layout& get_layout() const = 0;
 		virtual void set_layout(const vertex_buffer_layout& value) = 0;
 
+		virtual void set_data(const void* data) = 0;
+
 		virtual void bind() const = 0;
 		virtual void unbind() const = 0;
 	};
