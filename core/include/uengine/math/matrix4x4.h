@@ -2,6 +2,7 @@
 
 #include "uengine/math/vector2.h"
 #include "uengine/math/vector3.h"
+#include "uengine/math/quaternion.h"
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -23,9 +24,9 @@ namespace ue
 			return glm::translate((glm::mat4)identity, (glm::vec3)translation); 
 		}
 
-		static matrix4x4 rotate(const vector3& rotation) 
+		static matrix4x4 rotate(const quaternion& rotation) 
 		{
-			return glm::mat4_cast(glm::quat(glm::radians((glm::vec3)rotation)));
+			return glm::mat4_cast((glm::quat)rotation);
 		}
 
 		static matrix4x4 scale(const vector3& scale) 

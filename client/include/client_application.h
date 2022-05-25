@@ -65,8 +65,6 @@ public:
 		_entity = entity(_scene);
 		_transform = &_entity.add_component<transform>();
 		_transform->set_position({ 0.0f, 0.0f, 1.0f });
-		_transform->set_rotation({ 15.0f, 15.0f, 0.0f });
-
 		add_scene(_scene);
 	}
 
@@ -78,7 +76,7 @@ public:
 		_shader->bind();
 		_texture->bind();
 		_shader->set_float4(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "u_Color");
-		_shader->set_mat4(_camera.get_projection() * (glm::mat4)_transform->get_local_to_world(), "u_ViewProjection");
+		_shader->set_mat4(_camera.get_projection() * (glm::mat4)_transform->get_world_to_local(), "u_ViewProjection");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}

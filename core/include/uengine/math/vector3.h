@@ -63,5 +63,25 @@ namespace ue
 			case 2: return z;
 			}
 		}
+
+		vector3 operator + (const vector3& other) noexcept
+		{
+			return vector3(x + other.x, y + other.y, z + other.z);
+		}
+
+		vector3 operator - (const vector3& other) noexcept
+		{
+			return vector3(x - other.x, y - other.y, z - other.z);
+		}
+
+		vector3 operator * (float value) noexcept
+		{
+			return vector3(x * value, y * value, z * value);
+		}
+
+		vector3 operator / (float value)
+		{
+			return vector3(x / value, y / value, z / value);
+		}
 	};
 }
