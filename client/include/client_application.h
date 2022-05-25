@@ -11,6 +11,10 @@
 #include <uengine/rendering/texture_2d.h>
 #include <uengine/rendering/shader.h>
 #include <uengine/rendering/camera.h>
+#include <uengine/scene.h>
+#include <uengine/entity.h>
+
+#include <uengine/transform.h>
 
 #include <imgui.h>
 
@@ -25,6 +29,9 @@ private:
 	std::shared_ptr<texture_2d> _texture;
 	std::shared_ptr<shader> _shader;
 	camera _camera;
+	scene _scene;
+	entity _entity;
+	transform* _transform;
 public:
 	client_application() : _camera(16.0f / 9.0f)
 	{
@@ -54,6 +61,13 @@ public:
 
 		_shader = shader::create("assets/shaders/texture.glsl");
 		_shader->set_int(0, "u_Texture");
+
+		_entity = entity(_scene);
+		_transform = &_entity.add_component<transform>();
+		_transform->set_position({ 0.0f, 0.0f, 1.0f });
+		_transform->set_rotation({ 15.0f, 15.0f, 0.0f });
+
+		add_scene(_scene);
 	}
 
 	void on_update() override 
@@ -61,13 +75,10 @@ public:
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
-		_camera.set_position({ 0.0f, 0.0f, -1.0f });
-		_camera.set_rotation({ 15.0f, 15.0f, 0.0f });
-
 		_shader->bind();
 		_texture->bind();
 		_shader->set_float4(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "u_Color");
-		_shader->set_mat4(_camera.get_view_projection(), "u_ViewProjection");
+		_shader->set_mat4(_camera.get_projection() * (glm::mat4)_transform->get_local_to_world(), "u_ViewProjection");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}

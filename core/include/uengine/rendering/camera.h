@@ -56,6 +56,8 @@ namespace ue
 		void set_z_far(float value) { _z_far = value; recalculate_matrices(); }
 
 		const glm::mat4& get_view_projection() const { return _view_projection; }
+
+		const glm::mat4 get_projection() const { return _projection; }
 	private:
 		void recalculate_matrices() 
 		{

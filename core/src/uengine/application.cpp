@@ -5,6 +5,7 @@
 #include "uengine/input.h"
 #include "uengine/time.h"
 #include "uengine/rendering/gl.h"
+#include "uengine/scene.h"
 
 #include <GLFW/glfw3.h>
 
@@ -54,6 +55,12 @@ namespace ue
 
 			_window->on_update();
 		}
+	}
+
+	void application::on_update()
+	{
+		for (auto scene : _scenes)
+			scene->on_update();
 	}
 
 	void application::close()

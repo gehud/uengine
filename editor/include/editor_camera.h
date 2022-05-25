@@ -69,19 +69,13 @@ public:
 		if (ue::input::is_mouse_button_pressed(UE_MOUSE_BUTTON_RIGHT))
 		{
 			glm::vec2 delta = ue::input::get_mouse_delta();
-			_yaw += delta.x * _sensitivity;
+			float sign = _up.y < 0.0f ? -1.0f : 1.0f;
+			_yaw += sign * delta.x * _sensitivity;
+			if (_yaw > 360.0f)
+				_yaw -= 360.0f;
+			else if (_yaw < -360.0f)
+				_yaw += 360.0f;
 			_pitch = std::clamp(_pitch + delta.y * _sensitivity, -90.0f, 90.0f);
-			recalculate_matrices();
-			/*_forward = glm::vec3({
-				std::sin(glm::radians(_yaw)) * std::cos(glm::radians(_pitch)),
-				std::sin(glm::radians(_pitch)),
-				std::cos(glm::radians(_yaw)) * std::cos(glm::radians(_pitch))
-			});
-			_right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), _forward));
-			_up = glm::normalize(glm::cross(_forward, _right));*/
-			/*_right = glm::rotate(get_orientation(), glm::vec3(1.0f, 0.0f, 0.0f));
-			_up = glm::rotate(get_orientation(), glm::vec3(0.0f, 1.0f, 0.0f));
-			_forward = glm::rotate(get_orientation(), glm::vec3(0.0f, 0.0f, 1.0f));*/
 			_right =	glm::vec3(_view[0][0], _view[0][1], _view[0][2]);
 			_up =		glm::vec3(_view[1][0], _view[1][1], _view[1][2]);
 			_forward =	glm::vec3(_view[2][0], _view[2][1], _view[2][2]);
@@ -108,6 +102,7 @@ private:
 
 	void move_back() 
 	{
+		_position -= _forward * _speed * ue::time::get_delta();
 	}
 	
 	void move_right() 
@@ -140,10 +135,7 @@ private:
 		glm::mat4 transform = glm::mat4(1.0f);
 		transform = glm::translate(transform, glm::vec3(_position.x, _position.y, -_position.z));
 		transform *= glm::toMat4(get_orientation());
-		transform = glm::scale(transform, glm::vec3(1.0f));
-		transform = glm::translate(transform, glm::vec3(0.0f));
-		transform *= glm::toMat4(glm::quat(glm::vec3(0.0f)));
-		transform = glm::scale(transform, glm::vec3(1.0f));
+
 		_view = glm::inverse(transform);
 		switch (_mode)
 		{
