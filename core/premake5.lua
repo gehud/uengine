@@ -20,7 +20,8 @@ project "Core"
 		"dependencies/glad/include",
 		"dependencies/glm",
 		"dependencies/stb",
-		"dependencies/imgui"
+		"dependencies/imgui",
+		"dependencies/entt/src"
 	}
 
 	links {

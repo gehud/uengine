@@ -13,3 +13,6 @@
 [submodule "core/dependencies/imgui"]
 	path = core/dependencies/imgui
 	url = https://github.com/Gehud/imgui.git
+[submodule "core/dependencies/entt"]
+	path = core/dependencies/entt
+	url = https://github.com/skypjack/entt.git

@@ -21,7 +21,8 @@ project "Editor"
 		"../core/dependencies/glad/include",
 		"../core/dependencies/glm",
 		"../core/dependencies/stb",
-		"../core/dependencies/imgui"
+		"../core/dependencies/imgui",
+		"../core/dependencies/entt/src"
 	}
 
 	links {

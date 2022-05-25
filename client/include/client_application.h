@@ -70,8 +70,5 @@ public:
 		_shader->set_mat4(_camera.get_view_projection(), "u_ViewProjection");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
-
-		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
-		gl::clear();
 	}
 };

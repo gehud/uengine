@@ -5,7 +5,7 @@ workspace "UEngine"
 	}
 	architecture "x64"
 	language "C++"
-	startproject "Editor"
+	startproject "Client"
 
 output_dir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
