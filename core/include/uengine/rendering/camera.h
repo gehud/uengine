@@ -5,7 +5,7 @@
 
 namespace ue 
 {
-	enum class camera_mode 
+	enum class camera_projection 
 	{
 		perspective,
 		orthographic
@@ -15,7 +15,7 @@ namespace ue
 	{
 	private:
 		float _aspect;
-		camera_mode _mode = camera_mode::perspective;
+		camera_projection _mode = camera_projection::perspective;
 		float _fov = 60.0f;
 		float _size = 1.0f;
 		float _z_near = 0.0f;
@@ -26,13 +26,13 @@ namespace ue
 		glm::vec3 _position = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 _rotation = { 0.0f, 0.0f, 0.0f };
 	public:
-		camera(float aspect, camera_mode mode = camera_mode::perspective) : _aspect(aspect), _mode(mode)
+		camera(float aspect, camera_projection mode = camera_projection::perspective) : _aspect(aspect), _mode(mode)
 		{
 			recalculate_matrices();
 		}
 
-		camera_mode get_mode() const { return _mode; }
-		void set_mode(camera_mode value) { _mode = value; recalculate_matrices(); }
+		camera_projection get_mode() const { return _mode; }
+		void set_mode(camera_projection value) { _mode = value; recalculate_matrices(); }
 
 		const glm::vec3& get_position() const { return _position; }
 		void set_position(const glm::vec3& value) { _position = value; recalculate_matrices(); }
@@ -66,10 +66,10 @@ namespace ue
 			_view = glm::inverse(transform);
 			switch (_mode)
 			{
-			case ue::camera_mode::perspective:
+			case ue::camera_projection::perspective:
 				_projection = glm::perspective(glm::radians(_fov), _aspect, _z_near, _z_far);
 				break;
-			case ue::camera_mode::orthographic:
+			case ue::camera_projection::orthographic:
 				_projection = glm::ortho(-_aspect * _size, _aspect * _size, -1.0f, 1.0f, _z_near, _z_far);
 				break;
 			}

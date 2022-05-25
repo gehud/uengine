@@ -7,7 +7,7 @@
 #include <uengine/events.h>
 #include <uengine/log.h>
 #include <uengine/input.h>
-#include <uengine/key_codes.h>
+#include <uengine/keycodes.h>
 #include <uengine/time.h>
 
 #include <uengine/rendering/gl.h>
