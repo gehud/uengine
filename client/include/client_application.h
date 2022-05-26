@@ -61,25 +61,25 @@ public:
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
-		if (input::is_mouse_button_pressed(UE_MOUSE_BUTTON_RIGHT))
+		if (input::get_mouse_button(UE_MOUSE_BUTTON_RIGHT))
 		{
-			vector2 delta = input::get_mouse_delta();
+			vector2 delta = input::get_mouse_position_delta();
 			_transform->rotate(quaternion::euler_angles(vector3::get_down() * delta.x * 0.1f));
 			_rotation_x = std::clamp(_rotation_x - delta.y * 0.1f, -90.0f, 90.0f);
 			_transform->set_local_euler_angles(vector3::get_right() * _rotation_x);
 		}
 
-		if (input::is_key_pressed(UE_KEY_W))
+		if (input::get_key(UE_KEY_W))
 			_transform->translate(-_transform->get_forward() * time::get_delta());
-		else if (input::is_key_pressed(UE_KEY_S))
+		else if (input::get_key(UE_KEY_S))
 			_transform->translate(_transform->get_forward() * time::get_delta());
-		if (input::is_key_pressed(UE_KEY_D))
+		if (input::get_key(UE_KEY_D))
 			_transform->translate(_transform->get_right() * time::get_delta());
-		else if (input::is_key_pressed(UE_KEY_A))
+		else if (input::get_key(UE_KEY_A))
 			_transform->translate(-_transform->get_right() * time::get_delta());
-		if (input::is_key_pressed(UE_KEY_E))
+		if (input::get_key(UE_KEY_E))
 			_transform->translate(_transform->get_up() * time::get_delta());
-		else if (input::is_key_pressed(UE_KEY_Q))
+		else if (input::get_key(UE_KEY_Q))
 			_transform->translate(-_transform->get_up() * time::get_delta());
 
 		_shader->bind();

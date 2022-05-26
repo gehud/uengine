@@ -6,8 +6,9 @@ namespace ue
 {
 	input* input::_instance = new windows_input();
 
-	glm::vec2 input::last_mouse_position = glm::vec2(0.0f);
-	glm::vec2 input::mouse_delta = glm::vec2(0.0f);
+	vector2 input::last_mouse_position = vector2::zero;
+	vector2 input::mouse_position = vector2::zero;
+	vector2 input::mouse_position_delta = vector2::zero;
 
 	input::key_pressed_event input::on_key_pressed;
 	input::key_released_event input::on_key_released;

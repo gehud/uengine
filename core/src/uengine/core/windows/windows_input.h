@@ -7,12 +7,14 @@ namespace ue
 	class windows_input final : public input 
 	{
 	private:
-		bool is_key_pressed_impl(int keycode) override;
+		bool get_key_down_impl(int keycode) override;
+		bool get_key_impl(int keycode) override;
+		bool get_key_up_impl(int keycode) override;
 
-		bool is_mouse_button_pressed_impl(int button) override;
+		bool get_mouse_button_down_impl(int button) override;
+		bool get_mouse_button_impl(int button) override;
+		bool get_mouse_button_up_impl(int button) override;
 
-		glm::vec2 get_mouse_position_impl() override;
-
-		glm::vec2 get_mouse_delta_impl() override { return mouse_delta; }
+		vector2 get_mouse_position_impl() override;
 	};
 }

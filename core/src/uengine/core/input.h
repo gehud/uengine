@@ -3,8 +3,7 @@
 #include "uengine/core/events.h"
 #include "uengine/core/application.h"
 #include "uengine/core/windows/windows_window.h"
-
-#include <glm/vec2.hpp>
+#include "uengine/math/vector2.h"
 
 namespace ue 
 {
@@ -29,38 +28,58 @@ namespace ue
 		UE_DECLARE_EVENT(mouse_scrolled_event, input, float, float)
 		static mouse_scrolled_event on_mouse_scrolled;
 	protected:
-		static glm::vec2 last_mouse_position;
-		static glm::vec2 mouse_delta;
+		static vector2 last_mouse_position;
+		static vector2 mouse_position;
+		static vector2 mouse_position_delta;
 	private:
 		static input* _instance;
 	public:
-		static bool is_key_pressed(int keycode)
+		static bool get_key_down(int keycode)
 		{
-			return _instance->is_key_pressed_impl(keycode);
+			return _instance->get_key_down_impl(keycode);
 		}
 
-		static bool is_mouse_button_pressed(int button)
+		static bool get_key(int keycode)
 		{
-			return _instance->is_mouse_button_pressed_impl(button);
+			return _instance->get_key_impl(keycode);
 		}
 
-		static glm::vec2 get_mouse_position() 
+		static bool get_key_up(int keycode)
+		{
+			return _instance->get_key_up_impl(keycode);
+		}
+
+		static bool get_mouse_button_down(int button)
+		{
+			return _instance->get_mouse_button_down_impl(button);
+		}
+
+		static bool get_mouse_button(int button)
+		{
+			return _instance->get_mouse_button_impl(button);
+		}
+
+		static bool get_mouse_button_up(int button)
+		{
+			return _instance->get_mouse_button_up_impl(button);
+		}
+
+		static vector2 get_mouse_position()
 		{
 			return _instance->get_mouse_position_impl();
 		}
 
-		static glm::vec2 get_mouse_delta() 
-		{
-			return _instance->get_mouse_delta_impl();
-		}
+		static vector2 get_mouse_position_delta() { return mouse_position_delta; }
 	protected:
-		virtual bool is_key_pressed_impl(int keycode) = 0;
+		virtual bool get_key_down_impl(int keycode) = 0;
+		virtual bool get_key_impl(int keycode) = 0;
+		virtual bool get_key_up_impl(int keycode) = 0;
 
-		virtual bool is_mouse_button_pressed_impl(int button) = 0;
+		virtual bool get_mouse_button_down_impl(int button) = 0;
+		virtual bool get_mouse_button_impl(int button) = 0;
+		virtual bool get_mouse_button_up_impl(int button) = 0;
 
-		virtual glm::vec2 get_mouse_position_impl() = 0;
-
-		virtual glm::vec2 get_mouse_delta_impl() = 0;
+		virtual vector2 get_mouse_position_impl() = 0;
 	private:
 		static void invoke_key_pressed_event(int key, int repeat_count)
 		{

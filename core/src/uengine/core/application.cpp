@@ -39,8 +39,9 @@ namespace ue
 			time::_delta = time::_time - time::_last_frame_time;
 			time::_last_frame_time = time::_time;
 
-			input::mouse_delta = input::get_mouse_position() - input::last_mouse_position;
-			input::last_mouse_position = input::get_mouse_position();
+			input::mouse_position = input::get_mouse_position();
+			input::mouse_position_delta = input::mouse_position - input::last_mouse_position;
+			input::last_mouse_position = input::mouse_position;
 
 			on_update();
 

@@ -80,17 +80,17 @@ public:
 			_up =		glm::vec3(_view[1][0], _view[1][1], _view[1][2]);
 			_forward =	glm::vec3(_view[2][0], _view[2][1], _view[2][2]);
 		}
-		if (ue::input::is_key_pressed(UE_KEY_W))
+		if (ue::input::get_key(UE_KEY_W))
 			move_forward();
-		else if (ue::input::is_key_pressed(UE_KEY_S))
+		else if (ue::input::get_key(UE_KEY_S))
 			move_back();
-		if (ue::input::is_key_pressed(UE_KEY_A))
+		if (ue::input::get_key(UE_KEY_A))
 			move_left();
-		else if (ue::input::is_key_pressed(UE_KEY_D))
+		else if (ue::input::get_key(UE_KEY_D))
 			move_right();
-		if (ue::input::is_key_pressed(UE_KEY_Q))
+		if (ue::input::get_key(UE_KEY_Q))
 			move_down();
-		else if (ue::input::is_key_pressed(UE_KEY_E))
+		else if (ue::input::get_key(UE_KEY_E))
 			move_up();
 		update_matrices();
 	}
