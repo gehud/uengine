@@ -1,8 +1,11 @@
 #pragma once
 
-#include <memory>
+#include "uengine/math/vector2.h"
+#include "uengine/math/vector3.h"
+#include "uengine/math/vector4.h"
+#include "uengine/math/matrix4x4.h"
 
-#include <glm/glm.hpp>
+#include <memory>
 
 namespace ue 
 {
@@ -17,10 +20,9 @@ namespace ue
 
 		virtual void set_int(int value, const char* name) = 0;
 		virtual void set_float(float value, const char* name) = 0;
-		virtual void set_float2(const glm::vec2& value, const char* name) = 0;
-		virtual void set_float3(const glm::vec3& value, const char* name) = 0;
-		virtual void set_float4(const glm::vec4& value, const char* name) = 0;
-		virtual void set_mat3(const glm::mat3& value, const char* name) = 0;
-		virtual void set_mat4(const glm::mat4& value, const char* name) = 0;
+		virtual void set_vector2(const vector2& value, const char* name) = 0;
+		virtual void set_vector3(const vector3& value, const char* name) = 0;
+		virtual void set_vector4(const vector4& value, const char* name) = 0;
+		virtual void set_matrix4x4(const matrix4x4& value, const char* name) = 0;
 	};
 }

@@ -4,8 +4,6 @@
 
 #include <glm/glm.hpp>
 
-#include <ostream>
-
 namespace ue
 {
 	struct vector3

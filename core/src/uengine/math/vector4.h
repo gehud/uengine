@@ -22,12 +22,15 @@ namespace ue
 
 		float get_magnitude() const
 		{
-			return glm::length((glm::vec4)*this);
+			return std::sqrtf(x * x + y * y + z * z + w * w);
 		}
 
 		vector4 get_normalized() const
 		{
-			return glm::normalize((glm::vec4)*this);
+			float magnitude = get_magnitude();
+			if (magnitude > 0)
+				return vector4(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
+			return zero;
 		}
 
 		void normalize()
@@ -35,7 +38,7 @@ namespace ue
 			*this = get_normalized();
 		}
 
-		operator glm::vec4() const noexcept { return glm::vec4(x, y, z, w); }
+		operator glm::vec4() const { return glm::vec4(x, y, z, w); }
 
 		float operator [] (int index) const
 		{
@@ -60,5 +63,91 @@ namespace ue
 			case 3: return w;
 			}
 		}
+
+		vector4& operator += (const vector4& other)
+		{
+			x += other.x;
+			y += other.y;
+			z += other.z;
+			w += other.w;
+			return *this;
+		}
+
+		vector4& operator -= (const vector4& other)
+		{
+			x -= other.x;
+			y -= other.y;
+			z -= other.z;
+			w -= other.w;
+			return *this;
+		}
+
+		vector4& operator *= (const vector4& other)
+		{
+			x *= other.x;
+			y *= other.y;
+			z *= other.z;
+			w *= other.w;
+			return *this;
+		}
+
+		vector4& operator /= (const vector4& other)
+		{
+			x /= other.x;
+			y /= other.y;
+			z /= other.z;
+			w /= other.w;
+			return *this;
+		}
 	};
+
+	inline vector4 operator + (const vector4& left, const vector4& right)
+	{
+		return vector4(left.x + right.x, left.y + right.y, left.z + right.z, left.w + right.w);
+	}
+
+	inline vector4 operator - (const vector4& left, const vector4& right)
+	{
+		return vector4(left.x - right.x, left.y - right.y, left.z - right.z, left.w - right.w);
+	}
+
+	inline vector4 operator - (const vector4& vector)
+	{
+		return vector4(-vector.x, -vector.y, -vector.z, -vector.w);
+	}
+
+	inline vector4 operator * (const vector4& left, const vector4& right)
+	{
+		return vector4(left.x * right.x, left.y * right.y, left.z * right.z, left.w * right.w);
+	}
+
+	inline vector4 operator * (const vector4& vector, float number)
+	{
+		return vector4(vector.x * number, vector.y * number, vector.z * number, vector.w * number);
+	}
+
+	inline vector4 operator / (const vector4& left, const vector4& right)
+	{
+		return vector4(left.x / right.x, left.y / right.y, left.z / right.z, left.w / right.w);
+	}
+
+	inline vector4 operator / (const vector4& vector, float number)
+	{
+		return vector4(vector.x / number, vector.y / number, vector.z / number, vector.w / number);
+	}
+
+	inline bool operator == (const vector4& left, const vector4& right)
+	{
+		return left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w;
+	}
+
+	inline bool operator != (const vector4& left, const vector4& right)
+	{
+		return !(left == right);
+	}
+
+	inline std::ostream& operator << (std::ostream& ostream, const vector4& vector)
+	{
+		return ostream << "(" << vector.x << ", " << vector.y << ", " << vector.z << ", " << vector.w << ")";
+	}
 }

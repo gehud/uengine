@@ -102,34 +102,28 @@ namespace ue
 		glUniform1f(location, value);
 	}
 
-	void opengl_shader::set_float2(const glm::vec2& value, const char* name)
+	void opengl_shader::set_vector2(const vector2& value, const char* name)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniform2f(location, value.x, value.y);
 	}
 
-	void opengl_shader::set_float3(const glm::vec3& value, const char* name)
+	void opengl_shader::set_vector3(const vector3& value, const char* name)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniform3f(location, value.x, value.y, value.z);
 	}
 
-	void opengl_shader::set_float4(const glm::vec4& value, const char* name)
+	void opengl_shader::set_vector4(const vector4& value, const char* name)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniform4f(location, value.x, value.y, value.z, value.w);
 	}
 
-	void opengl_shader::set_mat3(const glm::mat3& value, const char* name)
+	void opengl_shader::set_matrix4x4(const matrix4x4& value, const char* name)
 	{
 		GLint location = glGetUniformLocation(_id, name);
-		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
-	}
-
-	void opengl_shader::set_mat4(const glm::mat4& value, const char* name)
-	{
-		GLint location = glGetUniformLocation(_id, name);
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr((glm::mat4)value));
 	}
 
 	void opengl_shader::compile(const std::unordered_map<GLenum, std::string>& shader_sources)

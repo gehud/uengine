@@ -84,8 +84,8 @@ public:
 
 		_shader->bind();
 		_texture->bind();
-		_shader->set_float4(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "u_Color");
-		_shader->set_mat4(_camera->get_projection_matrix() * _transform->get_world_to_local(), "u_ViewProjection");
+		_shader->set_vector4(vector4(1.0f, 0.0f, 0.0f, 1.0f), "u_Color");
+		_shader->set_matrix4x4(_camera->get_projection_matrix() * _transform->get_world_to_local(), "u_ViewProjection");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}

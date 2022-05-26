@@ -23,11 +23,10 @@ namespace ue
 
 		void set_int(int value, const char* name) override;
 		void set_float(float value, const char* name) override;
-		void set_float2(const glm::vec2& value, const char* name) override;
-		void set_float3(const glm::vec3& value, const char* name) override;
-		void set_float4(const glm::vec4& value, const char* name) override;
-		void set_mat3(const glm::mat3& value, const char* name) override;
-		void set_mat4(const glm::mat4& value, const char* name) override;
+		void set_vector2(const vector2& value, const char* name) override;
+		void set_vector3(const vector3& value, const char* name) override;
+		void set_vector4(const vector4& value, const char* name) override;
+		void set_matrix4x4(const matrix4x4& value, const char* name) override;
 	private:
 		void compile(const std::unordered_map<GLenum, std::string>& shader_sources);
 	};
