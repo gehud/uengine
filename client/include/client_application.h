@@ -32,7 +32,6 @@ public:
 			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 		};
-
 		_z_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
 		_z_vertex_buffer->set_layout({
 			{ vertex_attribute_format::float3, "a_Position"},

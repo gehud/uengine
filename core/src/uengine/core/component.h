@@ -9,6 +9,7 @@ namespace ue
 		entity* _entity = nullptr;
 	public:
 		component() = default;
+		component(entity& entity) : _entity(&entity) { }
 
 		~component() { _entity = nullptr; }
 

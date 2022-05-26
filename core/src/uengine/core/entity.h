@@ -16,6 +16,7 @@ namespace ue
 		scene* _scene = nullptr;
 	public:
 		entity();
+		entity(const entt::entity& entity);
 		entity(scene& scene);
 
 		static void destroy(const entity& entity);
@@ -24,9 +25,7 @@ namespace ue
 		t& add_component() 
 		{
 			UE_CORE_ASSERT(!has_component<t>(), "Entity allready has component.");
-			t& c = _scene->_registry.emplace<t>(_id);
-			static_cast<component&>(c)._entity = this;
-			return c;
+			return _scene->_registry.emplace<t>(_id, *this);
 		}
 
 		template<typename t, typename std::enable_if<std::is_base_of<component, t>::value 
