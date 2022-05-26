@@ -58,7 +58,7 @@ public:
 
 		unsigned int indices[6] = { 0, 1, 2, 0, 2, 3 };
 
-		_index_buffer = index_buffer::create(indices, sizeof(indices) / sizeof(unsigned int), sizeof(unsigned int));
+		_index_buffer = index_buffer::create(indices, sizeof(indices) / sizeof(int), sizeof(int));
 
 		_texture = texture_2d::create("assets/textures/checkerboard.png");
 		_texture->set_filter_mode(texture_filter_mode::nearest);
@@ -77,13 +77,15 @@ public:
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
-		if (input::is_mouse_button_pressed(UE_MOUSE_BUTTON_RIGHT)) 
+		if (input::is_mouse_button_pressed(UE_MOUSE_BUTTON_RIGHT))
 		{
 			vector2 delta = input::get_mouse_delta();
-			_transform->rotate(quaternion::euler_angles(-vector3(vector3::up) * delta.x * 0.1f));
+			_transform->rotate(quaternion::euler_angles(vector3::get_down() * delta.x * 0.1f));
 			_rotation_x = std::clamp(_rotation_x - delta.y * 0.1f, -90.0f, 90.0f);
-			_transform->set_local_euler_angles(vector3(vector3::right) * _rotation_x);
+			_transform->set_local_euler_angles(vector3::get_right() * _rotation_x);
 		}
+
+		UE_TRACE(_transform->get_right().get_normalized());
 
 		if (input::is_key_pressed(UE_KEY_W))
 			_transform->translate(-_transform->get_forward() * time::get_delta());

@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include <ostream>
+
 namespace ue
 {
 	struct vector3
@@ -25,14 +27,26 @@ namespace ue
 
 		vector3(const glm::vec3 vector) : x(vector.x), y(vector.y), z(vector.z) { }
 
+		static vector3 get_one() { return one; }
+		static vector3 get_zero() { return zero; }
+		static vector3 get_right() { return right; }
+		static vector3 get_left() { return left; }
+		static vector3 get_up() { return up; }
+		static vector3 get_down() { return down; }
+		static vector3 get_forward() { return forward; }
+		static vector3 get_back() { return back; }
+
 		float get_magnitude() const
 		{
-			return glm::length((glm::vec3)*this);
+			return std::sqrtf(x * x + y * y + z * z);
 		}
 
 		vector3 get_normalized() const
 		{
-			return glm::normalize((glm::vec3)*this);
+			float magnitude = get_magnitude();
+			if (magnitude > 0)
+				return vector3(x / magnitude, y / magnitude, z / magnitude);
+			return zero;
 		}
 
 		void normalize()
@@ -40,7 +54,7 @@ namespace ue
 			*this = get_normalized();
 		}
 
-		operator glm::vec3() const noexcept { return glm::vec3(x, y, z); }
+		operator glm::vec3() const { return glm::vec3(x, y, z); }
 
 		float operator [] (int index) const
 		{
@@ -64,12 +78,7 @@ namespace ue
 			}
 		}
 
-		vector3 operator + (const vector3& other) noexcept
-		{
-			return vector3(x + other.x, y + other.y, z + other.z);
-		}
-
-		vector3& operator += (const vector3& other) noexcept 
+		vector3& operator += (const vector3& other) 
 		{
 			x += other.x;
 			y += other.y;
@@ -77,24 +86,78 @@ namespace ue
 			return *this;
 		}
 
-		vector3 operator - (const vector3& other) noexcept
+		vector3& operator -= (const vector3& other)
 		{
-			return vector3(x - other.x, y - other.y, z - other.z);
+			x -= other.x;
+			y -= other.y;
+			z -= other.z;
+			return *this;
 		}
 
-		vector3 operator * (float value) noexcept
+		vector3& operator *= (const vector3& other)
 		{
-			return vector3(x * value, y * value, z * value);
+			x *= other.x;
+			y *= other.y;
+			z *= other.z;
+			return *this;
 		}
 
-		vector3 operator / (float value)
+		vector3& operator /= (const vector3& other)
 		{
-			return vector3(x / value, y / value, z / value);
-		}
-
-		vector3& operator - () 
-		{
-			return vector3(-x, -y, -z);
+			x /= other.x;
+			y /= other.y;
+			z /= other.z;
+			return *this;
 		}
 	};
+
+	inline vector3 operator + (const vector3& left, const vector3& right)
+	{
+		return vector3(left.x + right.x, left.y + right.y, left.z + right.z);
+	}
+
+	inline vector3 operator - (const vector3& left, const vector3& right)
+	{
+		return vector3(left.x - right.x, left.y - right.y, left.z - right.z);
+	}
+
+	inline vector3 operator - (const vector3& vector)
+	{
+		return vector3(-vector.x, -vector.y, -vector.z);
+	}
+
+	inline vector3 operator * (const vector3& left, const vector3& right)
+	{
+		return vector3(left.x * right.x, left.y * right.y, left.z * right.z);
+	}
+
+	inline vector3 operator * (const vector3& vector, float number)
+	{
+		return vector3(vector.x * number, vector.y * number, vector.z * number);
+	}
+
+	inline vector3 operator / (const vector3& left, const vector3& right)
+	{
+		return vector3(left.x / right.x, left.y / right.y, left.z / right.z);
+	}
+
+	inline vector3 operator / (const vector3& vector, float number)
+	{
+		return vector3(vector.x / number, vector.y / number, vector.z / number);
+	}
+
+	inline bool operator == (const vector3& left, const vector3& right)
+	{
+		return left.x == right.x && left.y == right.y && left.z == right.z;
+	}
+
+	inline bool operator != (const vector3& left, const vector3& right)
+	{
+		return !(left == right);
+	}
+
+	inline std::ostream& operator << (std::ostream& ostream, const vector3& vector) 
+	{
+		return ostream << "(" << vector.x << ", " << vector.y << ", " << vector.z << ")";
+	}
 }
