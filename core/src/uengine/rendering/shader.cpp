@@ -1,4 +1,4 @@
-#include "uengine/rendering/shader.h"
+#include "shader.h"
 
 #include "uengine/rendering/graphics.h"
 #include "uengine/rendering/opengl/opengl_shader.h"

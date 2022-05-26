@@ -1,23 +1,6 @@
 #pragma once
 
-#include <uengine/application.h>
-#include <uengine/events.h>
-#include <uengine/log.h>
-#include <uengine/input.h>
-#include <uengine/keycodes.h>
-#include <uengine/time.h>
-
-#include <uengine/rendering/gl.h>
-#include <uengine/rendering/vertex_array.h>
-#include <uengine/rendering/vertex_buffer.h>
-#include <uengine/rendering/index_buffer.h>
-#include <uengine/rendering/texture_2d.h>
-#include <uengine/rendering/shader.h>
-#include <uengine/rendering/camera.h>
-#include <uengine/scene.h>
-#include <uengine/entity.h>
-
-#include <uengine/transform.h>
+#include <uengine.h>
 
 #include <imgui.h>
 

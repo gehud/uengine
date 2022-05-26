@@ -1,6 +1,6 @@
-#include "uengine/rendering/opengl/opengl_index_buffer.h"
+#include "opengl_index_buffer.h"
 
-#include "uengine/assertion.h"
+#include "uengine/core/assertion.h"
 
 #include <glad/glad.h>
 

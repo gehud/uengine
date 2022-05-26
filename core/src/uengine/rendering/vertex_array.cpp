@@ -1,4 +1,4 @@
-#include "uengine/rendering/vertex_array.h"
+#include "vertex_array.h"
 
 #include "uengine/rendering/graphics.h"
 #include "uengine/rendering/opengl/opengl_vertex_array.h"

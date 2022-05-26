@@ -16,6 +16,7 @@ project "Editor"
 		"include",
 		"src",
 		"../core/include",
+		"../core/src",
 		"../core/dependencies/spdlog/include",
 		"../core/dependencies/glfw/include",
 		"../core/dependencies/glad/include",

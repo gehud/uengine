@@ -1,6 +1,6 @@
-#include "uengine/rendering/opengl/opengl_graphics_api.h"
+#include "opengl_graphics_api.h"
 
-#include "uengine/assertion.h"
+#include "uengine/core/assertion.h"
 
 #include <glad/glad.h>
 

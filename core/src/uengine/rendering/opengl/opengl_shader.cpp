@@ -1,6 +1,6 @@
-#include "uengine/rendering/opengl/opengl_shader.h"
+#include "opengl_shader.h"
 
-#include "uengine/assertion.h"
+#include "uengine/core/assertion.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

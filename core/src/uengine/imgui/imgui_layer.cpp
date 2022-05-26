@@ -1,6 +1,6 @@
-#include "uengine/imgui/imgui_layer.h"
+#include "imgui_layer.h"
 
-#include "uengine/application.h"
+#include "uengine/core/application.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>

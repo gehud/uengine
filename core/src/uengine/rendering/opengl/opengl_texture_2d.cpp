@@ -1,6 +1,6 @@
-#include "uengine/rendering/opengl/opengl_texture_2d.h"
+#include "opengl_texture_2d.h"
 
-#include "uengine/assertion.h"
+#include "uengine/core/assertion.h"
 
 #include <glad/glad.h>
 

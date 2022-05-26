@@ -1,4 +1,4 @@
-#include "uengine/rendering/vertex_buffer.h"
+#include "vertex_buffer.h"
 
 #include "uengine/rendering/graphics.h"
 #include "uengine/rendering/opengl/opengl_vertex_buffer.h"

@@ -1,4 +1,4 @@
-#include "uengine/rendering/texture_2d.h"
+#include "texture_2d.h"
 
 #include "uengine/rendering/graphics.h"
 #include "uengine/rendering/opengl/opengl_texture_2d.h"

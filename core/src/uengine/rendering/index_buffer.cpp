@@ -1,4 +1,4 @@
-#include "uengine/rendering/index_buffer.h"
+#include "index_buffer.h"
 
 #include "uengine/rendering/graphics.h"
 #include "uengine/rendering/opengl/opengl_index_buffer.h"

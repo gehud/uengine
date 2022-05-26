@@ -1,0 +1,17 @@
+#pragma once
+
+#include "uengine/core/application.h"
+#include "uengine/core/assertion.h"
+#include "uengine/core/component.h"
+#include "uengine/core/delegates.h"
+#include "uengine/core/entity.h"
+#include "uengine/core/events.h"
+#include "uengine/core/input.h"
+#include "uengine/core/keycodes.h"
+#include "uengine/core/layer.h"
+#include "uengine/core/layer_stack.h"
+#include "uengine/core/log.h"
+#include "uengine/core/scene.h"
+#include "uengine/core/time.h"
+#include "uengine/core/transform.h"
+#include "uengine/core/window.h"
