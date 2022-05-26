@@ -50,5 +50,16 @@ namespace ue
 			case 3: return w;
 			}
 		}
+
+		quaternion operator * (const quaternion& other) const noexcept
+		{
+			return glm::quat(glm::mat4((glm::quat)*this) * glm::mat4((glm::quat)other));
+		}
+
+		quaternion& operator *= (const quaternion& other) noexcept
+		{
+			*this = glm::quat(glm::mat4((glm::quat)*this) * glm::mat4((glm::quat)other));
+			return *this;
+		}
 	};
 }

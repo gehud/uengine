@@ -69,6 +69,14 @@ namespace ue
 			return vector3(x + other.x, y + other.y, z + other.z);
 		}
 
+		vector3& operator += (const vector3& other) noexcept 
+		{
+			x += other.x;
+			y += other.y;
+			z += other.z;
+			return *this;
+		}
+
 		vector3 operator - (const vector3& other) noexcept
 		{
 			return vector3(x - other.x, y - other.y, z - other.z);
@@ -82,6 +90,11 @@ namespace ue
 		vector3 operator / (float value)
 		{
 			return vector3(x / value, y / value, z / value);
+		}
+
+		vector3& operator - () 
+		{
+			return vector3(-x, -y, -z);
 		}
 	};
 }

@@ -3,6 +3,9 @@
 #include <uengine/application.h>
 #include <uengine/events.h>
 #include <uengine/log.h>
+#include <uengine/input.h>
+#include <uengine/keycodes.h>
+#include <uengine/time.h>
 
 #include <uengine/rendering/gl.h>
 #include <uengine/rendering/vertex_array.h>
@@ -32,6 +35,7 @@ private:
 	scene _scene;
 	entity _entity;
 	transform* _transform;
+	float _rotation_x = 0.0f;
 public:
 	client_application() : _camera(16.0f / 9.0f)
 	{
@@ -68,10 +72,31 @@ public:
 		add_scene(_scene);
 	}
 
-	void on_update() override 
+	void on_update() override
 	{
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
+
+		if (input::is_mouse_button_pressed(UE_MOUSE_BUTTON_RIGHT)) 
+		{
+			vector2 delta = input::get_mouse_delta();
+			_transform->rotate(quaternion::euler_angles(-vector3(vector3::up) * delta.x * 0.1f));
+			_rotation_x = std::clamp(_rotation_x - delta.y * 0.1f, -90.0f, 90.0f);
+			_transform->set_local_euler_angles(vector3(vector3::right) * _rotation_x);
+		}
+
+		if (input::is_key_pressed(UE_KEY_W))
+			_transform->translate(-_transform->get_forward() * time::get_delta());
+		else if (input::is_key_pressed(UE_KEY_S))
+			_transform->translate(_transform->get_forward() * time::get_delta());
+		if (input::is_key_pressed(UE_KEY_D))
+			_transform->translate(_transform->get_right() * time::get_delta());
+		else if (input::is_key_pressed(UE_KEY_A))
+			_transform->translate(-_transform->get_right() * time::get_delta());
+		if (input::is_key_pressed(UE_KEY_E))
+			_transform->translate(_transform->get_up() * time::get_delta());
+		else if (input::is_key_pressed(UE_KEY_Q))
+			_transform->translate(-_transform->get_up() * time::get_delta());
 
 		_shader->bind();
 		_texture->bind();
