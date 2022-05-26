@@ -1,12 +1,13 @@
 #pragma once
 
+#include "uengine/component.h"
 #include "uengine/math/vector3.h"
 #include "uengine/math/quaternion.h"
 #include "uengine/math/matrix4x4.h"
 
 namespace ue 
 {
-	class transform 
+	class transform : public component
 	{
 	private:
 		vector3 _position = { 0.0f, 0.0f, 0.0f };

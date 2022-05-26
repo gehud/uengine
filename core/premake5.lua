@@ -21,7 +21,7 @@ project "Core"
 		"dependencies/glm",
 		"dependencies/stb",
 		"dependencies/imgui",
-		"dependencies/entt/src"
+		"dependencies/entt/single_include"
 	}
 
 	links {

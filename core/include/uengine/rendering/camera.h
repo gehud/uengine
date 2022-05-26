@@ -1,7 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "uengine/entity.h"
+#include "uengine/transform.h"
+#include "uengine/math/matrix4x4.h"
 
 namespace ue 
 {
@@ -11,71 +12,56 @@ namespace ue
 		orthographic
 	};
 
-	class camera 
+	class camera : public component
 	{
 	private:
+		camera_projection _projection;
 		float _aspect;
-		camera_projection _mode = camera_projection::perspective;
 		float _fov = 60.0f;
 		float _size = 1.0f;
 		float _z_near = 0.0f;
 		float _z_far = 1000.0f;
-		glm::mat4 _view;
-		glm::mat4 _projection;
-		glm::mat4 _view_projection;
-		glm::vec3 _position = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 _rotation = { 0.0f, 0.0f, 0.0f };
+		matrix4x4 _projection_matrix;
+		matrix4x4 _view_projection_matrix;
 	public:
-		camera(float aspect, camera_projection mode = camera_projection::perspective) : _aspect(aspect), _mode(mode)
-		{
-			recalculate_matrices();
-		}
+		camera(camera_projection projection = camera_projection::perspective, float aspect = 1.0f)
+			: _projection(projection), _aspect(aspect) { }
 
-		camera_projection get_mode() const { return _mode; }
-		void set_mode(camera_projection value) { _mode = value; recalculate_matrices(); }
-
-		const glm::vec3& get_position() const { return _position; }
-		void set_position(const glm::vec3& value) { _position = value; recalculate_matrices(); }
-
-		const glm::vec3& get_rotation() const { return _rotation; }
-		void set_rotation(const glm::vec3& value) { _rotation = value; recalculate_matrices(); }
+		camera_projection get_projection() const { return _projection; }
+		void set_projection(camera_projection value) { _projection = value; update_matrices(); }
 
 		float get_aspect() const { return _aspect; }
-		void set_aspect(float value) { _aspect = value; recalculate_matrices(); }
+		void set_aspect(float value) { _aspect = value; update_matrices(); }
 
 		float get_fov() const { return _fov; }
-		void set_fov(float value) { _fov = value; recalculate_matrices(); }
+		void set_fov(float value) { _fov = value; update_matrices(); }
 
 		float get_size() const { return _size; }
-		void set_size(float value) { _size = value; recalculate_matrices(); }
+		void set_size(float value) { _size = value; update_matrices(); }
 
 		float get_z_near() const { return _z_near; }
-		void set_z_near(float value) { _z_near = value; recalculate_matrices(); }
+		void set_z_near(float value) { _z_near = value; update_matrices(); }
 
 		float get_z_far() const { return _z_far; }
-		void set_z_far(float value) { _z_far = value; recalculate_matrices(); }
+		void set_z_far(float value) { _z_far = value; update_matrices(); }
 
-		const glm::mat4& get_view_projection() const { return _view_projection; }
+		const matrix4x4& get_projection_matrix() const { return _projection_matrix; }
 
-		const glm::mat4 get_projection() const { return _projection; }
+		const matrix4x4& get_view_projection_matrix() const { return _view_projection_matrix; }
 	private:
-		void recalculate_matrices() 
+		void update_matrices() 
 		{
-			glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(_position.x, _position.y, -_position.z))
-				* glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f))
-				* glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f))
-				* glm::rotate(glm::mat4(1.0f), glm::radians(-_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-			_view = glm::inverse(transform);
-			switch (_mode)
+			switch (_projection)
 			{
 			case ue::camera_projection::perspective:
-				_projection = glm::perspective(glm::radians(_fov), _aspect, _z_near, _z_far);
+				_projection_matrix = matrix4x4::perspective(glm::radians(_fov), _aspect, _z_near, _z_far);
 				break;
 			case ue::camera_projection::orthographic:
-				_projection = glm::ortho(-_aspect * _size, _aspect * _size, -1.0f, 1.0f, _z_near, _z_far);
+				_projection_matrix = glm::ortho(-_aspect * _size, _aspect * _size, -1.0f, 1.0f, _z_near, _z_far);
 				break;
 			}
-			_view_projection = _projection * _view;
+			_view_projection_matrix = _projection_matrix
+				* get_entity().get_component<transform>().get_world_to_local();
 		}
 	};
 }

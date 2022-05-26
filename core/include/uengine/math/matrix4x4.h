@@ -17,7 +17,24 @@ namespace ue
 	private:
 		glm::mat4 _value;
 	public:
+		matrix4x4() : _value(0.0f) { }
+
 		matrix4x4(const glm::mat4& value) : _value(value) { }
+
+		static matrix4x4 perspective(float fov, float aspect, float z_near, float z_far) 
+		{
+			return glm::perspective(fov, aspect, z_near, z_far);
+		}
+
+		static matrix4x4 ortho(float left, float right, float bottom, float top) 
+		{
+			return glm::ortho(left, right, bottom, top);
+		}
+
+		static matrix4x4 ortho(float left, float right, float bottom, float top, float z_near, float z_far)
+		{
+			return glm::ortho(left, right, bottom, top, z_near, z_far);
+		}
 
 		static matrix4x4 translate(const vector3& translation) 
 		{ 

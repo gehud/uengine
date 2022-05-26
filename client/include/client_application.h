@@ -31,13 +31,13 @@ private:
 	std::shared_ptr<index_buffer> _index_buffer;
 	std::shared_ptr<texture_2d> _texture;
 	std::shared_ptr<shader> _shader;
-	camera _camera;
 	scene _scene;
 	entity _entity;
 	transform* _transform;
+	camera* _camera;
 	float _rotation_x = 0.0f;
 public:
-	client_application() : _camera(16.0f / 9.0f)
+	client_application()
 	{
 		_vertex_array = vertex_array::create();
 		_vertex_array->bind();
@@ -67,7 +67,9 @@ public:
 		_shader->set_int(0, "u_Texture");
 
 		_entity = entity(_scene);
-		_transform = &_entity.add_component<transform>();
+		_transform = &_entity.get_component<transform>();
+		_camera = &_entity.add_component<camera>();
+		_camera->set_aspect(16.0f / 9.0f);
 		_transform->set_position({ 0.0f, 0.0f, 1.0f });
 		add_scene(_scene);
 	}
@@ -85,8 +87,6 @@ public:
 			_transform->set_local_euler_angles(vector3::get_right() * _rotation_x);
 		}
 
-		UE_TRACE(_transform->get_right().get_normalized());
-
 		if (input::is_key_pressed(UE_KEY_W))
 			_transform->translate(-_transform->get_forward() * time::get_delta());
 		else if (input::is_key_pressed(UE_KEY_S))
@@ -103,7 +103,7 @@ public:
 		_shader->bind();
 		_texture->bind();
 		_shader->set_float4(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "u_Color");
-		_shader->set_mat4(_camera.get_projection() * (glm::mat4)_transform->get_world_to_local(), "u_ViewProjection");
+		_shader->set_mat4(_camera->get_projection_matrix() * _transform->get_world_to_local(), "u_ViewProjection");
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}

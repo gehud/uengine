@@ -22,7 +22,7 @@ project "Editor"
 		"../core/dependencies/glm",
 		"../core/dependencies/stb",
 		"../core/dependencies/imgui",
-		"../core/dependencies/entt/src"
+		"../core/dependencies/entt/single_include"
 	}
 
 	links {

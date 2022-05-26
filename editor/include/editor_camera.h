@@ -41,26 +41,26 @@ private:
 public:
 	editor_camera(float aspect, ue::camera_projection mode = ue::camera_projection::perspective) : _aspect(aspect), _mode(mode)
 	{
-		recalculate_matrices();
+		update_matrices();
 	}
 
 	ue::camera_projection get_mode() const { return _mode; }
-	void set_mode(ue::camera_projection value) { _mode = value; recalculate_matrices(); }
+	void set_mode(ue::camera_projection value) { _mode = value; update_matrices(); }
 
 	float get_aspect() const { return _aspect; }
-	void set_aspect(float value) { _aspect = value; recalculate_matrices(); }
+	void set_aspect(float value) { _aspect = value; update_matrices(); }
 
 	float get_fov() const { return _fov; }
-	void set_fov(float value) { _fov = value; recalculate_matrices(); }
+	void set_fov(float value) { _fov = value; update_matrices(); }
 
 	float get_size() const { return _size; }
-	void set_size(float value) { _size = value; recalculate_matrices(); }
+	void set_size(float value) { _size = value; update_matrices(); }
 
 	float get_z_near() const { return _z_near; }
-	void set_z_near(float value) { _z_near = value; recalculate_matrices(); }
+	void set_z_near(float value) { _z_near = value; update_matrices(); }
 
 	float get_z_far() const { return _z_far; }
-	void set_z_far(float value) { _z_far = value; recalculate_matrices(); }
+	void set_z_far(float value) { _z_far = value; update_matrices(); }
 
 	const glm::mat4& get_view_projection() const { return _view_projection; }
 
@@ -92,7 +92,7 @@ public:
 			move_down();
 		else if (ue::input::is_key_pressed(UE_KEY_E))
 			move_up();
-		recalculate_matrices();
+		update_matrices();
 	}
 private:
 	void move_forward()
@@ -130,7 +130,7 @@ private:
 		return glm::quat(glm::vec3(glm::radians(-_pitch), glm::radians(-_yaw), 0.0f));
 	}
 
-	void recalculate_matrices()
+	void update_matrices()
 	{
 		glm::mat4 transform = glm::mat4(1.0f);
 		transform = glm::translate(transform, glm::vec3(_position.x, _position.y, -_position.z));
