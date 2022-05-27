@@ -19,14 +19,11 @@ namespace ue
 		_instance = this;
 		log::init();
 		_window = window::create(window_properties("UEngine", 1280, 720));
-		_window->on_close += new lambda<void>([this]() { close(); });
+		_window->on_close += new lambda<void>([this](){ close(); });
 		gl::init();
 		_imgui_layer = new imgui_layer();
 		push_overlay(_imgui_layer);
 		UE_CORE_INFO("Welcome to the UEngine!");
-
-		for (auto system : _systems)
-			system->on_start();
 	}
 
 	application::~application()
@@ -38,6 +35,9 @@ namespace ue
 
 	void application::run()
 	{
+		for (auto system : _systems)
+			system->on_start();
+
 		while (_is_runing)
 		{
 			time::_time = glfwGetTime();

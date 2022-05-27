@@ -12,7 +12,7 @@ namespace ue
 	public:
 		system() = default; 
 	protected:
-		const entt::registry& get_registry() const { return *_registry; }
+		entt::registry& get_registry() { return *_registry; }
 		
 		virtual void on_start() { }
 		virtual void on_update() { }
