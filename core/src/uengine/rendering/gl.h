@@ -9,7 +9,7 @@ namespace ue
 	class gl final
 	{
 	private:
-		static std::shared_ptr<graphics_api> _api;
+		static std::unique_ptr<graphics_api> _api;
 	public:
 		static void init() { _api->init(); }
 

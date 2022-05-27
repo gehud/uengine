@@ -33,7 +33,8 @@ project "Core"
 	}
 
 	defines {
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"GLFW_INCLUDE_VULKAN"
 	}
 
 	filter "system:windows"

@@ -2,5 +2,5 @@
 
 namespace ue 
 {
-	std::shared_ptr<graphics_api> gl::_api = std::shared_ptr<graphics_api>(graphics_api::create());
+	std::unique_ptr<graphics_api> gl::_api = std::unique_ptr<graphics_api>(graphics_api::create());
 }

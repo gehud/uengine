@@ -4,6 +4,7 @@ namespace ue
 {
 	enum class graphics_apis
 	{
-		opengl
+		opengl,
+		vulkan
 	};
 }

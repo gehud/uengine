@@ -7,16 +7,16 @@ namespace ue
 	class opengl_graphics_api : public graphics_api 
 	{
 	public:
-		void init() const override;
+		void init() override;
 
-		void clear_color(float r, float g, float b, float a) const override;
+		void clear_color(float r, float g, float b, float a) override;
 
-		void clear() const override;
+		void clear() override;
 
-		int get_triangles_mode() const override;
+		int get_triangles_mode() override;
 
-		void draw_elements(int mode, int count, int type) const override;
+		void draw_elements(int mode, int count, int type) override;
 
-		void viewport(int x, int y, int width, int height) const override;
+		void viewport(int x, int y, int width, int height) override;
 	};
 }

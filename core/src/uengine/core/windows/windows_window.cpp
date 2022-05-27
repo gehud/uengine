@@ -5,7 +5,6 @@
 #include "uengine/core/input.h"
 
 #include <GLFW/glfw3.h>
-#include <glad/glad.h>
 
 namespace ue 
 {
@@ -31,9 +30,6 @@ namespace ue
 			_title, nullptr, nullptr);
 
 		glfwMakeContextCurrent(_window);
-
-		int glad_init_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		UE_CORE_ASSERT(glad_init_status, "Failed to initialize Glad.");
 
 		set_vsync(true);
 

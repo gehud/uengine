@@ -7,16 +7,16 @@ namespace ue
 	public:
 		static graphics_api* create();
 
-		virtual void init() const = 0;
+		virtual void init() = 0;
 
-		virtual void clear_color(float r, float g, float b, float a) const = 0;
+		virtual void clear_color(float r, float g, float b, float a) = 0;
 
-		virtual void clear() const = 0;
+		virtual void clear() = 0;
 
-		virtual int get_triangles_mode() const = 0;
+		virtual int get_triangles_mode() = 0;
 
-		virtual void draw_elements(int mode, int count, int type) const = 0;
+		virtual void draw_elements(int mode, int count, int type) = 0;
 
-		virtual void viewport(int x, int y, int width, int height) const = 0;
+		virtual void viewport(int x, int y, int width, int height) = 0;
 	};
 }

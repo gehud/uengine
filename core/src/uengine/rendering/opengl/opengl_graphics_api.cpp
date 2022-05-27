@@ -4,32 +4,37 @@
 
 #include <glad/glad.h>
 
+#include <GLFW/glfw3.h>
+
 namespace ue 
 {
-	void opengl_graphics_api::init() const
+	void opengl_graphics_api::init()
 	{
+		int glad_init_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		UE_CORE_ASSERT(glad_init_status, "Failed to initialize OpenGL.");
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH);
 	}
 
-	void opengl_graphics_api::clear_color(float r, float g, float b, float a) const
+	void opengl_graphics_api::clear_color(float r, float g, float b, float a)
 	{
 		glClearColor(r, g, b, a);
 	}
 
-	void opengl_graphics_api::clear() const
+	void opengl_graphics_api::clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	int opengl_graphics_api::get_triangles_mode() const
+	int opengl_graphics_api::get_triangles_mode()
 	{
 		return GL_TRIANGLES;
 	}
 
-	void opengl_graphics_api::draw_elements(int mode, int count, int type) const
+	void opengl_graphics_api::draw_elements(int mode, int count, int type)
 	{
 		UE_CORE_ASSERT(mode == GL_POINT || mode == GL_LINE_STRIP || mode == GL_LINE_LOOP
 			|| mode == GL_LINES || mode == GL_LINE_STRIP_ADJACENCY || mode == GL_TRIANGLE_STRIP
@@ -41,7 +46,7 @@ namespace ue
 		glDrawElements(mode, count, type, NULL);
 	}
 
-	void opengl_graphics_api::viewport(int x, int y, int width, int height) const
+	void opengl_graphics_api::viewport(int x, int y, int width, int height)
 	{
 		UE_CORE_ASSERT(x > -1, "X out of range.");
 		UE_CORE_ASSERT(y > -1, "Y out of range.");
