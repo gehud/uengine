@@ -18,6 +18,7 @@ project "Core"
 		"dependencies/spdlog/include",
 		"dependencies/glfw/include",
 		"dependencies/glad/include",
+		"dependencies/vulkan/include",
 		"dependencies/glm",
 		"dependencies/stb",
 		"dependencies/imgui",
@@ -27,7 +28,8 @@ project "Core"
 	links {
 		"GLFW",
 		"Glad",
-		"ImGui"
+		"ImGui",
+		"dependencies/vulkan/lib/vulkan-1.lib"
 	}
 
 	defines {

@@ -20,6 +20,7 @@ project "Client"
 		"../core/dependencies/spdlog/include",
 		"../core/dependencies/glfw/include",
 		"../core/dependencies/glad/include",
+		"../core/dependencies/vulkan/include",
 		"../core/dependencies/glm",
 		"../core/dependencies/stb",
 		"../core/dependencies/imgui",
