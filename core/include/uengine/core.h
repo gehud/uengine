@@ -3,6 +3,7 @@
 #include "uengine/core/application.h"
 #include "uengine/core/assertion.h"
 #include "uengine/core/component.h"
+#include "uengine/core/system.h"
 #include "uengine/core/delegates.h"
 #include "uengine/core/entity.h"
 #include "uengine/core/events.h"

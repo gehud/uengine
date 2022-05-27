@@ -5,23 +5,15 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-class editor_camera_component : public ue::component 
+class editor_camera_component : public ue::component
 {
 public:
-	editor_camera_component(ue::entity entity) : ue::component(entity) { }
+	editor_camera_component(ue::entity& entity) : component(entity) { }
 };
 
 class editor_camera_system : public ue::system 
 {
-public:
-	void on_update() override
-	{
-		auto view = get_registry().view<editor_camera_component>();
-		view.each([](auto& camera_component)
-		{
-			UE_TRACE("Foo");
-		});
-	}
+
 };
 
 class editor_application : public ue::application

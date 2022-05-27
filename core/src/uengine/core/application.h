@@ -1,5 +1,6 @@
 #pragma once
 
+#include "uengine/core/assertion.h"
 #include "uengine/core/window.h"
 #include "uengine/core/layer_stack.h"
 #include "uengine/core/scene.h"
@@ -40,6 +41,7 @@ namespace ue
 		template<typename t, typename std::enable_if<std::is_base_of<system, t>::value, bool>::type = true>
 		void add_system() 
 		{
+			UE_CORE_ASSERT(_current_scene != nullptr, "Missing scene.");
 			t* s = new t();
 			s->_registry = &_current_scene->_registry;
 			_systems.push_back(s);

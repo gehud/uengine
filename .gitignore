@@ -9,7 +9,6 @@
 **.obj
 **.exe
 **.exe.recipe
-**.lib
 **.lib.recipe
 **.ilk
 **.log
@@ -17,3 +16,6 @@
 **.idb
 **.pdb
 GenerateProjects.bat
+
+# Folders
+**/bin/
