@@ -24,10 +24,15 @@ namespace ue
 		_imgui_layer = new imgui_layer();
 		push_overlay(_imgui_layer);
 		UE_CORE_INFO("Welcome to the UEngine!");
+
+		for (auto system : _systems)
+			system->on_start();
 	}
 
 	application::~application()
 	{
+		for (auto system : _systems)
+			delete system;
 		delete _window;
 	}
 
@@ -43,10 +48,16 @@ namespace ue
 			input::mouse_position_delta = input::mouse_position - input::last_mouse_position;
 			input::last_mouse_position = input::mouse_position;
 
+			for (auto system : _systems)
+				system->on_update();
+
 			on_update();
 
 			for (auto layer : _layers_stack)
 				layer->on_update();
+
+			for (auto scene : _scenes)
+				scene->on_update();
 
 			_imgui_layer->begin();
 			on_gui();
@@ -56,12 +67,6 @@ namespace ue
 
 			_window->on_update();
 		}
-	}
-
-	void application::on_update()
-	{
-		for (auto scene : _scenes)
-			scene->on_update();
 	}
 
 	void application::close()

@@ -3,6 +3,7 @@
 #include "uengine/core/window.h"
 #include "uengine/core/layer_stack.h"
 #include "uengine/core/scene.h"
+#include "uengine/core/system.h"
 #include "uengine/imgui/imgui_layer.h"
 
 namespace ue 
@@ -16,6 +17,8 @@ namespace ue
 		layer_stack _layers_stack;
 		imgui_layer* _imgui_layer;
 		std::vector<scene*> _scenes;
+		scene* _current_scene = nullptr;
+		std::vector<system*> _systems;
 	public:
 		application();
 
@@ -28,13 +31,23 @@ namespace ue
 		void push_layer(layer* layer) { _layers_stack.push_layer(layer); }
 		void push_overlay(layer* overlay) { _layers_stack.push_overlay(overlay); }
 
-		void add_scene(scene& scene) { _scenes.push_back(&scene); }
+		void add_scene(scene& scene) 
+		{ 
+			_scenes.push_back(&scene); 
+			_current_scene = &scene;
+		}
 
-		void remove_scene(int index) { _scenes.erase(std::next(_scenes.begin(), index)); }
+		template<typename t, typename std::enable_if<std::is_base_of<system, t>::value, bool>::type = true>
+		void add_system() 
+		{
+			t* s = new t();
+			s->_registry = &_current_scene->_registry;
+			_systems.push_back(s);
+		}
 
 		void run();
 
-		virtual void on_update();
+		virtual void on_update() { }
 
 		virtual void on_gui() { }
 

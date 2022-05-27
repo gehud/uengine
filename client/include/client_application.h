@@ -2,8 +2,6 @@
 
 #include <uengine.h>
 
-#include <imgui.h>
-
 using namespace ue;
 
 class client_application : public application
