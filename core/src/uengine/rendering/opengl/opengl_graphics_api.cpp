@@ -13,6 +13,11 @@ namespace ue
 		int glad_init_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		UE_CORE_ASSERT(glad_init_status, "Failed to initialize OpenGL.");
 
+		UE_CORE_INFO("OpenGL info:");
+		UE_CORE_INFO("\tVendor: {0}", glGetString(GL_VENDOR));
+		UE_CORE_INFO("\tRenderer: {0}", glGetString(GL_RENDERER));
+		UE_CORE_INFO("\tVersion: {0}", glGetString(GL_VERSION));
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

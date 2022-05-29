@@ -2,14 +2,14 @@
 
 #include "uengine/rendering/graphics_api.h"
 
-#include <vulkan/vulkan.h>
+struct VkInstance_T;
 
 namespace ue 
 {
 	class vulkan_graphics_api : public graphics_api
 	{
 	private:
-		VkInstance _instance;
+		VkInstance_T* _instance;
 	public:
 		~vulkan_graphics_api();
 
@@ -24,6 +24,5 @@ namespace ue
 		void draw_elements(int mode, int count, int type) override {}
 
 		void viewport(int x, int y, int width, int height) override {}
-
 	};
 }

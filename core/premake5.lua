@@ -3,6 +3,8 @@ project "Core"
 	systemversion "latest"
 	cppdialect "C++17"
 
+	targetname "uengine"
+
 	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
 	objdir ("bin/int/" .. output_dir .. "/%{prj.name}")
 
@@ -25,11 +27,15 @@ project "Core"
 		"dependencies/entt/single_include"
 	}
 
+	libdirs {
+		"dependencies/vulkan/lib"
+	}
+
 	links {
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"dependencies/vulkan/lib/vulkan-1.lib"
+		"vulkan-1.lib"
 	}
 
 	defines {

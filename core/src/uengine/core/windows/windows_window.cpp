@@ -13,7 +13,7 @@ namespace ue
 	windows_window::windows_window(const window_properties& properties)
 		: _title(properties.title), _width(properties.width), _height(properties.height)
 	{
-		UE_CORE_INFO("Creating window: \"{0}\" ({1}, {2})", _title, _width, _height);
+		UE_CORE_INFO("Creating window: \"{0}\" ({1}, {2}).", _title, _width, _height);
 
 		if (!is_glfw_initialized) 
 		{
@@ -21,7 +21,7 @@ namespace ue
 			UE_CORE_ASSERT(glfwInitStatus, "Could not initialize GLFW.");
 			glfwSetErrorCallback([](int error, const char* message)
 				{
-					UE_CORE_ERROR("GLFW Error ({0}): {1}", error, message);
+					UE_CORE_ERROR("GLFW Error ({0}): {1}.", error, message);
 				});
 			is_glfw_initialized = true;
 		}
