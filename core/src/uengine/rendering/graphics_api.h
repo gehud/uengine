@@ -9,6 +9,8 @@ namespace ue
 
 		virtual void init() = 0;
 
+		virtual void terminate() = 0;
+
 		virtual void clear_color(float r, float g, float b, float a) = 0;
 
 		virtual void clear() = 0;

@@ -24,6 +24,10 @@ namespace ue
 		glEnable(GL_DEPTH);
 	}
 
+	void opengl_graphics_api::terminate()
+	{
+	}
+
 	void opengl_graphics_api::clear_color(float r, float g, float b, float a)
 	{
 		glClearColor(r, g, b, a);

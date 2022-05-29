@@ -9,6 +9,8 @@ namespace ue
 	public:
 		void init() override;
 
+		void terminate() override;
+
 		void clear_color(float r, float g, float b, float a) override;
 
 		void clear() override;

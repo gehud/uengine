@@ -6,18 +6,19 @@
 
 #include <GLFW/glfw3.h>
 
+#include <map>
 #include <vector>
 
 namespace ue 
 {
 #ifdef UE_DEBUG
 
-	static std::vector<const char*> layers = 
+	static VkDebugUtilsMessengerEXT _messenger;
+
+	static std::vector<const char*> _layers = 
 	{
 		"VK_LAYER_KHRONOS_validation"
 	};
-
-	static VkDebugUtilsMessengerEXT debug_messenger;
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
@@ -45,7 +46,7 @@ namespace ue
 		return VK_FALSE;
 	}
 
-	VkResult create_debug_utils_messeger_ext(
+	static VkResult create_debug_utils_messeger_ext(
 		VkInstance instance, 
 		const VkDebugUtilsMessengerCreateInfoEXT* create_info, 
 		const VkAllocationCallbacks* allocator, 
@@ -57,7 +58,7 @@ namespace ue
 		return VK_ERROR_EXTENSION_NOT_PRESENT;
 	}
 
-	void destroy_debug_utils_messenger_ext(
+	static void destroy_debug_utils_messenger_ext(
 		VkInstance instance, 
 		VkDebugUtilsMessengerEXT debug_messenger, 
 		const VkAllocationCallbacks* allocator) 
@@ -69,25 +70,62 @@ namespace ue
 
 #endif // UE_DEBUG
 
-	vulkan_graphics_api::~vulkan_graphics_api()
+	static int rate_device_suitability(const VkPhysicalDevice& device)
 	{
-#ifdef UE_DEBUG
-		destroy_debug_utils_messenger_ext(_instance, debug_messenger, nullptr);
-#endif // UE_DEBUG
-		vkDestroyInstance(_instance, nullptr);
+		// Queue families.
+
+		unsigned int queue_family_count = 0;
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, nullptr);
+		std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, queue_families.data());
+		bool has_graphics_queue_family = false;
+		for (const auto& queue_family : queue_families)
+			if ((queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0) 
+			{
+				has_graphics_queue_family = true;
+				break;
+			}
+		if (!has_graphics_queue_family)
+			return 0;
+
+		VkPhysicalDeviceFeatures features;
+		vkGetPhysicalDeviceFeatures(device, &features);
+
+		if (!features.geometryShader)
+			return 0;
+
+		VkPhysicalDeviceProperties properties;
+		vkGetPhysicalDeviceProperties(device, &properties);
+
+		int score = 0;
+
+		if (properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+			score += 100;
+
+		score += properties.limits.maxImageDimension2D;
+
+		return score;
 	}
+
+	static VkInstance _instance;
+	static VkPhysicalDevice _device;
+
+	static bool vulkan_initialized = false;
 
 	void vulkan_graphics_api::init()
 	{
+		if (vulkan_initialized)
+			return;
+
 #ifdef UE_DEBUG
 
 		// Validation layers support.
-		unsigned int layer_count;
+		unsigned int layer_count = 0;
 		vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
 		std::vector<VkLayerProperties> avaible_layers(layer_count);
 		vkEnumerateInstanceLayerProperties(&layer_count, avaible_layers.data());
 		bool layers_avaible = true;
-		for (const char* layer_name : layers)
+		for (const char* layer_name : _layers)
 		{
 			bool layer_found = false;
 
@@ -115,8 +153,8 @@ namespace ue
 		create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		create_info.pApplicationInfo = &app_info;
 #ifdef UE_DEBUG
-		create_info.enabledLayerCount = static_cast<uint32_t>(layers.size());
-		create_info.ppEnabledLayerNames = layers.data();
+		create_info.enabledLayerCount = static_cast<uint32_t>(_layers.size());
+		create_info.ppEnabledLayerNames = _layers.data();
 #else
 		create_info.enabledLayerCount = 0;
 #endif // UE_DEBUG
@@ -158,9 +196,40 @@ namespace ue
 			| VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		messenger_info.pfnUserCallback = debug_callback;
 
-		if (create_debug_utils_messeger_ext(_instance, &messenger_info, nullptr, &debug_messenger) != VK_SUCCESS)
+		if (create_debug_utils_messeger_ext(_instance, &messenger_info, nullptr, &_messenger) != VK_SUCCESS)
 			UE_CORE_ASSERT(false, "Failed to set up vulkan debug messenger.");
 
 #endif // UE_DEBUG
+
+		// Physical devise.
+		unsigned int device_count = 0;
+		vkEnumeratePhysicalDevices(_instance, &device_count, nullptr);
+		UE_CORE_ASSERT(device_count != 0, "Failed to find Vulkan compatible devices.");
+		std::vector<VkPhysicalDevice> devices(device_count);
+		vkEnumeratePhysicalDevices(_instance, &device_count, devices.data());
+
+		std::multimap<int, VkPhysicalDevice> rating;
+		for (const auto& device : devices) 
+		{
+			int score = rate_device_suitability(device);
+			rating.insert(std::make_pair(score, device));
+		}
+		if (rating.rbegin()->first > 0)
+			_device = rating.rbegin()->second;
+		else
+			UE_CORE_ASSERT(_device != nullptr, "Failed to find Vulkan suitable device.");
+		
+		vulkan_initialized = true;
+	}
+
+	void vulkan_graphics_api::terminate()
+	{
+		if (!vulkan_initialized)
+			return;
+
+#ifdef UE_DEBUG
+		destroy_debug_utils_messenger_ext(_instance, _messenger, nullptr);
+#endif // UE_DEBUG
+		vkDestroyInstance(_instance, nullptr);
 	}
 }
