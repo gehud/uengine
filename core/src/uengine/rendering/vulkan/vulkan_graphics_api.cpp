@@ -19,7 +19,7 @@ namespace ue
 
 #ifdef UE_DEBUG
 
-	static VkDebugUtilsMessengerEXT _messenger;
+	static VkDebugUtilsMessengerEXT _debug_messenger;
 
 	static std::vector<const char*> _layers = 
 	{
@@ -30,9 +30,8 @@ namespace ue
 		VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
 		VkDebugUtilsMessageTypeFlagsEXT message_type,
 		const VkDebugUtilsMessengerCallbackDataEXT* callback_data,
-		void* user_data) 
+		void* user_data)
 	{
-
 		switch (message_severity)
 		{
 		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
@@ -147,14 +146,10 @@ namespace ue
 		return score;
 	}
 
-	void vulkan_graphics_api::init()
+	static void check_validation_layers_support() 
 	{
-		if (vulkan_initialized)
-			return;
-
 #ifdef UE_DEBUG
 
-		// Validation layers support.
 		unsigned int layer_count = 0;
 		vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
 		std::vector<VkLayerProperties> avaible_layers(layer_count);
@@ -179,11 +174,13 @@ namespace ue
 		UE_CORE_ASSERT(layers_avaible, "Not all layers avaible.");
 
 #endif // UE_DEBUG
+	}
 
-		// Info.
+	static void create_instance() 
+	{
 		VkApplicationInfo app_info{};
 		app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-		
+
 		VkInstanceCreateInfo create_info{};
 		create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		create_info.pApplicationInfo = &app_info;
@@ -194,7 +191,6 @@ namespace ue
 		create_info.enabledLayerCount = 0;
 #endif // UE_DEBUG
 
-		// Extensions.
 		unsigned int extension_count = 0;
 		const char** required_extensions = glfwGetRequiredInstanceExtensions(&extension_count);
 		std::vector<const char*> extensions(required_extensions, required_extensions + extension_count);
@@ -205,7 +201,6 @@ namespace ue
 		create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
 		create_info.ppEnabledExtensionNames = extensions.data();
 
-		// Instance.
 		if (vkCreateInstance(&create_info, nullptr, &_instance) != VK_SUCCESS)
 			UE_CORE_ASSERT(false, "Failed to initialize Vulkan.");
 
@@ -216,26 +211,30 @@ namespace ue
 		UE_CORE_INFO("Vulkan extensions:");
 		for (auto extension : extension_properties)
 			UE_CORE_INFO("\t{0}", extension.extensionName);
+	}
 
+	static void setup_debug_messenger() 
+	{
 #ifdef UE_DEBUG
 
-		// Debug messenger.
 		VkDebugUtilsMessengerCreateInfoEXT messenger_create_info{};
 		messenger_create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-		messenger_create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT 
-			| VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT
-			| VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT 
+		messenger_create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT
+			| VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
 			| VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-		messenger_create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT 
-			| VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT 
+		messenger_create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
+			| VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
 			| VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		messenger_create_info.pfnUserCallback = debug_callback;
 
-		if (create_debug_utils_messeger_ext(_instance, &messenger_create_info, nullptr, &_messenger) != VK_SUCCESS)
+		if (create_debug_utils_messeger_ext(_instance, &messenger_create_info, nullptr, &_debug_messenger) != VK_SUCCESS)
 			UE_CORE_ASSERT(false, "Failed to set up vulkan debug messenger.");
 
 #endif // UE_DEBUG
+	}
 
+	static void create_surface() 
+	{
 		// Window surface
 		VkWin32SurfaceCreateInfoKHR surface_create_info{};
 		surface_create_info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
@@ -244,8 +243,10 @@ namespace ue
 		surface_create_info.hinstance = GetModuleHandle(nullptr);
 		if (vkCreateWin32SurfaceKHR(_instance, &surface_create_info, nullptr, &_surface) != VK_SUCCESS)
 			UE_CORE_ASSERT(false, "Failed to create window surface.");
+	}
 
-		// Physical devise.
+	static void pick_physical_device() 
+	{
 		unsigned int device_count = 0;
 		vkEnumeratePhysicalDevices(_instance, &device_count, nullptr);
 		UE_CORE_ASSERT(device_count != 0, "Failed to find Vulkan compatible devices.");
@@ -262,17 +263,19 @@ namespace ue
 			_physical_device = rating.rbegin()->second;
 		else
 			UE_CORE_ASSERT(_physical_device != nullptr, "Failed to find Vulkan suitable device.");
+	}
 
-		// Logical device.
+	static void create_logical_device() 
+	{
 		queue_family_infices indices = get_queue_families(_physical_device);
 		std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
-		std::set<unsigned int> queue_families = 
+		std::set<unsigned int> queue_families =
 		{
 			indices.graphics_family.value(),
 			indices.present_family.value()
 		};
 		float queue_priority = 1.0f;
-		for (unsigned int queue_family : queue_families) 
+		for (unsigned int queue_family : queue_families)
 		{
 			VkDeviceQueueCreateInfo queue_create_info{};
 			queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -300,6 +303,19 @@ namespace ue
 
 		vkGetDeviceQueue(_device, indices.graphics_family.value(), 0, &_graphics_queue);
 		vkGetDeviceQueue(_device, indices.present_family.value(), 0, &_present_queue);
+	}
+
+	void vulkan_graphics_api::init()
+	{
+		if (vulkan_initialized)
+			return;
+
+		check_validation_layers_support();
+		create_instance();
+		setup_debug_messenger();
+		create_surface();
+		pick_physical_device();
+		create_logical_device();
 
 		vulkan_initialized = true;
 	}
@@ -312,7 +328,7 @@ namespace ue
 		vkDestroyDevice(_device, nullptr);
 		vkDestroySurfaceKHR(_instance, _surface, nullptr);
 #ifdef UE_DEBUG
-		destroy_debug_utils_messenger_ext(_instance, _messenger, nullptr);
+		destroy_debug_utils_messenger_ext(_instance, _debug_messenger, nullptr);
 #endif // UE_DEBUG
 		vkDestroyInstance(_instance, nullptr);
 	}
