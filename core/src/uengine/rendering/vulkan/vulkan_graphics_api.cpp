@@ -8,9 +8,12 @@
 
 #include <map>
 #include <vector>
+#include <optional>
 
 namespace ue 
 {
+#pragma region Debug
+
 #ifdef UE_DEBUG
 
 	static VkDebugUtilsMessengerEXT _messenger;
@@ -70,32 +73,50 @@ namespace ue
 
 #endif // UE_DEBUG
 
-	static int rate_device_suitability(const VkPhysicalDevice& device)
+#pragma endregion
+
+	struct queue_family_infices 
 	{
-		// Queue families.
+		std::optional<unsigned int> graphics_family;
+	};
+
+	static queue_family_infices get_queue_families(const VkPhysicalDevice& physical_device) 
+	{
+		queue_family_infices indices;
 
 		unsigned int queue_family_count = 0;
-		vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, nullptr);
+		vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &queue_family_count, nullptr);
 		std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
-		vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, queue_families.data());
-		bool has_graphics_queue_family = false;
-		for (const auto& queue_family : queue_families)
-			if ((queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0) 
+		vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &queue_family_count, queue_families.data());
+
+		unsigned int i = 0;
+		for (const auto& queue_family : queue_families) 
+		{
+			if (queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 			{
-				has_graphics_queue_family = true;
+				indices.graphics_family = i;
 				break;
 			}
-		if (!has_graphics_queue_family)
+
+			i++;
+		}
+
+		return indices;
+	}
+
+	static int rate_device_suitability(const VkPhysicalDevice& physical_device)
+	{
+		if (!get_queue_families(physical_device).graphics_family.has_value())
 			return 0;
 
 		VkPhysicalDeviceFeatures features;
-		vkGetPhysicalDeviceFeatures(device, &features);
+		vkGetPhysicalDeviceFeatures(physical_device, &features);
 
 		if (!features.geometryShader)
 			return 0;
 
 		VkPhysicalDeviceProperties properties;
-		vkGetPhysicalDeviceProperties(device, &properties);
+		vkGetPhysicalDeviceProperties(physical_device, &properties);
 
 		int score = 0;
 
@@ -108,7 +129,9 @@ namespace ue
 	}
 
 	static VkInstance _instance;
-	static VkPhysicalDevice _device;
+	static VkPhysicalDevice _physical_device;
+	static VkDevice _device;
+	static VkQueue _graphics_queue;
 
 	static bool vulkan_initialized = false;
 
@@ -185,18 +208,18 @@ namespace ue
 #ifdef UE_DEBUG
 
 		// Debug messenger.
-		VkDebugUtilsMessengerCreateInfoEXT messenger_info{};
-		messenger_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-		messenger_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT 
+		VkDebugUtilsMessengerCreateInfoEXT messenger_create_info{};
+		messenger_create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+		messenger_create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT 
 			| VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT
 			| VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT 
 			| VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-		messenger_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT 
+		messenger_create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT 
 			| VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT 
 			| VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-		messenger_info.pfnUserCallback = debug_callback;
+		messenger_create_info.pfnUserCallback = debug_callback;
 
-		if (create_debug_utils_messeger_ext(_instance, &messenger_info, nullptr, &_messenger) != VK_SUCCESS)
+		if (create_debug_utils_messeger_ext(_instance, &messenger_create_info, nullptr, &_messenger) != VK_SUCCESS)
 			UE_CORE_ASSERT(false, "Failed to set up vulkan debug messenger.");
 
 #endif // UE_DEBUG
@@ -215,10 +238,37 @@ namespace ue
 			rating.insert(std::make_pair(score, device));
 		}
 		if (rating.rbegin()->first > 0)
-			_device = rating.rbegin()->second;
+			_physical_device = rating.rbegin()->second;
 		else
-			UE_CORE_ASSERT(_device != nullptr, "Failed to find Vulkan suitable device.");
-		
+			UE_CORE_ASSERT(_physical_device != nullptr, "Failed to find Vulkan suitable device.");
+
+		// Logical device.
+		queue_family_infices indices = get_queue_families(_physical_device);
+		VkDeviceQueueCreateInfo queue_create_info{};
+		queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queue_create_info.queueFamilyIndex = indices.graphics_family.value();
+		queue_create_info.queueCount = 1;
+		float queue_priority = 1.0f;
+		queue_create_info.pQueuePriorities = &queue_priority;
+
+		VkPhysicalDeviceFeatures device_features{};
+		VkDeviceCreateInfo device_create_info{};
+		device_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		device_create_info.pQueueCreateInfos = &queue_create_info;
+		device_create_info.queueCreateInfoCount = 1;
+		device_create_info.pEnabledFeatures = &device_features;
+		device_create_info.enabledExtensionCount = 0;
+#ifdef UE_DEBUG
+		device_create_info.enabledLayerCount = static_cast<uint32_t>(_layers.size());
+		device_create_info.ppEnabledLayerNames = _layers.data();
+#else
+		device_create_info.enabledLayerCount = 0;
+#endif // UE_DEBUG
+		if (vkCreateDevice(_physical_device, &device_create_info, nullptr, &_device) != VK_SUCCESS)
+			UE_CORE_ASSERT(false, "Failed to create logical device.");
+
+		vkGetDeviceQueue(_device, indices.graphics_family.value(), 0, &_graphics_queue);
+
 		vulkan_initialized = true;
 	}
 
@@ -230,6 +280,7 @@ namespace ue
 #ifdef UE_DEBUG
 		destroy_debug_utils_messenger_ext(_instance, _messenger, nullptr);
 #endif // UE_DEBUG
+		vkDestroyDevice(_device, nullptr);
 		vkDestroyInstance(_instance, nullptr);
 	}
 }
