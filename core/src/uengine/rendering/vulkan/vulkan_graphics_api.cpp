@@ -1,12 +1,15 @@
 #include "vulkan_graphics_api.h"
 
 #include "uengine/core/assertion.h"
+#include "uengine/core/application.h"
 
 #include <vulkan/vulkan.h>
 
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
 #include <map>
+#include <set>	
 #include <vector>
 #include <optional>
 
@@ -78,7 +81,22 @@ namespace ue
 	struct queue_family_infices 
 	{
 		std::optional<unsigned int> graphics_family;
+		std::optional<unsigned int> present_family;
+
+		bool is_complete() const 
+		{
+			return graphics_family.has_value() && present_family.has_value();
+		}
 	};
+
+	static VkInstance _instance;
+	static VkSurfaceKHR _surface;
+	static VkPhysicalDevice _physical_device;
+	static VkDevice _device;
+	static VkQueue _graphics_queue;
+	static VkQueue _present_queue;
+
+	static bool vulkan_initialized = false;
 
 	static queue_family_infices get_queue_families(const VkPhysicalDevice& physical_device) 
 	{
@@ -92,11 +110,12 @@ namespace ue
 		unsigned int i = 0;
 		for (const auto& queue_family : queue_families) 
 		{
+			VkBool32 present_support = false;
+			vkGetPhysicalDeviceSurfaceSupportKHR(physical_device, i, _surface, &present_support);
+			if (present_support)
+				indices.present_family = i;
 			if (queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-			{
 				indices.graphics_family = i;
-				break;
-			}
 
 			i++;
 		}
@@ -127,13 +146,6 @@ namespace ue
 
 		return score;
 	}
-
-	static VkInstance _instance;
-	static VkPhysicalDevice _physical_device;
-	static VkDevice _device;
-	static VkQueue _graphics_queue;
-
-	static bool vulkan_initialized = false;
 
 	void vulkan_graphics_api::init()
 	{
@@ -224,6 +236,15 @@ namespace ue
 
 #endif // UE_DEBUG
 
+		// Window surface
+		VkWin32SurfaceCreateInfoKHR surface_create_info{};
+		surface_create_info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+		void* native_window = application::get_instance().get_window().get_native_window();
+		surface_create_info.hwnd = glfwGetWin32Window(static_cast<GLFWwindow*>(native_window));
+		surface_create_info.hinstance = GetModuleHandle(nullptr);
+		if (vkCreateWin32SurfaceKHR(_instance, &surface_create_info, nullptr, &_surface) != VK_SUCCESS)
+			UE_CORE_ASSERT(false, "Failed to create window surface.");
+
 		// Physical devise.
 		unsigned int device_count = 0;
 		vkEnumeratePhysicalDevices(_instance, &device_count, nullptr);
@@ -244,18 +265,28 @@ namespace ue
 
 		// Logical device.
 		queue_family_infices indices = get_queue_families(_physical_device);
-		VkDeviceQueueCreateInfo queue_create_info{};
-		queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-		queue_create_info.queueFamilyIndex = indices.graphics_family.value();
-		queue_create_info.queueCount = 1;
+		std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
+		std::set<unsigned int> queue_families = 
+		{
+			indices.graphics_family.value(),
+			indices.present_family.value()
+		};
 		float queue_priority = 1.0f;
-		queue_create_info.pQueuePriorities = &queue_priority;
+		for (unsigned int queue_family : queue_families) 
+		{
+			VkDeviceQueueCreateInfo queue_create_info{};
+			queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+			queue_create_info.queueFamilyIndex = queue_family;
+			queue_create_info.queueCount = 1;
+			queue_create_info.pQueuePriorities = &queue_priority;
+			queue_create_infos.push_back(queue_create_info);
+		}
 
 		VkPhysicalDeviceFeatures device_features{};
 		VkDeviceCreateInfo device_create_info{};
 		device_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-		device_create_info.pQueueCreateInfos = &queue_create_info;
-		device_create_info.queueCreateInfoCount = 1;
+		device_create_info.queueCreateInfoCount = static_cast<uint32_t>(queue_create_infos.size());
+		device_create_info.pQueueCreateInfos = queue_create_infos.data();
 		device_create_info.pEnabledFeatures = &device_features;
 		device_create_info.enabledExtensionCount = 0;
 #ifdef UE_DEBUG
@@ -268,6 +299,7 @@ namespace ue
 			UE_CORE_ASSERT(false, "Failed to create logical device.");
 
 		vkGetDeviceQueue(_device, indices.graphics_family.value(), 0, &_graphics_queue);
+		vkGetDeviceQueue(_device, indices.present_family.value(), 0, &_present_queue);
 
 		vulkan_initialized = true;
 	}
@@ -277,10 +309,11 @@ namespace ue
 		if (!vulkan_initialized)
 			return;
 
+		vkDestroyDevice(_device, nullptr);
+		vkDestroySurfaceKHR(_instance, _surface, nullptr);
 #ifdef UE_DEBUG
 		destroy_debug_utils_messenger_ext(_instance, _messenger, nullptr);
 #endif // UE_DEBUG
-		vkDestroyDevice(_device, nullptr);
 		vkDestroyInstance(_instance, nullptr);
 	}
 }

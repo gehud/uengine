@@ -28,6 +28,7 @@ namespace ue
 
 	application::~application()
 	{
+		gl::terminate();
 		for (auto system : _systems)
 			delete system;
 		delete _window;

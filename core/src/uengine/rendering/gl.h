@@ -13,6 +13,8 @@ namespace ue
 	public:
 		static void init() { _api->init(); }
 
+		static void terminate() { _api->terminate(); }
+
 		static void clear_color(float r, float g, float b, float a) { _api->clear_color(r, g, b, a); }
 
 		static void clear() { _api->clear(); }

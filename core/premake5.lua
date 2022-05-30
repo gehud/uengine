@@ -45,7 +45,9 @@ project "Core"
 
 	filter "system:windows"
 		defines {
-			"UE_WINDOWS"
+			"UE_WINDOWS",
+			"GLFW_EXPOSE_NATIVE_WIN32",
+			"VK_USE_PLATFORM_WIN32_KHR"
 		}
 
 	filter "configurations:Debug"
