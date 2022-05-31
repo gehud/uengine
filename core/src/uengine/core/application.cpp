@@ -12,6 +12,7 @@
 namespace ue 
 {
 	application* application::_instance = nullptr;
+	application_platform application::_platform = application_platform::windows;
 
 	application::application() : _is_runing(true)
 	{

@@ -10,6 +10,8 @@ namespace ue
 {
 	void opengl_graphics_api::init()
 	{
+		gladLoadGL();
+
 		int glad_init_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		UE_CORE_ASSERT(glad_init_status, "Failed to initialize OpenGL.");
 

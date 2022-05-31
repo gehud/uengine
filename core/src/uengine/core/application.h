@@ -5,6 +5,7 @@
 #include "uengine/core/layer_stack.h"
 #include "uengine/core/scene.h"
 #include "uengine/core/system.h"
+#include "uengine/core/application_platform.h"
 #include "uengine/imgui/imgui_layer.h"
 
 namespace ue 
@@ -13,6 +14,7 @@ namespace ue
 	{
 	private:
 		static application* _instance;
+		static application_platform _platform;
 		bool _is_runing;
 		window* _window;
 		layer_stack _layers_stack;
@@ -26,6 +28,8 @@ namespace ue
 		~application();
 
 		static application& get_instance() { return *_instance; }
+
+		static application_platform get_platform() { return _platform; }
 
 		window& get_window() { return *_window; }
 
