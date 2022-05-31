@@ -9,7 +9,7 @@ namespace ue
 	{
 		switch (graphics::get_api())
 		{
-			case graphics_apis::opengl: return std::shared_ptr<shader>(new opengl_shader(path));
+			case graphics_api_type::opengl: return std::shared_ptr<shader>(new opengl_shader(path));
 		}
 	}
 
@@ -17,7 +17,7 @@ namespace ue
 	{
 		switch (graphics::get_api())
 		{
-			case graphics_apis::opengl: 
+			case graphics_api_type::opengl: 
 				return std::shared_ptr<shader>(new opengl_shader(vertex_source, fragment_source));
 		}
 	}

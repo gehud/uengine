@@ -9,7 +9,7 @@ namespace ue
 	{
 		switch (graphics::get_api())
 		{
-		case graphics_apis::opengl: return std::shared_ptr<texture_2d>(new opengl_texture_2d(path));
+		case graphics_api_type::opengl: return std::shared_ptr<texture_2d>(new opengl_texture_2d(path));
 		}
 	}
 

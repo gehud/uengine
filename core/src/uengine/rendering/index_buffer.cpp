@@ -9,7 +9,7 @@ namespace ue
 	{
 		switch (graphics::get_api())
 		{
-			case graphics_apis::opengl: 
+			case graphics_api_type::opengl: 
 				return std::shared_ptr<index_buffer>(new opengl_index_buffer(indices, count, stride));
 		}
 	}
@@ -18,7 +18,7 @@ namespace ue
 	{
 		switch (graphics::get_api())
 		{
-			case graphics_apis::opengl:
+			case graphics_api_type::opengl:
 				return std::shared_ptr<index_buffer>(new opengl_index_buffer(indices, count, stride));
 		}
 	}
@@ -27,7 +27,7 @@ namespace ue
 	{
 		switch (graphics::get_api())
 		{
-			case graphics_apis::opengl:
+			case graphics_api_type::opengl:
 				return std::shared_ptr<index_buffer>(new opengl_index_buffer(indices, count, stride));
 		}
 	}

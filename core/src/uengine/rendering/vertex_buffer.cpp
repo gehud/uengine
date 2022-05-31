@@ -9,7 +9,7 @@ namespace ue
 	{
 		switch (graphics::get_api())
 		{
-			case graphics_apis::opengl: 
+			case graphics_api_type::opengl: 
 				return std::shared_ptr<vertex_buffer>(new opengl_vertex_buffer(data, count, stride));
 		}
 	}

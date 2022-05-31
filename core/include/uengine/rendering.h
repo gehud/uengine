@@ -5,7 +5,7 @@
 #include "uengine/rendering/gl.h"
 #include "uengine/rendering/graphics.h"
 #include "uengine/rendering/graphics_api.h"
-#include "uengine/rendering/graphics_apis.h"
+#include "uengine/rendering/graphics_api_type.h"
 #include "uengine/rendering/index_buffer.h"
 #include "uengine/rendering/shader.h"
 #include "uengine/rendering/texture.h"

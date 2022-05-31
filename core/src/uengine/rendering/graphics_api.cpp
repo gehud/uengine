@@ -10,8 +10,8 @@ namespace ue
 	{
 		switch (graphics::get_api())
 		{
-		case graphics_apis::opengl: return new opengl_graphics_api();
-		case graphics_apis::vulkan: return new vulkan_graphics_api();
+		case graphics_api_type::opengl: return new opengl_graphics_api();
+		case graphics_api_type::vulkan: return new vulkan_graphics_api();
 		}
 	}
 }
