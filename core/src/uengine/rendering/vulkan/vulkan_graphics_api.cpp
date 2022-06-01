@@ -488,6 +488,10 @@ namespace ue
 		}
 	}
 
+	static void create_graphics_pipeline() 
+	{
+	}
+
 	void vulkan_graphics_api::init()
 	{
 		if (_vulkan_initialized)
@@ -501,6 +505,7 @@ namespace ue
 		create_logical_device();
 		create_swapchain();
 		create_swapchain_image_views();
+		create_graphics_pipeline();
 
 		_vulkan_initialized = true;
 	}
