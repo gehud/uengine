@@ -8,8 +8,13 @@
 
 namespace ue 
 {
+	static bool _opengl_initialized = false;
+
 	void opengl_graphics_api::init()
 	{
+		if (_opengl_initialized)
+			return;
+
 		gladLoadGL();
 
 		int glad_init_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -24,10 +29,14 @@ namespace ue
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH);
+
+		_opengl_initialized = true;
 	}
 
 	void opengl_graphics_api::terminate()
 	{
+		if (!_opengl_initialized)
+			return;
 	}
 
 	void opengl_graphics_api::clear_color(float r, float g, float b, float a)
