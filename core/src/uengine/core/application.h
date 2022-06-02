@@ -6,7 +6,7 @@
 #include "uengine/core/scene.h"
 #include "uengine/core/system.h"
 #include "uengine/core/application_platform.h"
-#include "uengine/imgui/imgui_layer.h"
+#include "uengine/gui/gui_layer.h"
 
 namespace ue 
 {
@@ -18,7 +18,7 @@ namespace ue
 		bool _is_runing;
 		window* _window;
 		layer_stack _layers_stack;
-		imgui_layer* _imgui_layer;
+		gui_layer* _gui_layer;
 		std::vector<scene*> _scenes;
 		scene* _current_scene = nullptr;
 		std::vector<system*> _systems;

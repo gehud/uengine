@@ -22,8 +22,8 @@ namespace ue
 		_window = window::create(window_properties("UEngine", 1280, 720));
 		_window->on_close += new lambda<void>([this](){ close(); });
 		gl::init();
-		_imgui_layer = new imgui_layer();
-		push_overlay(_imgui_layer);
+		_gui_layer = new gui_layer();
+		push_overlay(_gui_layer);
 		UE_CORE_INFO("Welcome to the UEngine!");
 	}
 
@@ -61,11 +61,11 @@ namespace ue
 			for (auto scene : _scenes)
 				scene->on_update();
 
-			_imgui_layer->begin();
+			_gui_layer->begin();
 			on_gui();
 			for (auto layer : _layers_stack)
 				layer->on_gui();
-			_imgui_layer->end();
+			_gui_layer->end();
 
 			_window->on_update();
 		}

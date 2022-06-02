@@ -1,4 +1,4 @@
-#include "imgui_layer.h"
+#include "gui_layer.h"
 
 #include "uengine/core/application.h"
 
@@ -13,7 +13,9 @@
 
 namespace ue 
 {
-	void imgui_layer::on_attach()
+	void set_style();
+
+	void gui_layer::on_attach()
 	{
 		IMGUI_CHECKVERSION();
 
@@ -27,7 +29,10 @@ namespace ue
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		ImGui::StyleColorsDark();
+		io.Fonts->AddFontFromFileTTF("../core/assets/fonts/open_sans/OpenSans-Bold.ttf", 22.0f);	
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("../core/assets/fonts/open_sans/OpenSans-Regular.ttf", 22.0f);
+
+		set_style();
 		application& app = application::get_instance();
 		window& window = app.get_window();
 		GLFWwindow* glfw_window = static_cast<GLFWwindow*>(window.get_native_window());
@@ -36,21 +41,21 @@ namespace ue
 		ImGui_ImplGlfw_InitForOpenGL(glfw_window, true);
 	}
 
-	void imgui_layer::on_detach()
+	void gui_layer::on_detach()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	void imgui_layer::begin()
+	void gui_layer::begin()
 	{
 		ImGui_ImplGlfw_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
 	}
 
-	void imgui_layer::end()
+	void gui_layer::end()
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		application& app = application::get_instance();
@@ -66,5 +71,14 @@ namespace ue
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_context);
 		}
+	}
+
+	static void set_style() 
+	{
+		ImGuiStyle dark_style;
+		ImGui::StyleColorsDark(&dark_style);
+		dark_style.WindowMinSize = ImVec2(128, 128);
+		dark_style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		ImGui::GetStyle() = dark_style;
 	}
 }

@@ -85,7 +85,7 @@ public:
 		_transform = &_entity.get_component<transform>();
 		_camera = &_entity.add_component<camera>();
 		_camera->set_aspect(16.0f / 9.0f);
-		_transform->set_position({ 0.0f, 0.0f, 1.0f });
+		_transform->set_position({ 0.0f, 0.0f, 2.0f });
 		add_scene(_scene);
 	}
 
@@ -123,5 +123,10 @@ public:
 		_shader->set_matrix4x4("u_ViewProjection", _camera->get_projection_matrix() * _transform->get_world_to_local());
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
+	}
+
+	void on_gui() override 
+	{
+		gui::window({ 50, 50, 300, 300 }, lambda<>([]() {}), "My Window");
 	}
 };

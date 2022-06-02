@@ -6,6 +6,13 @@ namespace ue
 {
 	struct color 
 	{
+		static const color white;
+		static const color black;
+		static const color clear;
+		static const color red;
+		static const color green;
+		static const color blue;
+
 		float r = 0.0f;
 		float g = 0.0f;
 		float b = 0.0f;
@@ -13,6 +20,13 @@ namespace ue
 
 		color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) { }
 		color(const vector4& vector) : r(vector.x), g(vector.y), b(vector.z), a(vector.w) { }
+
+		static color get_white() { return white; }
+		static color get_black() { return black; }
+		static color get_clear() { return clear; }
+		static color get_red() { return red; }
+		static color get_green() { return green; }
+		static color get_blue() { return blue; }
 
 		operator vector4() const { return vector4(r, g, b, a); }
 

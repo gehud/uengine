@@ -16,6 +16,9 @@ namespace ue
 		}
 	};
 
+	template<typename... targs>
+	using iaction = ifunction<void, targs...>;
+
 	template<typename treturn = void, typename... targs>
 	class function_ptr : public ifunction<treturn, targs...>
 	{

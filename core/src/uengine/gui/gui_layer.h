@@ -4,7 +4,7 @@
 
 namespace ue 
 {
-	class imgui_layer : public layer 
+	class gui_layer : public layer 
 	{
 	public:
 		void on_attach() override;

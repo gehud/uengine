@@ -126,6 +126,26 @@ namespace ue
 		return vector2(vector.x / number, vector.y / number);
 	}
 
+	inline bool operator > (const vector2& left, const vector2& right) 
+	{
+		return left.x > right.x && left.y > right.y;
+	}
+
+	inline bool operator >= (const vector2& left, const vector2& right)
+	{
+		return left.x >= right.x && left.y >= right.y;
+	}
+
+	inline bool operator < (const vector2& left, const vector2& right)
+	{
+		return left.x < right.x && left.y < right.y;
+	}
+
+	inline bool operator <= (const vector2& left, const vector2& right)
+	{
+		return left.x <= right.x && left.y <= right.y;
+	}
+
 	inline bool operator == (const vector2& left, const vector2& right)
 	{
 		return left.x == right.x && left.y == right.y;
