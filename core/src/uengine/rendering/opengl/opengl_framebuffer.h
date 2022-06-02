@@ -1,20 +1,20 @@
 #pragma once
 
-#include "uengine/rendering/frame_buffer.h"
+#include "uengine/rendering/framebuffer.h"
 
 namespace ue 
 {
-	class opengl_frame_buffer : public frame_buffer 
+	class opengl_framebuffer : public framebuffer 
 	{
 	private:
 		unsigned int _id;
-		frame_buffer_descriptor _descriptor;
+		framebuffer_descriptor _descriptor;
 		unsigned int _color_buffer_id;
 		unsigned int _depth_buffer_id;
 	public:
-		opengl_frame_buffer(const frame_buffer_descriptor& descriptor);
+		opengl_framebuffer(const framebuffer_descriptor& descriptor);
 
-		~opengl_frame_buffer();
+		~opengl_framebuffer();
 
 		int get_width() const override { return _descriptor.width; }
 		int get_height() const override { return _descriptor.height; }

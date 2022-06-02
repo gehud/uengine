@@ -90,37 +90,43 @@ namespace ue
 		glUseProgram(0);
 	}
 
-	void opengl_shader::set_int(int value, const char* name)
+	void opengl_shader::set_int(const char* name, int value)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniform1i(location, value);
 	}
 
-	void opengl_shader::set_float(float value, const char* name)
+	void opengl_shader::set_float(const char* name, float value)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniform1f(location, value);
 	}
 
-	void opengl_shader::set_vector2(const vector2& value, const char* name)
+	void opengl_shader::set_vector2(const char* name, const vector2& value)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniform2f(location, value.x, value.y);
 	}
 
-	void opengl_shader::set_vector3(const vector3& value, const char* name)
+	void opengl_shader::set_vector3(const char* name, const vector3& value)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniform3f(location, value.x, value.y, value.z);
 	}
 
-	void opengl_shader::set_vector4(const vector4& value, const char* name)
+	void opengl_shader::set_vector4(const char* name, const vector4& value)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniform4f(location, value.x, value.y, value.z, value.w);
 	}
 
-	void opengl_shader::set_matrix4x4(const matrix4x4& value, const char* name)
+	void opengl_shader::set_color(const char* name, const color& value)
+	{
+		GLint location = glGetUniformLocation(_id, name);
+		glUniform4f(location, value.r, value.g, value.b, value.a);
+	}
+
+	void opengl_shader::set_matrix4x4(const char* name, const matrix4x4& value)
 	{
 		GLint location = glGetUniformLocation(_id, name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr((glm::mat4)value));

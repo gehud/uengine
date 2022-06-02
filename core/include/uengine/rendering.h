@@ -1,7 +1,7 @@
 #pragma once
 
 #include "uengine/rendering/camera.h"
-#include "uengine/rendering/frame_buffer.h"
+#include "uengine/rendering/framebuffer.h"
 #include "uengine/rendering/gl.h"
 #include "uengine/rendering/graphics.h"
 #include "uengine/rendering/graphics_api.h"

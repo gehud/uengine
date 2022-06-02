@@ -6,12 +6,12 @@
 
 namespace ue 
 {
-	struct frame_buffer_descriptor 
+	struct framebuffer_descriptor 
 	{
 		int width, height; 
 		int samples;
 
-		frame_buffer_descriptor(int width, int height, int samples = 1) 
+		framebuffer_descriptor(int width, int height, int samples = 1) 
 		{
 			UE_CORE_ASSERT(width > -1, "Width out of range.");
 			UE_CORE_ASSERT(height > -1, "Height out of range.");
@@ -22,10 +22,10 @@ namespace ue
 		}
 	};
 
-	class frame_buffer 
+	class framebuffer 
 	{
 	public:
-		static std::shared_ptr<frame_buffer> create(const frame_buffer_descriptor& descriptor);
+		static std::shared_ptr<framebuffer> create(const framebuffer_descriptor& descriptor);
 
 		virtual int get_width() const = 0;
 		virtual int get_height() const = 0;

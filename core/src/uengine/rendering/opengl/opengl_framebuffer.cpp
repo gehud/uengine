@@ -1,4 +1,4 @@
-#include "opengl_frame_buffer.h"
+#include "opengl_framebuffer.h"
 
 #include "uengine/core/assertion.h"
 
@@ -6,7 +6,7 @@
 
 namespace ue 
 {
-	opengl_frame_buffer::opengl_frame_buffer(const frame_buffer_descriptor& descriptor)
+	opengl_framebuffer::opengl_framebuffer(const framebuffer_descriptor& descriptor)
 		: _descriptor(descriptor) 
 	{
 		glCreateFramebuffers(1, &_id);
@@ -30,17 +30,17 @@ namespace ue
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	opengl_frame_buffer::~opengl_frame_buffer()
+	opengl_framebuffer::~opengl_framebuffer()
 	{
 		glDeleteFramebuffers(1, &_id);
 	}
 
-	void opengl_frame_buffer::bind()
+	void opengl_framebuffer::bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, _id);
 	}
 
-	void opengl_frame_buffer::unbind()
+	void opengl_framebuffer::unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

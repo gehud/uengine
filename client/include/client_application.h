@@ -8,7 +8,7 @@ class client_application : public application
 {
 private:
 	std::shared_ptr<vertex_array> _vertex_array;
-	std::shared_ptr<vertex_buffer> _z_vertex_buffer;
+	std::shared_ptr<vertex_buffer> _vertex_buffer;
 	std::shared_ptr<index_buffer> _index_buffer;
 	std::shared_ptr<texture_2d> _texture;
 	std::shared_ptr<shader> _shader;
@@ -56,8 +56,8 @@ public:
 			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f
 		};
 
-		_z_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
-		_z_vertex_buffer->set_layout({
+		_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
+		_vertex_buffer->set_layout({
 			{ vertex_attribute_format::float3, "a_Position"},
 			{ vertex_attribute_format::float3, "a_Normal"},
 			{ vertex_attribute_format::float2, "a_UV"}
@@ -79,7 +79,7 @@ public:
 		_texture->set_filter_mode(texture_filter_mode::nearest);
 
 		_shader = shader::create("assets/shaders/texture.glsl");
-		_shader->set_int(0, "u_Texture");
+		_shader->set_int("u_Texture", 0);
 
 		_entity = entity(_scene);
 		_transform = &_entity.get_component<transform>();
@@ -117,10 +117,10 @@ public:
 
 		_shader->bind();
 		_texture->bind();
-		_shader->set_vector3(vector3(5.0f, 5.0f, 5.0f), "u_LightPosition");
-		_shader->set_vector3(_transform->get_position(), "u_ViewPosition");
-		_shader->set_vector4(vector4(1.0f, 0.0f, 0.0f, 0.0f), "u_Color");
-		_shader->set_matrix4x4(_camera->get_projection_matrix() * _transform->get_world_to_local(), "u_ViewProjection");
+		_shader->set_vector3("u_LightPosition", vector3(5.0f, 5.0f, 5.0f));
+		_shader->set_vector3("u_ViewPosition", _transform->get_position());
+		_shader->set_vector4("u_Color", vector4(1.0f, 0.0f, 0.0f, 0.0f));
+		_shader->set_matrix4x4("u_ViewProjection", _camera->get_projection_matrix() * _transform->get_world_to_local());
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}
