@@ -28,7 +28,7 @@ namespace ue
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glEnable(GL_DEPTH);
+		glEnable(GL_DEPTH_TEST);
 
 		_opengl_initialized = true;
 	}

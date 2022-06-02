@@ -19,7 +19,7 @@ namespace ue
 		float _aspect;
 		float _fov = 60.0f;
 		float _size = 1.0f;
-		float _z_near = 0.0f;
+		float _z_near = 0.01f;
 		float _z_far = 1000.0f;
 		matrix4x4 _projection_matrix;
 		matrix4x4 _view_projection_matrix;

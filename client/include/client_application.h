@@ -7,7 +7,7 @@ using namespace ue;
 class client_application : public application
 {
 private:
-	/*std::shared_ptr<vertex_array> _vertex_array;
+	std::shared_ptr<vertex_array> _vertex_array;
 	std::shared_ptr<vertex_buffer> _z_vertex_buffer;
 	std::shared_ptr<index_buffer> _index_buffer;
 	std::shared_ptr<texture_2d> _texture;
@@ -16,27 +16,61 @@ private:
 	entity _entity;
 	transform* _transform;
 	camera* _camera;
-	float _rotation_x = 0.0f;*/
+	float _rotation_x = 0.0f;
 public:
 	client_application()
 	{
-		/*_vertex_array = vertex_array::create();
+		_vertex_array = vertex_array::create();
 		_vertex_array->bind();
 
-		float vertices[4 * 5] = 
+		float vertices[24 * 5] = 
 		{
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
+			-0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+			-0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
+			 0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+
+			 0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+
+			 0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
+			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+
+			-0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
+			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+
+			 0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+			 0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f
 		};
+
 		_z_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
 		_z_vertex_buffer->set_layout({
 			{ vertex_attribute_format::float3, "a_Position"},
 			{ vertex_attribute_format::float2, "a_UV"}
 		});
 
-		unsigned int indices[6] = { 0, 1, 2, 0, 2, 3 };
+		unsigned int indices[36] = 
+		{ 
+			0, 1, 2, 0, 2, 3,
+			4, 5, 6, 4, 6, 7,
+			8, 9, 10, 8, 10, 11,
+			12, 13, 14, 12, 14, 15,
+			16, 17, 18, 16, 18, 19,
+			20, 21, 22, 20, 22, 23,
+		};
 
 		_index_buffer = index_buffer::create(indices, sizeof(indices) / sizeof(int), sizeof(int));
 
@@ -51,12 +85,12 @@ public:
 		_camera = &_entity.add_component<camera>();
 		_camera->set_aspect(16.0f / 9.0f);
 		_transform->set_position({ 0.0f, 0.0f, 1.0f });
-		add_scene(_scene);*/
+		add_scene(_scene);
 	}
 
 	void on_update() override
 	{
-		/*gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
+		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
 		if (input::get_mouse_button(UE_MOUSE_BUTTON_RIGHT))
@@ -85,6 +119,6 @@ public:
 		_shader->set_vector4(vector4(1.0f, 0.0f, 0.0f, 0.0f), "u_Color");
 		_shader->set_matrix4x4(_camera->get_projection_matrix() * _transform->get_world_to_local(), "u_ViewProjection");
 		_vertex_array->bind();
-		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());*/
+		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}
 };

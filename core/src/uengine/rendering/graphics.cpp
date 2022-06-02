@@ -2,5 +2,5 @@
 
 namespace ue 
 {
-	graphics_api_type graphics::_api_type = graphics_api_type::vulkan;
+	graphics_api_type graphics::_api_type = graphics_api_type::opengl;
 }
