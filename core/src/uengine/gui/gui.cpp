@@ -12,7 +12,8 @@ namespace ue
 		UE_CORE_ASSERT(ImGui::GetCurrentContext()->WithinFrameScope, "Missing GUI scope.");
 		ImGui::SetNextWindowPos(ImVec2(rectangle.x, rectangle.y), ImGuiCond_Once);
 		ImGui::SetNextWindowSize(ImVec2(rectangle.width, rectangle.height), ImGuiCond_Once);
-		ImGui::Begin(name);
+		ImGui::SetNextWindowCollapsed(false, ImGuiCond_Once);
+		ImGui::Begin(name, nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 		action();
 		ImGui::End();
 	}

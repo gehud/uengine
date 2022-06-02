@@ -24,6 +24,7 @@ namespace ue
 		glBindTexture(GL_TEXTURE_2D, _depth_buffer_id);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, _descriptor.width, _descriptor.height, 0, GL_DEPTH_STENCIL,
 			GL_UNSIGNED_INT_24_8, NULL);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, _depth_buffer_id, 0);
 
 		UE_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete.");
 

@@ -73,12 +73,47 @@ namespace ue
 		}
 	}
 
+	// Style.
+
+	static ImVec4 _active_main_color = ImVec4(0.36f, 0.21f, 0.62f, 1.0f);
+	static ImVec4 _disabled_main_color = ImVec4(0.22f, 0.22f, 0.22f, 1.0f);
+	static ImVec4 _window_background_color = ImVec4(0.12f, 0.12f, 0.12f, 1.0f);
+	static ImVec4 _border_color = ImVec4(0.24f, 0.24f, 0.24f, 1.0f);
+
 	static void set_style() 
 	{
 		ImGuiStyle dark_style;
 		ImGui::StyleColorsDark(&dark_style);
 		dark_style.WindowMinSize = ImVec2(128, 128);
-		dark_style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+
+		dark_style.Colors[ImGuiCol_WindowBg] = _window_background_color;
+		dark_style.Colors[ImGuiCol_Border] = _border_color;
+
+		dark_style.Colors[ImGuiCol_TitleBg] = _active_main_color;
+		dark_style.Colors[ImGuiCol_TitleBgActive] = _active_main_color;
+		dark_style.Colors[ImGuiCol_TitleBgCollapsed] = _active_main_color;
+
+		dark_style.Colors[ImGuiCol_ResizeGripHovered] = _active_main_color;
+		dark_style.Colors[ImGuiCol_ResizeGripActive] = _active_main_color;
+		dark_style.Colors[ImGuiCol_ResizeGrip].w = 0.0f;
+
+		dark_style.Colors[ImGuiCol_Separator] = _border_color;
+		dark_style.Colors[ImGuiCol_SeparatorActive] = _active_main_color;
+		dark_style.Colors[ImGuiCol_SeparatorHovered] = _active_main_color;
+
+		dark_style.Colors[ImGuiCol_Tab] = _active_main_color;
+		dark_style.Colors[ImGuiCol_TabActive] = _active_main_color;
+		dark_style.Colors[ImGuiCol_TabHovered] = _active_main_color;
+		dark_style.Colors[ImGuiCol_TabUnfocusedActive] = _active_main_color;
+		dark_style.Colors[ImGuiCol_TabUnfocused] = _active_main_color;
+
+		dark_style.Colors[ImGuiCol_Button] = _disabled_main_color;
+		dark_style.Colors[ImGuiCol_ButtonActive] = _active_main_color;
+		dark_style.Colors[ImGuiCol_ButtonHovered] = _active_main_color;
+
+
+		dark_style.Colors[ImGuiCol_DockingPreview] = _active_main_color;
+
 		ImGui::GetStyle() = dark_style;
 	}
 }

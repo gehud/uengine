@@ -11,13 +11,11 @@ private:
 	std::shared_ptr<ue::vertex_array> _vertex_array;
 	std::shared_ptr<ue::vertex_buffer> _vertex_buffer;
 	std::shared_ptr<ue::index_buffer> _index_buffer;
-	std::shared_ptr<ue::frame_buffer> _frame_buffer;
+	std::shared_ptr<ue::framebuffer> _frame_buffer;
 	std::shared_ptr<ue::texture_2d> _texture;
 	std::shared_ptr<ue::shader> _shader;
 	int _game_window_width = 1280;
 	int _game_window_height = 720;
-	int _game_window_pos_x = 0;
-	int _game_window_pos_y = 0;
 	ue::scene _scene;
 	ue::entity _entity;
 	ue::transform* _transform;
@@ -85,7 +83,7 @@ public:
 		_texture->set_filter_mode(ue::texture_filter_mode::nearest);
 
 		_shader = ue::shader::create("assets/shaders/texture.glsl");
-		_shader->set_int(0, "u_Texture");
+		_shader->set_int("u_Texture", 0);
 
 		_entity = ue::entity(_scene);
 		_transform = &_entity.get_component<ue::transform>();
@@ -94,12 +92,13 @@ public:
 		_transform->set_position({ 0.0f, 0.0f, 1.0f });
 		add_scene(_scene);
 
-		_frame_buffer = ue::frame_buffer::create({ 1280, 720 });
+		_frame_buffer = ue::framebuffer::create({ 1280, 720 });
 	}
 
 	void on_update() override
 	{
 		_frame_buffer->bind();
+
 
 		ue::gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		ue::gl::clear();
@@ -125,11 +124,13 @@ public:
 		else if (ue::input::get_key(UE_KEY_Q))
 			_transform->translate(-_transform->get_up() * ue::time::get_delta());
 
+		_camera->set_aspect(static_cast<float>(_game_window_width) / static_cast<float>(_game_window_height));
+
 		_shader->bind();
 		_texture->bind();
-		_shader->set_vector3(ue::vector3(5.0f, 5.0f, 5.0f), "u_LightPosition");
-		_shader->set_vector3(_transform->get_position(), "u_ViewPosition");
-		_shader->set_matrix4x4(_camera->get_projection_matrix() * _transform->get_world_to_local(), "u_ViewProjection");
+		_shader->set_vector3("u_LightPosition", ue::vector3(5.0f, 5.0f, 5.0f));
+		_shader->set_vector3("u_ViewPosition", _transform->get_position());
+		_shader->set_matrix4x4("u_ViewProjection", _camera->get_projection_matrix() * _transform->get_world_to_local());
 		_vertex_array->bind();
 		ue::gl::draw_elements(ue::gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 
@@ -188,7 +189,7 @@ public:
 		ImGui::Text("Hierarchy");
 		ImGui::End();
 
-		ImGui::Begin("Game");
+		ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 		ImVec2 viewport_size = ImGui::GetWindowSize();
 		_game_window_width = viewport_size.x;
 		_game_window_height = viewport_size.y;
