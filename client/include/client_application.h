@@ -23,42 +23,43 @@ public:
 		_vertex_array = vertex_array::create();
 		_vertex_array->bind();
 
-		float vertices[24 * 5] = 
+		float vertices[24 * 8] = 
 		{
-			-0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
-			 0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-			 0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-
-			 0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-			-0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-
-			 0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
-			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-
-			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-			-0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-
-			-0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-			 0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-
-			 0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-			 0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+										 
+			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+								  		  
+			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+								  		  	    
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+								  		  	    
+			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+								  		 
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f
 		};
 
 		_z_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
 		_z_vertex_buffer->set_layout({
 			{ vertex_attribute_format::float3, "a_Position"},
+			{ vertex_attribute_format::float3, "a_Normal"},
 			{ vertex_attribute_format::float2, "a_UV"}
 		});
 
@@ -116,6 +117,8 @@ public:
 
 		_shader->bind();
 		_texture->bind();
+		_shader->set_vector3(vector3(5.0f, 5.0f, 5.0f), "u_LightPosition");
+		_shader->set_vector3(_transform->get_position(), "u_ViewPosition");
 		_shader->set_vector4(vector4(1.0f, 0.0f, 0.0f, 0.0f), "u_Color");
 		_shader->set_matrix4x4(_camera->get_projection_matrix() * _transform->get_world_to_local(), "u_ViewProjection");
 		_vertex_array->bind();
