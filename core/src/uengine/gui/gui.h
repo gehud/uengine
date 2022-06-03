@@ -10,7 +10,7 @@ namespace ue
 	private:
 
 	public:
-		static void window(const rectangle& rectangle, const iaction<>& action, const char* name);
+		static void window(const rectangle& rectangle, const ifunction<void>& function, const char* name);
 	private:
 		gui() = default;
 	};

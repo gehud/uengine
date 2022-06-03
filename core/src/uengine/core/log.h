@@ -15,8 +15,8 @@ namespace ue
 	public:
 		static void init();
 
-		static [[nodiscard]] std::shared_ptr<spdlog::logger> get_core_logger() { return _core_logger; }
-		static [[nodiscard]] std::shared_ptr<spdlog::logger> get_client_logger() { return _client_logger; }
+		static std::shared_ptr<spdlog::logger> get_core_logger() { return _core_logger; }
+		static std::shared_ptr<spdlog::logger> get_client_logger() { return _client_logger; }
 	};
 }
 

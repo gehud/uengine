@@ -5,7 +5,7 @@
 
 namespace ue 
 {
-	template<typename treturn = void, typename... targs>
+	template<typename treturn, typename... targs>
 	struct ifunction 
 	{
 		virtual treturn invoke(const targs&... args) const = 0;
@@ -16,10 +16,7 @@ namespace ue
 		}
 	};
 
-	template<typename... targs>
-	using iaction = ifunction<void, targs...>;
-
-	template<typename treturn = void, typename... targs>
+	template<typename treturn, typename... targs>
 	class function_ptr : public ifunction<treturn, targs...>
 	{
 	private:
@@ -33,7 +30,7 @@ namespace ue
 		}
 	};
 
-	template<typename tclass, typename treturn = void, typename... targs>
+	template<typename tclass, typename treturn, typename... targs>
 	class method_ptr : public ifunction<treturn, targs...> 
 	{
 	private:
@@ -49,7 +46,7 @@ namespace ue
 		}
 	};
 
-	template<typename treturn = void, typename... targs>
+	template<typename treturn, typename... targs>
 	class lambda : public ifunction<treturn, targs...> 
 	{
 	private:
@@ -64,7 +61,7 @@ namespace ue
 	};
 
 	template<typename... targs>
-	class action : public ifunction<void, targs...> 
+	class action : public ifunction<void, targs...>
 	{
 	private:
 		std::vector<ifunction<void, targs...>*> _functions;

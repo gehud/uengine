@@ -9,11 +9,12 @@ namespace ue
 	{
 		static const rectangle zero;
 
-		float x;
-		float y;
-		float width;
-		float height;
+		float x = 0.0f;
+		float y = 0.0f;
+		float width = 0.0f;
+		float height = 0.0f;
 
+		rectangle() = default;
 		rectangle(float x, float y, float width, float height) 
 		{
 			UE_CORE_ASSERT(x >= 0, "X out of range.");

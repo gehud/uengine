@@ -1,6 +1,7 @@
 #pragma once
 
-#include "scene_hierarchy_editor.h"
+#include "game_window.h"
+#include "scene_hierarchy_window.h"
 
 #include <uengine.h>
 
@@ -13,18 +14,18 @@ private:
 	std::shared_ptr<ue::vertex_array> _vertex_array;
 	std::shared_ptr<ue::vertex_buffer> _vertex_buffer;
 	std::shared_ptr<ue::index_buffer> _index_buffer;
-	std::shared_ptr<ue::framebuffer> _frame_buffer;
+	std::shared_ptr<ue::framebuffer> _framebuffer;
 	std::shared_ptr<ue::texture_2d> _texture;
 	std::shared_ptr<ue::shader> _shader;
-	int _game_window_width = 1280;
-	int _game_window_height = 720;
 	ue::scene _scene;
 	ue::entity _entity;
 	ue::transform* _transform;
 	ue::camera* _camera;
 	float _rotation_x = 0.0f;
+	game_window _game_window;
+	scene_hierarchy_window _scene_hierarchy_window;
 public:
-	editor_application()
+	editor_application() : _game_window(_framebuffer)
 	{
 		_vertex_array = ue::vertex_array::create();
 		_vertex_array->bind();
@@ -94,14 +95,12 @@ public:
 		_transform->set_position({ 0.0f, 0.0f, 2.0f });
 		add_scene(_scene);
 
-		_frame_buffer = ue::framebuffer::create({ 1280, 720 });
-
-		add_editor<scene_hierarchy_editor>();
+		_framebuffer = ue::framebuffer::create({ 1280, 720 });
 	}
 
 	void on_update() override
 	{
-		_frame_buffer->bind();
+		_framebuffer->bind();
 
 
 		ue::gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
@@ -128,7 +127,8 @@ public:
 		else if (ue::input::get_key(UE_KEY_Q))
 			_transform->translate(-_transform->get_up() * ue::time::get_delta());
 
-		_camera->set_aspect(static_cast<float>(_game_window_width) / static_cast<float>(_game_window_height));
+		_camera->set_aspect(static_cast<float>(_game_window.get_rectangle().width) 
+			/ static_cast<float>(_game_window.get_rectangle().height));
 
 		_shader->bind();
 		_texture->bind();
@@ -138,7 +138,7 @@ public:
 		_vertex_array->bind();
 		ue::gl::draw_elements(ue::gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 
-		_frame_buffer->unbind();
+		_framebuffer->unbind();
 	}
 
 	void on_gui() override
@@ -151,8 +151,6 @@ public:
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
 		ImGui::SetNextWindowViewport(viewport->ID);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
 		window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
@@ -161,8 +159,9 @@ public:
 			window_flags |= ImGuiWindowFlags_NoBackground;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 25.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::Begin("DockSpace", nullptr, window_flags);
-		ImGui::PopStyleVar(3);
+		ImGui::PopStyleVar(2);
 
 		// DockSpace
 		ImGuiIO& io = ImGui::GetIO();
@@ -186,15 +185,9 @@ public:
 			ImGui::EndMenuBar();
 		}
 
-
 		ImGui::End();
 
-		ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-		ImVec2 viewport_size = ImGui::GetContentRegionAvail();
-		_game_window_width = viewport_size.x;
-		_game_window_height = viewport_size.y;
-		ImGui::Image(reinterpret_cast<void*>(_frame_buffer->get_color_buffer_id()),
-			ImVec2(_game_window_width, _game_window_height), ImVec2(0, 1), ImVec2(1, 0));
-		ImGui::End();
+		_scene_hierarchy_window.show();
+		_game_window.show();
 	}
 };

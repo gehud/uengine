@@ -16,7 +16,9 @@ namespace ue
 	private:
 		static application* _instance;
 		static application_platform _platform;
-		bool _is_runing;
+
+		bool _runing;
+
 		window* _window;
 		layer_stack _layers_stack;
 		gui_layer* _gui_layer;
