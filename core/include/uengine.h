@@ -4,3 +4,4 @@
 #include "uengine/math.h"
 #include "uengine/rendering.h"
 #include "uengine/gui.h"
+#include "uengine/editor.h"

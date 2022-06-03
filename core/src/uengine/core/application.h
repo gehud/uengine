@@ -7,6 +7,7 @@
 #include "uengine/core/system.h"
 #include "uengine/core/application_platform.h"
 #include "uengine/gui/gui_layer.h"
+#include "uengine/editor/editor.h"
 
 namespace ue 
 {
@@ -22,6 +23,7 @@ namespace ue
 		std::vector<scene*> _scenes;
 		scene* _current_scene = nullptr;
 		std::vector<system*> _systems;
+		std::vector<editor*> _editors;
 	public:
 		application();
 
@@ -49,6 +51,14 @@ namespace ue
 			t* s = new t();
 			s->_registry = &_current_scene->_registry;
 			_systems.push_back(s);
+		}
+
+		template<typename t, typename std::enable_if<std::is_base_of<editor, t>::value, bool>::type = true>
+		void add_editor() 
+		{
+			t* e = new t();
+			e->registry = &_current_scene->_registry;
+			_editors.push_back(e);
 		}
 
 		void run();

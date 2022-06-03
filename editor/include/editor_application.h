@@ -1,5 +1,7 @@
 #pragma once
 
+#include "scene_hierarchy_editor.h"
+
 #include <uengine.h>
 
 #include <imgui.h>
@@ -89,10 +91,12 @@ public:
 		_transform = &_entity.get_component<ue::transform>();
 		_camera = &_entity.add_component<ue::camera>();
 		_camera->set_aspect(16.0f / 9.0f);
-		_transform->set_position({ 0.0f, 0.0f, 1.0f });
+		_transform->set_position({ 0.0f, 0.0f, 2.0f });
 		add_scene(_scene);
 
 		_frame_buffer = ue::framebuffer::create({ 1280, 720 });
+
+		add_editor<scene_hierarchy_editor>();
 	}
 
 	void on_update() override
@@ -185,12 +189,8 @@ public:
 
 		ImGui::End();
 
-		ImGui::Begin("Hierarchy");
-		ImGui::Text("Hierarchy");
-		ImGui::End();
-
 		ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-		ImVec2 viewport_size = ImGui::GetWindowSize();
+		ImVec2 viewport_size = ImGui::GetContentRegionAvail();
 		_game_window_width = viewport_size.x;
 		_game_window_height = viewport_size.y;
 		ImGui::Image(reinterpret_cast<void*>(_frame_buffer->get_color_buffer_id()),

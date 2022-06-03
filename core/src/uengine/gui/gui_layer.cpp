@@ -36,7 +36,6 @@ namespace ue
 		application& app = application::get_instance();
 		window& window = app.get_window();
 		GLFWwindow* glfw_window = static_cast<GLFWwindow*>(window.get_native_window());
-
 		ImGui_ImplOpenGL3_Init("#version 410");
 		ImGui_ImplGlfw_InitForOpenGL(glfw_window, true);
 	}
@@ -89,9 +88,9 @@ namespace ue
 		dark_style.Colors[ImGuiCol_WindowBg] = _window_background_color;
 		dark_style.Colors[ImGuiCol_Border] = _border_color;
 
-		dark_style.Colors[ImGuiCol_TitleBg] = _active_main_color;
-		dark_style.Colors[ImGuiCol_TitleBgActive] = _active_main_color;
-		dark_style.Colors[ImGuiCol_TitleBgCollapsed] = _active_main_color;
+		dark_style.Colors[ImGuiCol_TitleBg] = _disabled_main_color;
+		dark_style.Colors[ImGuiCol_TitleBgActive] = _disabled_main_color;
+		dark_style.Colors[ImGuiCol_TitleBgCollapsed] = _disabled_main_color;
 
 		dark_style.Colors[ImGuiCol_ResizeGripHovered] = _active_main_color;
 		dark_style.Colors[ImGuiCol_ResizeGripActive] = _active_main_color;
@@ -101,16 +100,15 @@ namespace ue
 		dark_style.Colors[ImGuiCol_SeparatorActive] = _active_main_color;
 		dark_style.Colors[ImGuiCol_SeparatorHovered] = _active_main_color;
 
-		dark_style.Colors[ImGuiCol_Tab] = _active_main_color;
-		dark_style.Colors[ImGuiCol_TabActive] = _active_main_color;
+		dark_style.Colors[ImGuiCol_Tab] = _disabled_main_color;
+		dark_style.Colors[ImGuiCol_TabActive] = _disabled_main_color;
 		dark_style.Colors[ImGuiCol_TabHovered] = _active_main_color;
-		dark_style.Colors[ImGuiCol_TabUnfocusedActive] = _active_main_color;
-		dark_style.Colors[ImGuiCol_TabUnfocused] = _active_main_color;
+		dark_style.Colors[ImGuiCol_TabUnfocusedActive] = _disabled_main_color;
+		dark_style.Colors[ImGuiCol_TabUnfocused] = _disabled_main_color;
 
 		dark_style.Colors[ImGuiCol_Button] = _disabled_main_color;
 		dark_style.Colors[ImGuiCol_ButtonActive] = _active_main_color;
 		dark_style.Colors[ImGuiCol_ButtonHovered] = _active_main_color;
-
 
 		dark_style.Colors[ImGuiCol_DockingPreview] = _active_main_color;
 

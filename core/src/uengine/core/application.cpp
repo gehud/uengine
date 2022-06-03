@@ -30,6 +30,8 @@ namespace ue
 	application::~application()
 	{
 		gl::terminate();
+		for (auto editor : _editors)
+			delete editor;
 		for (auto system : _systems)
 			delete system;
 		delete _window;
@@ -65,6 +67,8 @@ namespace ue
 			on_gui();
 			for (auto layer : _layers_stack)
 				layer->on_gui();
+			for (auto editor : _editors)
+				editor->on_gui();
 			_gui_layer->end();
 
 			_window->on_update();
