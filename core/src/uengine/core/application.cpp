@@ -4,7 +4,8 @@
 #include "uengine/core/log.h"
 #include "uengine/core/input.h"
 #include "uengine/core/time.h"
-#include "uengine/core/scene.h"
+#include "uengine/core/scene_manager.h"
+#include "uengine/core/system_manager.h"
 #include "uengine/rendering/gl.h"
 
 namespace ue 
@@ -35,8 +36,6 @@ namespace ue
 	{
 		for (auto editor : _editors)
 			delete editor;
-		for (auto system : _systems)
-			delete system;
 		gl::terminate();
 		delete _window;
 	}
@@ -45,8 +44,7 @@ namespace ue
 	{
 		_runing = true;
 
-		for (auto system : _systems)
-			system->on_start();
+		system_manager::on_start();
 
 		while (_runing)
 		{
@@ -56,16 +54,14 @@ namespace ue
 			input::mouse_position_delta = input::mouse_position - input::last_mouse_position;
 			input::last_mouse_position = input::mouse_position;
 
-			for (auto system : _systems)
-				system->on_update();
+			system_manager::on_update();
 
 			on_update();
 
 			for (auto layer : _layers_stack)
 				layer->on_update();
 
-			for (auto scene : _scenes)
-				scene->on_update();
+			scene_manager::on_update();
 
 			_gui_layer->begin();
 			on_gui();

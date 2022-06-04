@@ -4,6 +4,21 @@
 
 using namespace ue;
 
+class camera_controller_component : public component 
+{
+public:
+	camera_controller_component(entity& entity) : component(entity) { }
+};
+
+class camera_controller_system : public system 
+{
+protected:
+	void on_start() override 
+	{
+		UE_INFO("Hello!");
+	}
+};
+
 class client_application : public application
 {
 private:
@@ -81,12 +96,16 @@ public:
 		_shader = shader::create("assets/shaders/texture.glsl");
 		_shader->set_int("u_Texture", 0);
 
-		_entity = entity(_scene);
+		scene_manager::add_scene(_scene);
+		scene_manager::set_active_scene(_scene);
+
+		_entity = entity_manager::create();
 		_transform = &_entity.get_component<transform>();
 		_camera = &_entity.add_component<camera>();
 		_camera->set_aspect(16.0f / 9.0f);
 		_transform->set_position({ 0.0f, 0.0f, 2.0f });
-		add_scene(_scene);
+		_entity.add_component<camera_controller_component>();
+		system_manager::add_system<camera_controller_system>();
 	}
 
 	void on_update() override
@@ -123,10 +142,5 @@ public:
 		_shader->set_matrix4x4("u_ViewProjection", _camera->get_projection_matrix() * _transform->get_world_to_local());
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
-	}
-
-	void on_gui() override 
-	{
-		gui::window({ 50, 50, 300, 300 }, lambda<>([]() {}), "My Window");
 	}
 };

@@ -22,9 +22,7 @@ namespace ue
 		window* _window;
 		layer_stack _layers_stack;
 		gui_layer* _gui_layer;
-		std::vector<scene*> _scenes;
-		scene* _current_scene = nullptr;
-		std::vector<system*> _systems;
+
 		std::vector<editor*> _editors;
 	public:
 		application();
@@ -40,26 +38,11 @@ namespace ue
 		void push_layer(layer* layer) { _layers_stack.push_layer(layer); }
 		void push_overlay(layer* overlay) { _layers_stack.push_overlay(overlay); }
 
-		void add_scene(scene& scene) 
-		{ 
-			_scenes.push_back(&scene); 
-			_current_scene = &scene;
-		}
-
-		template<typename t, typename std::enable_if<std::is_base_of<system, t>::value, bool>::type = true>
-		void add_system() 
-		{
-			UE_CORE_ASSERT(_current_scene != nullptr, "Missing scene.");
-			t* s = new t();
-			s->_registry = &_current_scene->_registry;
-			_systems.push_back(s);
-		}
-
 		template<typename t, typename std::enable_if<std::is_base_of<editor, t>::value, bool>::type = true>
 		void add_editor() 
 		{
 			t* e = new t();
-			e->registry = &_current_scene->_registry;
+			e->registry = &_active_scene->_entities;
 			_editors.push_back(e);
 		}
 

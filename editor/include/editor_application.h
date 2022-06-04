@@ -102,7 +102,6 @@ public:
 	{
 		_framebuffer->bind();
 
-
 		ue::gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		ue::gl::clear();
 

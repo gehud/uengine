@@ -6,13 +6,13 @@ namespace ue
 {
 	class system 
 	{
-		friend class application;
+		friend class system_manager;
 	private:
-		entt::registry* _registry = nullptr;
+		entt::registry* _entities = nullptr;
 	public:
 		system() = default; 
 	protected:
-		entt::registry& get_registry() { return *_registry; }
+		entt::registry& get_registry() { return *_entities; }
 		
 		virtual void on_start() { }
 		virtual void on_update() { }
