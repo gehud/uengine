@@ -2,7 +2,7 @@
 
 namespace ue 
 {
-	std::vector<system*> system_manager::_systems;
+	std::set<system*> system_manager::_systems;
 
 	void system_manager::on_start()
 	{

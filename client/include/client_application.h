@@ -8,18 +8,25 @@ class camera_controller_component : public component
 {
 public:
 	camera_controller_component(const entity& entity) : component(entity) { }
-
-	void foo()
-	{
-	}
 };
 
 class camera_controller_system : public system 
 {
+};
+
+class camera_controller : public script 
+{
+public:
+	camera_controller(const entity& entity) : script(entity) {}
 protected:
 	void on_start() override 
 	{
-		UE_INFO("Hello!");
+		UE_TRACE("Start");
+	}
+
+	void on_update() override 
+	{
+		UE_TRACE("Update");
 	}
 };
 
@@ -32,7 +39,7 @@ private:
 	std::shared_ptr<texture_2d> _texture;
 	std::shared_ptr<shader> _shader;
 	scene _scene;
-	entity _entity;
+	entity* _entity;
 	transform* _transform;
 	camera* _camera;
 	float _rotation_x = 0.0f;
@@ -103,13 +110,15 @@ public:
 		scene_manager::add_scene(_scene);
 		scene_manager::set_active_scene(_scene);
 
-		_entity = entity_manager::create();
-		_transform = &_entity.get_component<transform>();
-		_camera = &_entity.add_component<camera>();
+		_entity = &entity_manager::create();
+		_transform = &_entity->get_component<transform>();
+		_camera = &_entity->add_component<camera>();
 
 		_camera->set_aspect(16.0f / 9.0f);
 		_transform->set_position({ 0.0f, 0.0f, 2.0f });
-		_entity.add_component<camera_controller_component>();
+		_entity->add_component<camera_controller_component>();
+		_entity->add_component<camera_controller>();
+		system_manager::add_system<script_system<camera_controller>>();
 		system_manager::add_system<camera_controller_system>();
 	}
 

@@ -16,3 +16,4 @@
 #include "uengine/core/time.h"
 #include "uengine/core/transform.h"
 #include "uengine/core/window.h"
+#include "uengine/core/script_system.h"

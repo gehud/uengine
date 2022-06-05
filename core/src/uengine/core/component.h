@@ -1,10 +1,8 @@
 #pragma once
 
-#include "uengine/core/assertion.h"
-
 namespace ue 
 {
-	class component 
+	class component
 	{
 		friend class entity;
 	private:

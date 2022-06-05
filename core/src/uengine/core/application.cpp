@@ -6,6 +6,7 @@
 #include "uengine/core/time.h"
 #include "uengine/core/scene_manager.h"
 #include "uengine/core/system_manager.h"
+#include "uengine/core/script_manager.h"
 #include "uengine/rendering/gl.h"
 
 namespace ue 
@@ -45,6 +46,7 @@ namespace ue
 		_runing = true;
 
 		system_manager::on_start();
+		//script_manager::on_start();
 
 		while (_runing)
 		{
@@ -55,6 +57,7 @@ namespace ue
 			input::last_mouse_position = input::mouse_position;
 
 			system_manager::on_update();
+			//script_manager::on_update();
 
 			on_update();
 

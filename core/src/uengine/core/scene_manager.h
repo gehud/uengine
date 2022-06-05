@@ -11,6 +11,7 @@ namespace ue
 		friend class application;
 		friend class entity_manager;
 		friend class system_manager;
+		friend class script_manager;
 	private:
 		static std::map<int, scene*> _scenes;
 		static scene* _active_scene;

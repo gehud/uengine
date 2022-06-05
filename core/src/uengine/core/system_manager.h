@@ -4,7 +4,7 @@
 #include "uengine/core/assertion.h"
 #include "uengine/core/scene_manager.h"
 
-#include <vector>
+#include <set>
 
 namespace ue 
 {
@@ -12,15 +12,15 @@ namespace ue
 	{
 		friend class application;
 	private:
-		static std::vector<system*> _systems;
+		static std::set<system*> _systems;
 	public:
 		template<typename t, typename std::enable_if<std::is_base_of<system, t>::value, bool>::type = true>
 		static void add_system()
 		{
 			t* s = new t();
 			if (scene_manager::_active_scene != nullptr) 
-				s->_entities = &scene_manager::_active_scene->_entities;
-			_systems.push_back(s);
+				static_cast<system*>(s)->_entities = &scene_manager::_active_scene->_entities;
+			_systems.emplace(s);
 		}
 	private:
 		system_manager();
