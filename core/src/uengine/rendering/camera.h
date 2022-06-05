@@ -24,11 +24,8 @@ namespace ue
 		matrix4x4 _projection_matrix;
 		matrix4x4 _view_projection_matrix;
 	public:
-		camera(entity& entity, camera_projection projection = camera_projection::perspective, float aspect = 1.0f)
-			: component(entity), _projection(projection), _aspect(aspect) 
-		{
-			update_matrices();
-		}
+		camera(const entity& entity, camera_projection projection = camera_projection::perspective, float aspect = 1.0f)
+			: component(entity), _projection(projection), _aspect(aspect) { }
 
 		camera_projection get_projection() const { return _projection; }
 		void set_projection(camera_projection value) { _projection = value; update_matrices(); }

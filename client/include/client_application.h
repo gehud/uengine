@@ -7,7 +7,11 @@ using namespace ue;
 class camera_controller_component : public component 
 {
 public:
-	camera_controller_component(entity& entity) : component(entity) { }
+	camera_controller_component(const entity& entity) : component(entity) { }
+
+	void foo()
+	{
+	}
 };
 
 class camera_controller_system : public system 
@@ -102,6 +106,7 @@ public:
 		_entity = entity_manager::create();
 		_transform = &_entity.get_component<transform>();
 		_camera = &_entity.add_component<camera>();
+
 		_camera->set_aspect(16.0f / 9.0f);
 		_transform->set_position({ 0.0f, 0.0f, 2.0f });
 		_entity.add_component<camera_controller_component>();

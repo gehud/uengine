@@ -19,8 +19,7 @@ namespace ue
 		matrix4x4 _local_to_world = matrix4x4::identity;
 		matrix4x4 _world_to_local = matrix4x4::identity;
 	public:
-		transform() = default;
-		transform(entity& entity) : component(entity) { }
+		transform(const entity& entity) : component(entity) { }
 
 		vector3 get_position() const { return _position; }
 		void set_position(const vector3& value) { _position = value; update_matrices(); }
