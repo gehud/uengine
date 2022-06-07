@@ -1,8 +1,8 @@
 #pragma once
 
-#include "vector2.h"
 #include "vector3.h"
 #include "quaternion.h"
+#include "vector2_int.h"
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -58,17 +58,17 @@ namespace ue
 
 		operator glm::mat4() const { return _value; }
 
-		float operator [] (const vector2& index) const
+		float operator [] (const vector2_int& index) const
 		{
-			UE_CORE_ASSERT(index.x > -1 && index.x < 4 
-				&& index.y > -1 && index.y < 4, "Index out of range.");
+			UE_CORE_ASSERT(index.x >= 0 && index.x <= 3 
+				&& index.y >= 0 && index.y <= 3, "Index out of range.");
 			return _value[index.x][index.y];
 		}
 
-		float& operator [] (const vector2& index)
+		float& operator [] (const vector2_int& index)
 		{
-			UE_CORE_ASSERT(index.x > -1 && index.x < 4
-				&& index.y > -1 && index.y < 4, "Index out of range.");
+			UE_CORE_ASSERT(index.x >= 0 && index.x <= 3
+				&& index.y >= 0 && index.y <= 3, "Index out of range.");
 			return _value[index.x][index.y];
 		}
 

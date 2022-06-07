@@ -22,6 +22,13 @@ namespace ue
 
 		vector2(const glm::vec2 vector) : x(vector.x), y(vector.y) { }
 
+		static vector2 get_one() { return one; }
+		static vector2 get_zero() { return zero; }
+		static vector2 get_right() { return right; }
+		static vector2 get_left() { return left; }
+		static vector2 get_up() { return up; }
+		static vector2 get_down() { return down; }
+
 		float get_magnitude() const
 		{
 			return std::sqrtf(x * x + y * y);
@@ -44,7 +51,7 @@ namespace ue
 
 		float operator [] (int index) const
 		{
-			UE_CORE_ASSERT(index > -1 && index < 2, "Index out of range.");
+			UE_CORE_ASSERT(index >= 0 && index <= 1, "Index out of range.");
 			switch (index)
 			{
 			case 0: return x;
@@ -54,7 +61,7 @@ namespace ue
 
 		float& operator [] (int index)
 		{
-			UE_CORE_ASSERT(index > -1 && index < 2, "Index out of range.");
+			UE_CORE_ASSERT(index >= 0 && index <= 1, "Index out of range.");
 			switch (index)
 			{
 			case 0: return x;
@@ -94,6 +101,11 @@ namespace ue
 	inline vector2 operator + (const vector2& left, const vector2& right)
 	{
 		return vector2(left.x + right.x, left.y + right.y);
+	}
+
+	inline vector2 operator + (const vector2& vector)
+	{
+		return vector2(vector.x, vector.y);
 	}
 
 	inline vector2 operator - (const vector2& left, const vector2& right)

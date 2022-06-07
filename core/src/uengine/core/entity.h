@@ -9,11 +9,11 @@
 
 namespace ue
 {
-	class entity 
+	class entity
 	{
 		friend class entity_manager;
 	private:
-		entt::entity _id = entt::null;
+		entt::entity _id { entt::null };
 		scene* _scene = nullptr;
 	public:
 		template<typename t, typename std::enable_if<std::is_base_of<component, t>::value 
@@ -45,7 +45,6 @@ namespace ue
 			return _scene->_entities.all_of<t>(_id);
 		}
 	private:
-		entity(const entt::entity& entity);
-		entity(scene& scene);
+		entity(scene* scene);
 	};
 }

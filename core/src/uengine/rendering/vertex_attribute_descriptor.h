@@ -35,6 +35,9 @@ namespace ue
 			case vertex_attribute_format::mat3:		return 4 * 3 * 3;
 			case vertex_attribute_format::mat4:		return 4 * 4 * 4;
 		}
+
+		UE_CORE_ASSERT(false, "Unknown format.");
+		return 0;
 	}
 
 	static unsigned int get_vertex_attribute_format_dimension(vertex_attribute_format format) 
@@ -53,6 +56,9 @@ namespace ue
 			case vertex_attribute_format::mat3:		return 3 * 3;
 			case vertex_attribute_format::mat4:		return 4 * 4;
 		}
+
+		UE_CORE_ASSERT(false, "Unknown format.");
+		return 0;
 	}
 
 	class vertex_attribute_descriptor

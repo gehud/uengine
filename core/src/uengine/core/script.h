@@ -6,7 +6,7 @@ namespace ue
 {
 	class script : public component
 	{
-		friend class script_handle;
+		friend struct script_handle;
 	public:
 		script(const entity& entity) : component(entity) { }
 	protected:

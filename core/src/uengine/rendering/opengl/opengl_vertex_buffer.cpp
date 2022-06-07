@@ -20,6 +20,9 @@ namespace ue
 			case vertex_attribute_format::mat3:		return GL_FLOAT;
 			case vertex_attribute_format::mat4:		return GL_FLOAT;
 		}
+
+		UE_CORE_ASSERT(false, "Unknown format.");
+		return 0;
 	}
 
 	opengl_vertex_buffer::opengl_vertex_buffer(const void* data, int count, int stride)
@@ -28,7 +31,7 @@ namespace ue
 		UE_CORE_ASSERT(stride >= 0, "Stride out of range.");
 		glCreateBuffers(1, &_id);
 		bind();
-		glBufferData(GL_ARRAY_BUFFER, count * stride, data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(count * stride), data, GL_STATIC_DRAW);
 		_count = count;
 		_stride = stride;
 	}
@@ -45,12 +48,15 @@ namespace ue
 		for (const auto& element : _layout)
 		{
 			glEnableVertexAttribArray(index);
+#pragma warning(push)
+#pragma warning(disable: 4312)
 			glVertexAttribPointer(index, 
 				element.get_dimension(),
 				vertex_attribute_format_to_opengl_enum(element.get_format()),
 				element.is_normalized() ? GL_TRUE : GL_FALSE,
 				_layout.get_stride(),
-				(const void*)element.get_offet());
+				reinterpret_cast<const void*>(element.get_offet()));
+#pragma warning(pop)
 			index++;
 		}
 	}
