@@ -24,7 +24,7 @@ project "Core"
 		"dependencies/glm",
 		"dependencies/stb",
 		"dependencies/imgui",
-		"dependencies/entt/single_include"
+		"dependencies/entt/single_include",
 	}
 
 	libdirs {
@@ -35,6 +35,7 @@ project "Core"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"Assimp",
 		"vulkan-1.lib"
 	}
 
@@ -47,7 +48,8 @@ project "Core"
 		defines {
 			"UE_WINDOWS",
 			"GLFW_EXPOSE_NATIVE_WIN32",
-			"VK_USE_PLATFORM_WIN32_KHR"
+			"VK_USE_PLATFORM_WIN32_KHR",
+			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 	filter "configurations:Debug"

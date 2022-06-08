@@ -6,12 +6,41 @@ using namespace ue;
 
 class camera_controller : public script 
 {
+private:
+	camera* _camera;
+	transform* _transform;
+	float _rotation_x = 0.0f;
 public:
-	camera_controller(const entity& entity) : script(entity) { }
-protected:
-	void on_start() override 
+	camera_controller(const entity& entity) : script(entity) 
 	{
-		UE_WARNING("Start");
+		_transform = &get_entity().get_component<transform>();
+		_camera = &get_entity().add_component<camera>();
+		_camera->set_aspect(16.0f / 9.0f);
+		_transform->set_position({ 0.0f, 0.0f, 2.0f });
+	}
+protected:
+	void on_update() override 
+	{
+		if (input::get_mouse_button(UE_MOUSE_BUTTON_RIGHT))
+		{
+			vector2 delta = input::get_mouse_position_delta();
+			_transform->rotate(quaternion::euler_angles(vector3::get_down() * delta.x * 0.1f));
+			_rotation_x = std::clamp(_rotation_x - delta.y * 0.1f, -90.0f, 90.0f);
+			_transform->set_local_euler_angles(vector3::get_right() * _rotation_x);
+		}
+
+		if (input::get_key(UE_KEY_W))
+			_transform->translate(-_transform->get_forward() * time::get_delta());
+		else if (input::get_key(UE_KEY_S))
+			_transform->translate(_transform->get_forward() * time::get_delta());
+		if (input::get_key(UE_KEY_D))
+			_transform->translate(_transform->get_right() * time::get_delta());
+		else if (input::get_key(UE_KEY_A))
+			_transform->translate(-_transform->get_right() * time::get_delta());
+		if (input::get_key(UE_KEY_E))
+			_transform->translate(_transform->get_up() * time::get_delta());
+		else if (input::get_key(UE_KEY_Q))
+			_transform->translate(-_transform->get_up() * time::get_delta());
 	}
 };
 
@@ -25,9 +54,6 @@ private:
 	std::shared_ptr<shader> _shader;
 	scene _scene;
 	reference<entity> _entity;
-	transform* _transform;
-	camera* _camera;
-	float _rotation_x = 0.0f;
 public:
 	client_application()
 	{
@@ -96,14 +122,7 @@ public:
 		scene_manager::set_active_scene(_scene);
 
 		_entity = entity_manager::create();
-		_transform = &_entity->get_component<transform>();
-
-		_camera = &_entity->add_component<camera>();
-		_camera->set_aspect(16.0f / 9.0f);
-		_transform->set_position({ 0.0f, 0.0f, 2.0f });
-
 		_entity->add_component<camera_controller>();
-
 		system_manager::add_system<script_system<camera_controller>>();
 	}
 
@@ -112,32 +131,13 @@ public:
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
-		if (input::get_mouse_button(UE_MOUSE_BUTTON_RIGHT))
-		{
-			vector2 delta = input::get_mouse_position_delta();
-			_transform->rotate(quaternion::euler_angles(vector3::get_down() * delta.x * 0.1f));
-			_rotation_x = std::clamp(_rotation_x - delta.y * 0.1f, -90.0f, 90.0f);
-			_transform->set_local_euler_angles(vector3::get_right() * _rotation_x);
-		}
-
-		if (input::get_key(UE_KEY_W))
-			_transform->translate(-_transform->get_forward() * time::get_delta());
-		else if (input::get_key(UE_KEY_S))
-			_transform->translate(_transform->get_forward() * time::get_delta());
-		if (input::get_key(UE_KEY_D))
-			_transform->translate(_transform->get_right() * time::get_delta());
-		else if (input::get_key(UE_KEY_A))
-			_transform->translate(-_transform->get_right() * time::get_delta());
-		if (input::get_key(UE_KEY_E))
-			_transform->translate(_transform->get_up() * time::get_delta());
-		else if (input::get_key(UE_KEY_Q))
-			_transform->translate(-_transform->get_up() * time::get_delta());
 		_shader->bind();
 		_texture->bind();
 		_shader->set_vector3("u_LightPosition", vector3(5.0f, 5.0f, 5.0f));
 		_shader->set_vector3("u_ViewPosition", _entity->get_component<transform>().get_position());
 		_shader->set_vector4("u_Color", vector4(1.0f, 0.0f, 0.0f, 0.0f));
-		_shader->set_matrix4x4("u_ViewProjection", _camera->get_projection_matrix() * _transform->get_world_to_local());
+		_shader->set_matrix4x4("u_ViewProjection", _entity->get_component<camera>().get_projection_matrix() 
+			* _entity->get_component<transform>().get_world_to_local());
 		_vertex_array->bind();
 		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
 	}

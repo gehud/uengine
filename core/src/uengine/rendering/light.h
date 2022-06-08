@@ -19,7 +19,7 @@ namespace ue
 		color _color = color::white;
 		float _intensity = 1.0f;
 	public:
-		light(entity& entity) : component(entity) { }
+		light(const entity& entity) : component(entity) { }
 
 		color get_color() const { return _color; }
 		void set_color(const color& value) { _color = value; }

@@ -24,7 +24,7 @@ project "Client"
 		"../core/dependencies/glm",
 		"../core/dependencies/stb",
 		"../core/dependencies/imgui",
-		"../core/dependencies/entt/single_include"
+		"../core/dependencies/entt/single_include",
 	}
 
 	links {
