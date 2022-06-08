@@ -25,6 +25,7 @@ project "Core"
 		"dependencies/stb",
 		"dependencies/imgui",
 		"dependencies/entt/single_include",
+		"dependencies/assimp/include",
 	}
 
 	libdirs {
@@ -35,8 +36,8 @@ project "Core"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"Assimp",
-		"vulkan-1.lib"
+		"vulkan-1.lib",
+		"assimp-vc143-mtd.lib"
 	}
 
 	defines {
@@ -56,12 +57,18 @@ project "Core"
 		defines {
 			"UE_DEBUG"
 		}
+		libdirs {
+			"dependencies/assimp/lib/Debug"
+		}
 		runtime "Debug"
 		symbols "on"
 	
 	filter "configurations:Release"
 		defines {
 			"UE_RELEASE"
+		}
+		libdirs {
+			"dependencies/assimp/lib/Release"
 		}
 		runtime "Release"
 		optimize "on"

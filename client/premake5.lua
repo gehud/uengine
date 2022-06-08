@@ -25,6 +25,7 @@ project "Client"
 		"../core/dependencies/stb",
 		"../core/dependencies/imgui",
 		"../core/dependencies/entt/single_include",
+		"../core/dependencies/assimp/include",
 	}
 
 	links {
