@@ -1,25 +1,33 @@
 project "Glad"
 	kind "StaticLib"
-	systemversion "latest"
 	language "C"
 
-	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
-	objdir ("bin/int/" .. output_dir .. "/%{prj.name}")
+	objdir ("build/obj/%{cfg.buildcfg}-%{cfg.platform}")
+	targetdir ("build/%{cfg.buildcfg}-%{cfg.platform}")
 
 	files {
 		"include/**.h",
-		"src/**.c"
+		"src/**.c",
 	}
 
 	includedirs {
 		"include",
-		"src"
+		"src",
 	}
+
+	filter "system:windows"
+		systemversion "latest"
 
 	filter "configurations:Debug"
 		runtime "Debug"
-		symbols "on"
+		symbols "On"
 	
 	filter "configurations:Release"
 		runtime "Release"
-		optimize "on"
+		optimize "On"
+
+	filter "platforms:Windows32"
+		architecture "x86"
+
+	filter "platforms:Windows64"
+		architecture "x86_64"

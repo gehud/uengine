@@ -1,21 +1,12 @@
 # Visual Studio
-.vs/
+.vs
 **.sln
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
 
-# Files
-**.obj
-**.exe
-**.exe.recipe
-**.lib.recipe
-**.ilk
-**.log
-**.tlog
-**.idb
-**.pdb
-GenerateProjects.bat
+# Visual Studio Code
+.vscode
 
-# Folders
-**/bin/
+# Build
+**/build

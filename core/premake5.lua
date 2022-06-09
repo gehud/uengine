@@ -1,22 +1,19 @@
 project "Core"
 	kind "StaticLib"
-	systemversion "latest"
-	cppdialect "C++17"
+	language "C++"
 
-	targetname "uengine"
-
-	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
-	objdir ("bin/int/" .. output_dir .. "/%{prj.name}")
+	objdir ("build/obj/%{cfg.buildcfg}-%{cfg.platform}")
+	targetdir ("build/%{cfg.buildcfg}-%{cfg.platform}")
 
 	files {
 		"include/**.h",
-		"src/**.h",
-		"src/**.cpp"
+		"source/**.h",
+		"source/**.cpp",
 	}
 
 	includedirs {
 		"include",
-		"src",
+		"source",
 		"dependencies/spdlog/include",
 		"dependencies/glfw/include",
 		"dependencies/glad/include",
@@ -24,51 +21,49 @@ project "Core"
 		"dependencies/glm",
 		"dependencies/stb",
 		"dependencies/imgui",
-		"dependencies/entt/single_include",
+		"dependencies/entt/src",
 		"dependencies/assimp/include",
-	}
-
-	libdirs {
-		"dependencies/vulkan/lib"
 	}
 
 	links {
 		"GLFW",
 		"Glad",
+		"Vulkan",
 		"ImGui",
-		"vulkan-1.lib",
-		"assimp-vc143-mtd.lib"
+		"Assimp",
 	}
 
 	defines {
 		"GLFW_INCLUDE_NONE",
-		"GLFW_INCLUDE_VULKAN"
+		"GLFW_INCLUDE_VULKAN",
 	}
 
 	filter "system:windows"
+		systemversion "latest"
+		cppdialect "C++17"
 		defines {
 			"UE_WINDOWS",
 			"GLFW_EXPOSE_NATIVE_WIN32",
 			"VK_USE_PLATFORM_WIN32_KHR",
-			"_CRT_SECURE_NO_WARNINGS"
+			"_CRT_SECURE_NO_WARNINGS",
 		}
 
 	filter "configurations:Debug"
 		defines {
 			"UE_DEBUG"
 		}
-		libdirs {
-			"dependencies/assimp/lib/Debug"
-		}
 		runtime "Debug"
-		symbols "on"
+		symbols "On"
 	
 	filter "configurations:Release"
 		defines {
 			"UE_RELEASE"
 		}
-		libdirs {
-			"dependencies/assimp/lib/Release"
-		}
 		runtime "Release"
-		optimize "on"
+		optimize "On"
+
+	filter "platforms:Windows32"
+		architecture "x86"
+
+	filter "platforms:Windows64"
+		architecture "x86_64"

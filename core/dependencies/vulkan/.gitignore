@@ -1,6 +1,7 @@
-Bin/
-Demos/
-Helpers/
-installerResources/
-Templates/
-Tools/
+Bin
+Demos
+Helpers
+installerResources
+Templates
+Tools
+obj
