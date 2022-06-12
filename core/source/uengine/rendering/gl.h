@@ -21,7 +21,7 @@ namespace ue
 
 		static int get_triangles_mode() { return _api->get_triangles_mode(); }
 
-		static void draw_elements(int mode, int count, int type) { _api->draw_elements(mode, count, type); }
+		static void draw_elements(int mode, int count, index_format format) { _api->draw_elements(mode, count, format); }
 
 		static void viewport(int x, int y, int width, int height) { _api->viewport(x, y, width, height); }
 	};

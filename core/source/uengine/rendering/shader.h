@@ -1,5 +1,6 @@
 #pragma once
 
+#include "uengine/core/memory.h"
 #include "uengine/math/vector2.h"
 #include "uengine/math/vector3.h"
 #include "uengine/math/vector4.h"
@@ -13,8 +14,10 @@ namespace ue
 	class shader 
 	{
 	public:
-		static std::shared_ptr<shader> create(const char* path);
-		static std::shared_ptr<shader> create(const char* vertex_source, const char* fragment_source);
+		static reference<shader> create(const char* path);
+		static reference<shader> create(const char* vertex_source, const char* fragment_source);
+
+		virtual ~shader() = default;
 
 		virtual void bind() const = 0;
 		virtual void unbind() const = 0;

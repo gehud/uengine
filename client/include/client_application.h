@@ -4,7 +4,7 @@
 
 using namespace ue;
 
-class camera_controller : public script 
+class camera_controller : public script
 {
 private:
 	camera* _camera;
@@ -47,19 +47,14 @@ protected:
 class client_application : public application
 {
 private:
-	std::shared_ptr<vertex_array> _vertex_array;
-	std::shared_ptr<vertex_buffer> _vertex_buffer;
-	std::shared_ptr<index_buffer> _index_buffer;
-	std::shared_ptr<texture_2d> _texture;
-	std::shared_ptr<shader> _shader;
+	reference<mesh> _mesh;
+	reference<texture_2d> _texture;
+	reference<shader> _shader;
 	scene _scene;
 	reference<entity> _entity;
 public:
 	client_application()
 	{
-		_vertex_array = vertex_array::create();
-		_vertex_array->bind();
-
 		float vertices[24 * 8] = 
 		{
 			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
@@ -93,13 +88,6 @@ public:
 			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f
 		};
 
-		_vertex_buffer = vertex_buffer::create(vertices, sizeof(vertices) / sizeof(float), sizeof(float));
-		_vertex_buffer->set_layout({
-			{ vertex_attribute_format::float3, "a_Position"},
-			{ vertex_attribute_format::float3, "a_Normal"},
-			{ vertex_attribute_format::float2, "a_UV"}
-		});
-
 		unsigned int indices[36] = 
 		{ 
 			0, 1, 2, 0, 2, 3,
@@ -110,7 +98,17 @@ public:
 			20, 21, 22, 20, 22, 23,
 		};
 
-		_index_buffer = index_buffer::create(indices, sizeof(indices) / sizeof(int), sizeof(int));
+		_mesh = mesh::create();
+
+		_mesh->set_vertex_buffer_params(24, { 
+			{ "a_Position", vertex_attribute_format::float32, 3 },
+			{ "a_Normal", vertex_attribute_format::float32, 3 },
+			{ "a_UV", vertex_attribute_format::float32, 2 } 
+		});
+		_mesh->set_vertex_buffer_data(vertices);
+
+		_mesh->set_index_buffer_params(36);
+		_mesh->set_index_buffer_data(indices);
 
 		_texture = texture_2d::create("assets/textures/checkerboard.png");
 		_texture->set_filter_mode(texture_filter_mode::nearest);
@@ -138,7 +136,6 @@ public:
 		_shader->set_vector4("u_Color", vector4(1.0f, 0.0f, 0.0f, 0.0f));
 		_shader->set_matrix4x4("u_ViewProjection", _entity->get_component<camera>().get_projection_matrix() 
 			* _entity->get_component<transform>().get_world_to_local());
-		_vertex_array->bind();
-		gl::draw_elements(gl::get_triangles_mode(), _index_buffer->get_count(), _index_buffer->get_type());
+		graphics::draw_mesh(_mesh);
 	}
 };

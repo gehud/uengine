@@ -10,19 +10,14 @@ namespace ue
 	{
 	private:
 		std::vector<vertex_attribute_descriptor> _descriptors;
-		unsigned int _stride = 0;
+		int _stride = 0;
 	public:
 		vertex_buffer_layout() = default;
 
 		vertex_buffer_layout(const std::initializer_list<vertex_attribute_descriptor>& descriptors)
-			: _descriptors(descriptors) 
-		{
-			calculate_offsets_and_stride();
-		}
+			: _descriptors(descriptors) { calculate_stride(); }
 
-		const std::vector<vertex_attribute_descriptor>& get_descriptors() const { return _descriptors; }
-
-		unsigned int get_stride() const { return _stride; }
+		int get_stride() const { return _stride; }
 
 		std::vector<vertex_attribute_descriptor>::iterator begin() { return _descriptors.begin(); }
 		std::vector<vertex_attribute_descriptor>::iterator end() { return _descriptors.end(); }
@@ -30,16 +25,11 @@ namespace ue
 		std::vector<vertex_attribute_descriptor>::const_iterator begin() const { return _descriptors.begin(); }
 		std::vector<vertex_attribute_descriptor>::const_iterator end() const { return _descriptors.end(); }
 	private:
-		void calculate_offsets_and_stride() 
+		void calculate_stride() 
 		{
-			unsigned int offset = 0;
 			_stride = 0;
-			for (auto& element : _descriptors)
-			{
-				element.set_offet(offset);
-				offset += element.get_size();
+			for (const auto& element : _descriptors)
 				_stride += element.get_size();
-			}
 		}
 	};
 }

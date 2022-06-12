@@ -17,7 +17,7 @@ namespace ue
 
 		int get_triangles_mode() override { return -1; }
 
-		void draw_elements(int mode, int count, int type) override {}
+		void draw_elements(int mode, int count, index_format format) override {}
 
 		void viewport(int x, int y, int width, int height) override {}
 	};

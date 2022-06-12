@@ -54,15 +54,22 @@ namespace ue
 		return GL_TRIANGLES;
 	}
 
-	void opengl_graphics_api::draw_elements(int mode, int count, int type)
+	void opengl_graphics_api::draw_elements(int mode, int count, index_format format)
 	{
-		UE_CORE_ASSERT(mode == GL_POINT || mode == GL_LINE_STRIP || mode == GL_LINE_LOOP
-			|| mode == GL_LINES || mode == GL_LINE_STRIP_ADJACENCY || mode == GL_TRIANGLE_STRIP
-			|| mode == GL_TRIANGLE_FAN || mode == GL_TRIANGLES || mode == GL_TRIANGLE_STRIP_ADJACENCY
-			|| mode == GL_TRIANGLES_ADJACENCY || mode == GL_PATCHES, "Unknown render mode.");
 		UE_CORE_ASSERT(count >= 0, "Count out of range.");
-		UE_CORE_ASSERT(type == GL_UNSIGNED_BYTE || type == GL_UNSIGNED_SHORT || type == GL_UNSIGNED_INT,
-			"Incorrect index type.");
+		GLenum type = 0;
+		switch (format)
+		{
+		case index_format::uint8:
+			type = GL_UNSIGNED_BYTE;
+			break;
+		case index_format::uint16:
+			type = GL_UNSIGNED_SHORT;
+			break;
+		case index_format::uint32:
+			type = GL_UNSIGNED_INT;
+			break;
+		}
 		glDrawElements(mode, count, type, NULL);
 	}
 

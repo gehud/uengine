@@ -1,5 +1,7 @@
 #pragma once
 
+#include "uengine/rendering/index_format.h"
+
 namespace ue 
 {
 	class graphics_api 
@@ -17,7 +19,7 @@ namespace ue
 
 		virtual int get_triangles_mode() = 0;
 
-		virtual void draw_elements(int mode, int count, int type) = 0;
+		virtual void draw_elements(int mode, int count, index_format format) = 0;
 
 		virtual void viewport(int x, int y, int width, int height) = 0;
 	};
