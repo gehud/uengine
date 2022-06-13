@@ -1,8 +1,8 @@
-#include "client_application.h"
+#include "uengine/core/application.h"
 
 int main(void) 
 {
-	client_application* app = new client_application();
+	ue::application* app = new ue::application();
 	app->run();
 	delete app;
 }
