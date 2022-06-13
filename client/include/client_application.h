@@ -21,7 +21,7 @@ public:
 protected:
 	void on_update() override 
 	{
-		if (input::get_mouse_button(UE_MOUSE_BUTTON_RIGHT))
+		/*if (input::get_mouse_button(UE_MOUSE_BUTTON_RIGHT))
 		{
 			vector2 delta = input::get_mouse_position_delta();
 			_transform->rotate(quaternion::euler_angles(vector3::get_down() * delta.x * 0.1f));
@@ -40,8 +40,18 @@ protected:
 		if (input::get_key(UE_KEY_E))
 			_transform->translate(_transform->get_up() * time::get_delta());
 		else if (input::get_key(UE_KEY_Q))
-			_transform->translate(-_transform->get_up() * time::get_delta());
+			_transform->translate(-_transform->get_up() * time::get_delta());*/
 	}
+};
+
+struct vertex 
+{
+	vector3 position;
+	vector3 normal;
+	vector2 uv;
+
+	vertex(const vector3& position, const vector3& normal, const vector2& uv)
+		: position(position), normal(normal), uv(uv) { }
 };
 
 class client_application : public application
@@ -52,40 +62,41 @@ private:
 	reference<shader> _shader;
 	scene _scene;
 	reference<entity> _entity;
+	reference<entity> _cube;
 public:
 	client_application()
 	{
-		float vertices[24 * 8] = 
+		vertex vertices[24] = 
 		{
-			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
-			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
-										 
-			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
-								  		  
-			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-								  		  	    
-			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-								  		  	    
-			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-								  		 
-			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f
+			{ { -0.5f, -0.5f,  0.5f }, { 0.0f,  0.0f,  1.0f }, { 0.0f,  0.0f } },
+			{ { -0.5f,  0.5f,  0.5f }, { 0.0f,  0.0f,  1.0f }, { 0.0f,  1.0f } },
+			{ {  0.5f,  0.5f,  0.5f }, { 0.0f,  0.0f,  1.0f }, { 1.0f,  1.0f } },
+			{ {  0.5f, -0.5f,  0.5f }, { 0.0f,  0.0f,  1.0f }, { 1.0f,  0.0f } },
+						 			 	   				
+			{ {  0.5f, -0.5f, -0.5f }, { 0.0f,  0.0f, -1.0f }, { 0.0f,  0.0f } },
+			{ {  0.5f,  0.5f, -0.5f }, { 0.0f,  0.0f, -1.0f }, { 0.0f,  1.0f } },
+			{ { -0.5f,  0.5f, -0.5f }, { 0.0f,  0.0f, -1.0f }, { 1.0f,  1.0f } },
+			{ { -0.5f, -0.5f, -0.5f }, { 0.0f,  0.0f, -1.0f }, { 1.0f,  0.0f } },
+			 	   		  			     				      		    
+			{ {  0.5f, -0.5f,  0.5f }, { 1.0f,  0.0f,  0.0f }, { 0.0f,  0.0f } },
+			{ {  0.5f,  0.5f,  0.5f }, { 1.0f,  0.0f,  0.0f }, { 0.0f,  1.0f } },
+			{ {  0.5f,  0.5f, -0.5f }, { 1.0f,  0.0f,  0.0f }, { 1.0f,  1.0f } },
+			{ {  0.5f, -0.5f, -0.5f }, { 1.0f,  0.0f,  0.0f }, { 1.0f,  0.0f } },
+			   		  	    		   	 					     			    
+			{ { -0.5f, -0.5f, -0.5f }, { -1.0f, 0.0f,  0.0f }, { 0.0f,  0.0f } },
+			{ { -0.5f,  0.5f, -0.5f }, { -1.0f, 0.0f,  0.0f }, { 0.0f,  1.0f } },
+			{ { -0.5f,  0.5f,  0.5f }, { -1.0f, 0.0f,  0.0f }, { 1.0f,  1.0f } },
+			{ { -0.5f, -0.5f,  0.5f }, { -1.0f, 0.0f,  0.0f }, { 1.0f,  0.0f } },
+			 	   		  	    	    					     			    
+			{ { -0.5f,  0.5f,  0.5f }, { 0.0f,  1.0f,  0.0f }, { 0.0f,  0.0f } },
+			{ { -0.5f,  0.5f, -0.5f }, { 0.0f,  1.0f,  0.0f }, { 0.0f,  1.0f } },
+			{ {  0.5f,  0.5f, -0.5f }, { 0.0f,  1.0f,  0.0f }, { 1.0f,  1.0f } },
+			{ {  0.5f,  0.5f,  0.5f }, { 0.0f,  1.0f,  0.0f }, { 1.0f,  0.0f } },
+			 	   		 			     				      		    
+			{ {  0.5f, -0.5f,  0.5f }, { 0.0f, -1.0f,  0.0f }, { 0.0f,  0.0f } },
+			{ {  0.5f, -0.5f, -0.5f }, { 0.0f, -1.0f,  0.0f }, { 0.0f,  1.0f } },
+			{ { -0.5f, -0.5f, -0.5f }, { 0.0f, -1.0f,  0.0f }, { 1.0f,  1.0f } },
+			{ { -0.5f, -0.5f,  0.5f }, { 0.0f, -1.0f,  0.0f }, { 1.0f,  0.0f } }
 		};
 
 		unsigned int indices[36] = 
@@ -113,13 +124,14 @@ public:
 		_texture = texture_2d::create("assets/textures/checkerboard.png");
 		_texture->set_filter_mode(texture_filter_mode::nearest);
 
-		_shader = shader::create("assets/shaders/texture.glsl");
+		_shader = shader::create("assets/shaders/color.glsl");
 		_shader->set_int("u_Texture", 0);
 
 		scene_manager::add_scene(_scene);
 		scene_manager::set_active_scene(_scene);
 
 		_entity = entity_manager::create();
+		_cube = entity_manager::create();
 		_entity->add_component<camera_controller>();
 		system_manager::add_system<script_system<camera_controller>>();
 	}
@@ -129,13 +141,17 @@ public:
 		gl::clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 		gl::clear();
 
+		_cube->get_component<transform>().rotate(quaternion::euler_angles(vector3::up 
+			* time::get_delta() * 10));
+
 		_shader->bind();
 		_texture->bind();
 		_shader->set_vector3("u_LightPosition", vector3(5.0f, 5.0f, 5.0f));
 		_shader->set_vector3("u_ViewPosition", _entity->get_component<transform>().get_position());
-		_shader->set_vector4("u_Color", vector4(1.0f, 0.0f, 0.0f, 0.0f));
 		_shader->set_matrix4x4("u_ViewProjection", _entity->get_component<camera>().get_projection_matrix() 
 			* _entity->get_component<transform>().get_world_to_local());
+		_shader->set_matrix4x4("u_Transform", _cube->get_component<transform>().get_local_to_world());
+		_shader->set_color("u_Color", color::red);
 		graphics::draw_mesh(_mesh);
 	}
 };

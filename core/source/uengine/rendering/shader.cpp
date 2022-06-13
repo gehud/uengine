@@ -2,6 +2,7 @@
 
 #include "uengine/rendering/graphics.h"
 #include "uengine/rendering/opengl/opengl_shader.h"
+#include "uengine/rendering/vulkan/vulkan_shader.h"
 
 namespace ue 
 {
