@@ -8,5 +8,11 @@
 # Visual Studio Code
 .vscode
 
+# CMake
+out
+**/CMakeFiles
+**/CMakeCache.txt
+**/cmake_install.cmake
+
 # Build
 **/build
