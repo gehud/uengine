@@ -1,8 +1,5 @@
-#include "uengine/core/application.h"
+#include "uengine/core/entry_point.h"
 
-int main(void) 
-{
-	ue::application* app = new ue::application();
-	app->run();
-	delete app;
+ue::application* ue::create_application() {
+	return new ue::application();
 }

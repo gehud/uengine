@@ -1,0 +1,4 @@
+#pragma once
+
+#define UE_VERSION_MAJOR @UE_VERSION_MAJOR@
+#define UE_VERSION_MINOR @UE_VERSION_MINOR@

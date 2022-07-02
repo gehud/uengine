@@ -1,17 +1,21 @@
-cmake_minimum_required(VERSION 3.10)
-
 project(Client LANGUAGES CXX)
 
-file(GLOB_RECURSE CLIENT_FILES 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+file(GLOB_RECURSE CLIENT_SOURCE_FILES 
 	${PROJECT_SOURCE_DIR}/include/*.h
 	${PROJECT_SOURCE_DIR}/source/*.h
 	${PROJECT_SOURCE_DIR}/source/*.cpp)
 
-add_executable(Client ${CLIENT_FILES})
+if(${CMAKE_SYSTEM_NAME} STREQUAL Android)
+	add_library(Client STATIC ${CLIENT_SOURCE_FILES})
+else()
+	add_executable(Client ${CLIENT_SOURCE_FILES})
+endif()
 
 target_include_directories(Client PRIVATE
 	${PROJECT_SOURCE_DIR}/include
-	${PROJECT_SOURCE_DIR}/source
-	${PROJECT_SOURCE_DIR}/../core/include)
+	${PROJECT_SOURCE_DIR}/source)
 
 target_link_libraries(Client Core)

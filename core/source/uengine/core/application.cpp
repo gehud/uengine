@@ -1,30 +1,25 @@
 #include "uengine/core/application.h"
 
-namespace ue 
-{
+namespace ue {
 	application* application::_instance = nullptr;
 
-	application::application()
-	{
+	application::application() {
 		_instance = this;
 	}
 
-	application::~application()
-	{
+	application::~application() {
+
 	}
 
-	void application::run()
-	{
+	void application::run() {
 		_runing = true;
 
-		while (_runing)
-		{
+		while (_runing) {
 
 		}
 	}
 
-	void application::close()
-	{
+	void application::close() {
 		_runing = false;
 	}
 }
