@@ -28,7 +28,7 @@
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
-          "intelliSenseMode": "windows-clang-x64"
+          "intelliSenseMode": "windows-msvc-x64"
         } 
       }
     },

@@ -17,6 +17,8 @@ namespace ue {
 
 		void run();
 		void stop();
+
+		virtual void update() {}
 	private:
 		static application* _instance;
 		static application_platform	_platform;

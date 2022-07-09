@@ -1,7 +1,10 @@
 #include "application.h"
 
+#include "input.h"
 #include "assertion.h"
 #include "uengine/rendering/graphics.h"
+
+#include <glad/glad.h>
 
 namespace ue {
 	application* application::_instance = nullptr;
@@ -33,6 +36,10 @@ namespace ue {
 		_runing = true;
 
 		while (_runing) {
+			input::update();
+
+			update();
+
 			_window->update();
 		}
 	}

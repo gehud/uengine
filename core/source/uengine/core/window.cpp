@@ -1,6 +1,7 @@
 #include "window.h"
 
 #include "log.h"
+#include "input.h"
 #include "assertion.h"
 
 namespace ue {
@@ -43,6 +44,44 @@ namespace ue {
 		glfwSetWindowCloseCallback(_handle, [](GLFWwindow* handle) {
 			ue::window* window = get_window_from_user_ptr(handle);
 			window->invoke_close_event();
+		});
+
+		glfwSetKeyCallback(_handle, [](GLFWwindow* window, int key, int scanmode, int action, int mods) {
+			switch (action) {
+				case GLFW_PRESS: {
+					input::invoke_key_pressed_event(key, 0);
+					break;
+				}
+				case GLFW_REPEAT: {
+					input::invoke_key_pressed_event(key, 1);
+					break;
+				}
+				case GLFW_RELEASE: {
+					input::invoke_key_released_event(key);
+					break;
+				}
+			}
+		});
+
+		glfwSetMouseButtonCallback(_handle, [](GLFWwindow* window, int button, int action, int mods) {
+			switch (action) {
+				case GLFW_PRESS: {
+					input::invoke_mouse_button_pressed_event(button);
+					break;
+				}
+				case GLFW_RELEASE: {
+					input::invoke_mouse_button_released_event(button);
+					break;
+				}
+			}
+		});
+
+		glfwSetScrollCallback(_handle, [](GLFWwindow* window, double offset_x, double offset_y) {
+			input::invoke_mouse_scrolled_event(static_cast<float>(offset_x), static_cast<float>(offset_y));
+		});
+
+		glfwSetCursorPosCallback(_handle, [](GLFWwindow* window, double position_x, double position_y) {
+			input::invoke_mouse_moved_event(static_cast<float>(position_x), static_cast<float>(position_y));
 		});
 	}
 

@@ -3,6 +3,7 @@
 #include "memory.h"
 
 #include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
 
 namespace ue {
 	class log {
