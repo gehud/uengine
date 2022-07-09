@@ -5,11 +5,7 @@
 namespace ue {
 	application* application::_instance = nullptr;
 
-#if defined(UE_WINDOWS)
 	application_platform application::_platform = application_platform::windows;
-#elif defined(UE_ANDROID)
-	application_platform application::_platform = application_platform::android;
-#endif
 
 	application::application() {
 		_instance = this;
@@ -28,7 +24,7 @@ namespace ue {
 		}
 	}
 
-	void application::close() {
+	void application::stop() {
 		_runing = false;
 	}
 }

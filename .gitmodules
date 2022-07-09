@@ -1,3 +1,6 @@
 [submodule "core/dependencies/spdlog"]
 	path = core/dependencies/spdlog
-	url = https://github.com/gabime/spdlog.git
+	url = https://github.com/gehud/spdlog.git
+[submodule "core/dependencies/glfw"]
+	path = core/dependencies/glfw
+	url = https://github.com/gehud/glfw.git

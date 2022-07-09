@@ -1,14 +1,12 @@
 #pragma once
 
-#include "uengine/core/export.h"
-
 namespace ue {
 	enum class application_platform {
 		windows,
 		android
 	};
 
-	class UE_API application {
+	class application {
 	private:
 		static application* _instance;
 		static application_platform	_platform;
@@ -23,6 +21,6 @@ namespace ue {
 
 		void run();
 
-		void close();
+		void stop();
 	};
 }

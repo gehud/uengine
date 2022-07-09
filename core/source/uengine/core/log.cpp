@@ -3,8 +3,8 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace ue {
-	std::shared_ptr<spdlog::logger> log::_core_logger;
-	std::shared_ptr<spdlog::logger> log::_client_logger;
+	reference<spdlog::logger> log::_core_logger;
+	reference<spdlog::logger> log::_client_logger;
 
 	void log::initialize()
 	{
