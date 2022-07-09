@@ -14,7 +14,6 @@ file(GLOB_RECURSE UE_SOURCE_FILES
 	${PROJECT_SOURCE_DIR}/source/*.h
 	${PROJECT_SOURCE_DIR}/source/*.cpp)
 
-
 add_library(${PROJECT_NAME} STATIC ${UE_SOURCE_FILES})
 
 target_compile_definitions(${PROJECT_NAME}
@@ -27,14 +26,16 @@ target_compile_definitions(${PROJECT_NAME}
 		$<$<CONFIG:Release>:UE_RELEASE>
 		$<$<CONFIG:MinSizeRel>:UE_RELEASE>
 )
+
 add_subdirectory(dependencies/spdlog)
+add_subdirectory(dependencies/glfw)
 
 list(APPEND INCLUDE_DIRS
 	${PROJECT_SOURCE_DIR}/include
 	${PROJECT_SOURCE_DIR}/source
 	${PROJECT_BINARY_DIR}/source)
 
-list(APPEND LIBS spdlog::spdlog)
+list(APPEND LIBS spdlog::spdlog glfw)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
