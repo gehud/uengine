@@ -20,22 +20,24 @@ target_compile_definitions(${PROJECT_NAME}
 	PRIVATE
 		_CRT_SECURE_NO_WARNINGS
 	PUBLIC
-		UE_PLATFORM_WINDOWS
 		$<$<CONFIG:Debug>:UE_DEBUG>
 		$<$<CONFIG:RelWithDebInfo>:UE_DEBUG>
 		$<$<CONFIG:Release>:UE_RELEASE>
 		$<$<CONFIG:MinSizeRel>:UE_RELEASE>
+		UE_PLATFORM_WINDOWS
+		GLFW_INCLUDE_NONE
 )
 
 add_subdirectory(dependencies/spdlog)
 add_subdirectory(dependencies/glfw)
+add_subdirectory(dependencies/glad)
 
 list(APPEND INCLUDE_DIRS
 	${PROJECT_SOURCE_DIR}/include
 	${PROJECT_SOURCE_DIR}/source
 	${PROJECT_BINARY_DIR}/source)
 
-list(APPEND LIBS spdlog::spdlog glfw)
+list(APPEND LIBS spdlog::spdlog glfw glad)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

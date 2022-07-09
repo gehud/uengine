@@ -1,6 +1,7 @@
 #include "application.h"
 
 #include "assertion.h"
+#include "uengine/rendering/graphics.h"
 
 namespace ue {
 	application* application::_instance = nullptr;
@@ -18,11 +19,14 @@ namespace ue {
 			stop();
 		});
 
+		graphics::initialize();
+
 		UE_CORE_LOG_INFO("Welcome to the UEngine!");
 	}
 
 	application::~application() {
 		delete _window;
+		graphics::terminate();
 	}
 
 	void application::run() {

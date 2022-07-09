@@ -31,10 +31,6 @@ namespace ue {
 		_handle = glfwCreateWindow(static_cast<int>(_width), static_cast<int>(_height),
 			_title, nullptr, nullptr);
 
-		glfwMakeContextCurrent(_handle);
-
-		set_vsync(true);
-
 		glfwSetWindowUserPointer(_handle, this);
 
 		glfwSetWindowSizeCallback(_handle, [](GLFWwindow* handle, int width, int height) {
