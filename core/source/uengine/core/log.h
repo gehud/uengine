@@ -17,16 +17,16 @@ namespace ue {
 	};
 }
 
-#define UE_CORE_LOG_TRACE(...)		::ue::log::get_core_logger()->trace(__VA_ARGS__)
-#define UE_CORE_LOG_INFO(...)		::ue::log::get_core_logger()->info(__VA_ARGS__)
-#define UE_CORE_LOG_DEBUG(...)		::ue::log::get_core_logger()->debug(__VA_ARGS__)
-#define UE_CORE_LOG_WARNING(...)	::ue::log::get_core_logger()->warn(__VA_ARGS__)
-#define UE_CORE_LOG_ERROR(...)		::ue::log::get_core_logger()->error(__VA_ARGS__)
-#define UE_CORE_LOG_CRITICAL(...)	::ue::log::get_core_logger()->critical(__VA_ARGS__)
+#define UE_CORE_LOG_TRACE(...)		::ue::log::get_core_logger()->trace(__VA_ARGS__);
+#define UE_CORE_LOG_INFO(...)		::ue::log::get_core_logger()->info(__VA_ARGS__);
+#define UE_CORE_LOG_DEBUG(...)		::ue::log::get_core_logger()->debug(__VA_ARGS__);
+#define UE_CORE_LOG_WARNING(...)	::ue::log::get_core_logger()->warn(__VA_ARGS__);
+#define UE_CORE_LOG_ERROR(...)		::ue::log::get_core_logger()->error(__VA_ARGS__);
+#define UE_CORE_LOG_CRITICAL(...)	::ue::log::get_core_logger()->critical(__VA_ARGS__);
 
-#define UE_LOG_TRACE(...)			::ue::log::get_client_logger()->trace(__VA_ARGS__)
-#define UE_LOG_INFO(...)			::ue::log::get_client_logger()->info(__VA_ARGS__)
-#define UE_LOG_DEBUG(...)			::ue::log::get_client_logger()->debug(__VA_ARGS__)
-#define UE_LOG_WARNING(...)			::ue::log::get_client_logger()->warn(__VA_ARGS__)
-#define UE_LOG_ERROR(...)			::ue::log::get_client_logger()->error(__VA_ARGS__)
-#define UE_LOG_CRITICAL(...)		::ue::log::get_client_logger()->critical(__VA_ARGS__)
+#define UE_LOG_TRACE(...)			::ue::log::get_client_logger()->trace(__VA_ARGS__);
+#define UE_LOG_INFO(...)			::ue::log::get_client_logger()->info(__VA_ARGS__);
+#define UE_LOG_DEBUG(...)			::ue::log::get_client_logger()->debug(__VA_ARGS__);
+#define UE_LOG_WARNING(...)			::ue::log::get_client_logger()->warn(__VA_ARGS__);
+#define UE_LOG_ERROR(...)			::ue::log::get_client_logger()->error(__VA_ARGS__);
+#define UE_LOG_CRITICAL(...)		::ue::log::get_client_logger()->critical(__VA_ARGS__);

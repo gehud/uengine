@@ -14,6 +14,9 @@ namespace ue {
 		log::initialize();
 
 		_window = new window(1280, 720, "UEngine");
+		_window->on_close += new lambda<void>([this]() {
+			stop();
+		});
 
 		UE_CORE_LOG_INFO("Welcome to the UEngine!");
 	}
