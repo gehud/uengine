@@ -12,7 +12,8 @@ configure_file(source/uengine/core/configuration.h.in source/uengine/core/config
 file(GLOB_RECURSE UE_SOURCE_FILES 
 	${PROJECT_SOURCE_DIR}/include/*.h
 	${PROJECT_SOURCE_DIR}/source/*.h
-	${PROJECT_SOURCE_DIR}/source/*.cpp)
+	${PROJECT_SOURCE_DIR}/source/*.cpp
+)
 
 add_library(${PROJECT_NAME} STATIC ${UE_SOURCE_FILES})
 
@@ -31,13 +32,16 @@ target_compile_definitions(${PROJECT_NAME}
 add_subdirectory(dependencies/spdlog)
 add_subdirectory(dependencies/glfw)
 add_subdirectory(dependencies/glad)
+add_subdirectory(dependencies/stb)
+add_subdirectory(dependencies/glm)
 
 list(APPEND INCLUDE_DIRS
 	${PROJECT_SOURCE_DIR}/include
 	${PROJECT_SOURCE_DIR}/source
-	${PROJECT_BINARY_DIR}/source)
+	${PROJECT_BINARY_DIR}/source
+)
 
-list(APPEND LIBS spdlog::spdlog glfw glad)
+list(APPEND LIBS spdlog::spdlog glfw glad stb glm)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

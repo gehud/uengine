@@ -4,3 +4,9 @@
 [submodule "core/dependencies/glfw"]
 	path = core/dependencies/glfw
 	url = https://github.com/gehud/glfw.git
+[submodule "core/dependencies/stb"]
+	path = core/dependencies/stb
+	url = https://github.com/gehud/stb.git
+[submodule "core/dependencies/glm"]
+	path = core/dependencies/glm
+	url = https://github.com/gehud/glm.git

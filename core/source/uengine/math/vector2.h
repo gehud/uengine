@@ -17,6 +17,8 @@ namespace ue {
 		float x = 0.0f;
 		float y = 0.0f;
 
+		vector2() = default;
+
 		vector2(float x, float y) : x(x), y(y) { }
 
 		static vector2 get_one() { return one; }
@@ -68,66 +70,30 @@ namespace ue {
 			y -= other.y;
 			return *this;
 		}
-
-		vector2& operator *= (const vector2& other) {
-			x *= other.x;
-			y *= other.y;
-			return *this;
-		}
-
-		vector2& operator /= (const vector2& other) {
-			x /= other.x;
-			y /= other.y;
-			return *this;
-		}
 	};
+
+	inline vector2 operator + (const vector2& vector) {
+		return vector;
+	}
 
 	inline vector2 operator + (const vector2& left, const vector2& right) {
 		return vector2(left.x + right.x, left.y + right.y);
-	}
-
-	inline vector2 operator + (const vector2& vector) {
-		return vector2(vector.x, vector.y);
-	}
-
-	inline vector2 operator - (const vector2& left, const vector2& right) {
-		return vector2(left.x - right.x, left.y - right.y);
 	}
 
 	inline vector2 operator - (const vector2& vector) {
 		return vector2(-vector.x, -vector.y);
 	}
 
-	inline vector2 operator * (const vector2& left, const vector2& right) {
-		return vector2(left.x * right.x, left.y * right.y);
+	inline vector2 operator - (const vector2& left, const vector2& right) {
+		return vector2(left.x - right.x, left.y - right.y);
 	}
 
 	inline vector2 operator * (const vector2& vector, float number) {
 		return vector2(vector.x * number, vector.y * number);
 	}
 
-	inline vector2 operator / (const vector2& left, const vector2& right) {
-		return vector2(left.x / right.x, left.y / right.y);
-	}
-
 	inline vector2 operator / (const vector2& vector, float number) {
 		return vector2(vector.x / number, vector.y / number);
-	}
-
-	inline bool operator > (const vector2& left, const vector2& right) {
-		return left.x > right.x && left.y > right.y;
-	}
-
-	inline bool operator >= (const vector2& left, const vector2& right) {
-		return left.x >= right.x && left.y >= right.y;
-	}
-
-	inline bool operator < (const vector2& left, const vector2& right) {
-		return left.x < right.x&& left.y < right.y;
-	}
-
-	inline bool operator <= (const vector2& left, const vector2& right) {
-		return left.x <= right.x && left.y <= right.y;
 	}
 
 	inline bool operator == (const vector2& left, const vector2& right) {

@@ -1,5 +1,6 @@
 #include "application.h"
 
+#include "time.h"
 #include "input.h"
 #include "assertion.h"
 #include "uengine/rendering/graphics.h"
@@ -36,6 +37,7 @@ namespace ue {
 		_runing = true;
 
 		while (_runing) {
+			time::update();
 			input::update();
 
 			update();

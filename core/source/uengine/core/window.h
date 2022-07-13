@@ -9,9 +9,9 @@ namespace ue {
 	class window {
 	public:
 		UE_DECLARE_EVENT(close_event, window)
-		close_event on_close;
+			close_event on_close;
 		UE_DECLARE_EVENT(resize_event, window, uint32, uint32)
-		resize_event on_resize;
+			resize_event on_resize;
 
 		window(uint32 width, uint32 height, const char* title);
 		~window();
@@ -20,6 +20,20 @@ namespace ue {
 
 		uint32 get_width() const { return _width; }
 		uint32 get_height() const { return _height; }
+
+		uint32 get_x() const 
+		{ 
+			int x, y;
+			glfwGetWindowPos(_handle, &x, &y);
+			return x;
+		}
+
+		uint32 get_y() const
+		{
+			int x, y;
+			glfwGetWindowPos(_handle, &x, &y);
+			return y;
+		}
 
 		bool is_vsync() const { return _vsync; }
 		void set_vsync(bool value);
