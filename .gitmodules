@@ -10,3 +10,6 @@
 [submodule "core/dependencies/glm"]
 	path = core/dependencies/glm
 	url = https://github.com/gehud/glm.git
+[submodule "core/dependencies/entt"]
+	path = core/dependencies/entt
+	url = https://github.com/gehud/entt.git

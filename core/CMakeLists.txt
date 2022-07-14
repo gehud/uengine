@@ -37,6 +37,7 @@ add_subdirectory(dependencies/glfw)
 add_subdirectory(dependencies/glad)
 add_subdirectory(dependencies/stb)
 add_subdirectory(dependencies/glm)
+add_subdirectory(dependencies/entt)
 
 list(APPEND INCLUDE_DIRS
 	${PROJECT_SOURCE_DIR}/include
@@ -44,7 +45,7 @@ list(APPEND INCLUDE_DIRS
 	${PROJECT_BINARY_DIR}/source
 )
 
-list(APPEND LIBS spdlog::spdlog glfw glad stb glm)
+list(APPEND LIBS spdlog::spdlog glfw glad stb glm entt)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
