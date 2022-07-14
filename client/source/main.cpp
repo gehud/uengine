@@ -2,7 +2,6 @@
 #include <uengine/core/window.h>
 #include <uengine/math/vector2.h>
 #include <uengine/math/vector3.h>
-#include <uengine/math/matrix3x3.h>
 #include <uengine/math/matrix4x4.h>
 #include <uengine/core/input.h>
 #include <uengine/core/time.h>
@@ -98,9 +97,9 @@ public:
 		_texture->bind();
 		_shader->set_vector3("u_LightPosition", ue::vector3(5.0f, 5.0f, 5.0f));
 		_shader->set_vector3("u_ViewPosition", ue::vector3(0, 2, 0));
-		_shader->set_matrix4x4("u_ViewProjection", glm::perspective(55.0f, 1.9f, 0.1f, 500.0f) * glm::translate(glm::mat4(1.0), glm::vec3(0, 0, -2)));
+		_shader->set_matrix4x4("u_ViewProjection", ue::matrix4x4::perspective(55.0f, 1.9f, 0.01f, 500.0f) * ue::matrix4x4::translate(0.0f, 0.0f, -2.0f));
 		_shader->set_vector4("u_Color", ue::vector4(1.0f, 0.0f, 0.0f, 1.0f));
-		_shader->set_matrix4x4("u_Transform", glm::rotate(glm::mat4(1.0f), ue::time::get_time(), glm::vec3(0, 1, 0)));
+		_shader->set_matrix4x4("u_Transform", ue::matrix4x4::rotate(ue::vector3::down, ue::time::get_time()));
 		ue::graphics::draw_mesh(_mesh);
 	}
 private:
