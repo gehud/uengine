@@ -45,7 +45,7 @@ list(APPEND INCLUDE_DIRS
 	${PROJECT_BINARY_DIR}/source
 )
 
-list(APPEND LIBS spdlog::spdlog glfw glad stb glm entt)
+list(APPEND LIBS spdlog::spdlog glfw glad stb glm EnTT)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

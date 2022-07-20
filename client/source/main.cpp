@@ -3,7 +3,9 @@
 #include <uengine/math/vector2.h>
 #include <uengine/math/vector3.h>
 #include <uengine/math/matrix4x4.h>
+#include <uengine/math/quaternion.h>
 #include <uengine/core/input.h>
+#include <uengine/core/keycodes.h>
 #include <uengine/core/time.h>
 #include <uengine/core/memory.h>
 
@@ -97,16 +99,15 @@ public:
 		_texture->bind();
 		_shader->set_vector3("u_LightPosition", ue::vector3(5.0f, 5.0f, 5.0f));
 		_shader->set_vector3("u_ViewPosition", ue::vector3(0, 2, 0));
+		_shader->set_matrix4x4("u_Transform", ue::quaternion(ue::vector3(0, ue::time::get_time(), 0)));
 		_shader->set_matrix4x4("u_ViewProjection", ue::matrix4x4::perspective(55.0f, 1.9f, 0.01f, 500.0f) * ue::matrix4x4::translate(0.0f, 0.0f, -2.0f));
 		_shader->set_vector4("u_Color", ue::vector4(1.0f, 0.0f, 0.0f, 1.0f));
-		_shader->set_matrix4x4("u_Transform", ue::matrix4x4::rotate(ue::vector3::down, ue::time::get_time()));
 		ue::graphics::draw_mesh(_mesh);
 	}
 private:
 	ue::reference<ue::mesh> _mesh;
 	ue::reference<ue::shader> _shader;
 	ue::reference<ue::texture> _texture;
-	ue::uint32 _vertex_array, _vertex_buffer, _index_buffer;
 };
 
 ue::application* ue::create_application() {

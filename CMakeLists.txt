@@ -4,3 +4,5 @@ project(uengine)
 
 add_subdirectory(core)
 add_subdirectory(client)
+
+set(VS_STARTUP_PROJECT client)

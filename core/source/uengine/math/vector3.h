@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math.h"
+#include "uengine/math/math.h"
 #include "uengine/core/types.h"
 #include "uengine/core/assertion.h"
 
@@ -39,7 +39,15 @@ namespace ue {
 		}
 
 		static float angle(const vector3& a, const vector3& b) {
-			return math::degrees(std::acosf(dot(a, b) / ((a.get_magnitude() * b.get_magnitude()))));
+			return math::degrees(math::acos(dot(a, b) / ((a.get_magnitude() * b.get_magnitude()))));
+		}
+
+		static vector3 sin(const vector3& vector) {
+			return vector3(math::sin(vector.x), math::sin(vector.y), math::sin(vector.z));
+		}
+
+		static vector3 cos(const vector3& vector) {
+			return vector3(math::cos(vector.x), math::cos(vector.y), math::cos(vector.z));
 		}
 
 		float get_magnitude() const {
