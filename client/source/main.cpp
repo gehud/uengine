@@ -100,7 +100,7 @@ public:
 		_shader->set_vector3("u_LightPosition", ue::vector3(5.0f, 5.0f, 5.0f));
 		_shader->set_vector3("u_ViewPosition", ue::vector3(0, 2, 0));
 		_shader->set_matrix4x4("u_Transform", ue::quaternion(ue::vector3(0, ue::time::get_time(), 0)));
-		_shader->set_matrix4x4("u_ViewProjection", ue::matrix4x4::perspective(55.0f, 1.9f, 0.01f, 500.0f) * ue::matrix4x4::translate(0.0f, 0.0f, -2.0f));
+		_shader->set_matrix4x4("u_ViewProjection", ue::matrix4x4::perspective(60.0f, 1.9f, 0.01f, 500.0f) * ue::matrix4x4::translate(0.0f, 0.0f, -2.0f));
 		_shader->set_vector4("u_Color", ue::vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		ue::graphics::draw_mesh(_mesh);
 	}

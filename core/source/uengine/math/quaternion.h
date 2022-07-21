@@ -7,7 +7,14 @@
 namespace ue {
 	struct quaternion {
 	public:
-		float x, y, z, w;
+		static const quaternion identity;
+
+		float x = 0.0f;
+		float y = 0.0f;
+		float z = 0.0f;
+		float w = 0.0f;
+
+		quaternion() = default;
 
 		quaternion(float x, float y, float z, float w)
 			: x(x), y(y), z(z), w(w) { }
@@ -22,9 +29,7 @@ namespace ue {
 			w = c.x * c.y * c.z + s.x * s.y * s.z;
 		}
 
-		static int get_length() {
-			return 4;
-		}
+		static int get_length() { return 4; }
 
 		float& operator [] (int index) {
 			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
@@ -104,40 +109,40 @@ namespace ue {
 			return *this;
 		}
 	};
-}
 
-inline ue::quaternion operator + (const ue::quaternion& quaternion) {
-	return quaternion;
-}
+	inline quaternion operator + (const quaternion& quaternion) {
+		return quaternion;
+	}
 
-inline ue::quaternion operator + (const ue::quaternion& left, const ue::quaternion& right) {
-	return ue::quaternion(left) *= right;
-}
+	inline quaternion operator + (const quaternion& left, const quaternion& right) {
+		return quaternion(left) *= right;
+	}
 
-inline ue::quaternion operator - (const ue::quaternion& quaternion) {
-	return ue::quaternion(-quaternion.x, -quaternion.y, -quaternion.z, -quaternion.w);
-}
+	inline quaternion operator - (const quaternion& quaternion) {
+		return ue::quaternion(-quaternion.x, -quaternion.y, -quaternion.z, -quaternion.w);
+	}
 
-inline ue::quaternion operator - (const ue::quaternion& left, const ue::quaternion& right) {
-	return ue::quaternion(left) *= right;
-}
+	inline quaternion operator - (const quaternion& left, const quaternion& right) {
+		return quaternion(left) *= right;
+	}
 
-inline ue::quaternion operator * (const ue::quaternion& left, const ue::quaternion& right) {
-	return ue::quaternion(left) *= right;
-}
+	inline quaternion operator * (const quaternion& left, const quaternion& right) {
+		return quaternion(left) *= right;
+	}
 
-inline ue::quaternion operator * (const ue::quaternion& quaternion, float number) {
-	return ue::quaternion(quaternion) *= number;
-}
+	inline quaternion operator * (const quaternion& quaternion, float number) {
+		return ue::quaternion(quaternion) *= number;
+	}
 
-inline ue::quaternion operator / (const ue::quaternion& quaternion, float number) {
-	return ue::quaternion(quaternion) /= number;
-}
+	inline quaternion operator / (const quaternion& quaternion, float number) {
+		return ue::quaternion(quaternion) /= number;
+	}
 
-inline bool operator == (const ue::quaternion& left, const ue::quaternion& right) {
-	return left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w;
-}
+	inline bool operator == (const quaternion& left, const quaternion& right) {
+		return left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w;
+	}
 
-inline bool operator != (const ue::quaternion& left, const ue::quaternion& right) {
-	return !(left == right);
+	inline bool operator != (const quaternion& left, const quaternion& right) {
+		return !(left == right);
+	}
 }

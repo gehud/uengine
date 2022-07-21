@@ -1,18 +1,18 @@
 #pragma once
 
-#include "uengine/core/types.h"
+#include "uengine/math/math.h"
 #include "uengine/core/assertion.h"
 
 #include <ostream>
 
 namespace ue {
 	struct vector2 {
-		static const vector2 one;
 		static const vector2 zero;
-		static const vector2 right;
+		static const vector2 one;
 		static const vector2 left;
-		static const vector2 up;
+		static const vector2 right;
 		static const vector2 down;
+		static const vector2 up;
 
 		float x = 0.0f;
 		float y = 0.0f;
@@ -21,15 +21,17 @@ namespace ue {
 
 		vector2(float x, float y) : x(x), y(y) { }
 
-		static vector2 get_one() { return one; }
+		static int get_length() { return 2; }
+
 		static vector2 get_zero() { return zero; }
-		static vector2 get_right() { return right; }
+		static vector2 get_one() { return one; }
 		static vector2 get_left() { return left; }
-		static vector2 get_up() { return up; }
+		static vector2 get_right() { return right; }
 		static vector2 get_down() { return down; }
+		static vector2 get_up() { return up; }
 
 		float get_magnitude() const {
-			return std::sqrtf(x * x + y * y);
+			return math::sqrt(x * x + y * y);
 		}
 
 		vector2 get_normalized() const {
@@ -43,20 +45,14 @@ namespace ue {
 			*this = get_normalized();
 		}
 
-		float operator [] (uint32 index) const {
-			UE_CORE_ASSERT(index <= 1, "Index out of range.");
-			switch (index) {
-				case 0: return x;
-				case 1: return y;
-			}
+		float& operator [] (int index) {
+			UE_CORE_ASSERT(index > 0 && index < get_length(), "Index out of range.");
+			return (&x)[index];
 		}
 
-		float& operator [] (uint32 index) {
-			UE_CORE_ASSERT(index <= 1, "Index out of range.");
-			switch (index) {
-				case 0: return x;
-				case 1: return y;
-			}
+		float operator [] (int index) const {
+			UE_CORE_ASSERT(index > 0 && index < get_length(), "Index out of range.");
+			return (&x)[index];
 		}
 
 		vector2& operator += (const vector2& other) {
@@ -70,6 +66,18 @@ namespace ue {
 			y -= other.y;
 			return *this;
 		}
+
+		vector2& operator *= (float number) {
+			x *= number;
+			y *= number;
+			return *this;
+		}
+
+		vector2& operator /= (float number) {
+			x /= number;
+			y /= number;
+			return *this;
+		}
 	};
 
 	inline vector2 operator + (const vector2& vector) {
@@ -77,7 +85,7 @@ namespace ue {
 	}
 
 	inline vector2 operator + (const vector2& left, const vector2& right) {
-		return vector2(left.x + right.x, left.y + right.y);
+		return vector2(left) += right;
 	}
 
 	inline vector2 operator - (const vector2& vector) {
@@ -85,15 +93,15 @@ namespace ue {
 	}
 
 	inline vector2 operator - (const vector2& left, const vector2& right) {
-		return vector2(left.x - right.x, left.y - right.y);
+		return vector2(left) -= right;
 	}
 
 	inline vector2 operator * (const vector2& vector, float number) {
-		return vector2(vector.x * number, vector.y * number);
+		return vector2(vector) *= number;
 	}
 
 	inline vector2 operator / (const vector2& vector, float number) {
-		return vector2(vector.x / number, vector.y / number);
+		return vector2(vector) /= number;
 	}
 
 	inline bool operator == (const vector2& left, const vector2& right) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "uengine/core/types.h"
+#include "uengine/math/math.h"
 #include "uengine/core/assertion.h"
 
 #include <ostream>
@@ -19,6 +19,8 @@ namespace ue {
 
 		vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) { }
 
+		static int get_length() { return 4; }
+
 		static vector4 get_zero() { return zero; }
 		static vector4 get_one() { return one; }
 
@@ -27,7 +29,7 @@ namespace ue {
 		}
 
 		float get_magnitude() const {
-			return std::sqrtf(x * x + y * y + z * z + w * w);
+			return math::sqrt(x * x + y * y + z * z + w * w);
 		}
 
 		vector4 get_normalized() const {
@@ -41,24 +43,14 @@ namespace ue {
 			*this = get_normalized();
 		}
 
-		float operator [] (uint32 index) const {
-			UE_CORE_ASSERT(index <= 3, "Index out of range.");
-			switch (index) {
-				case 0: return x;
-				case 1: return y;
-				case 2: return z;
-				case 3: return w;
-			}
+		float& operator [] (int index) {
+			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
+			return (&x)[index];
 		}
 
-		float& operator [] (uint32 index) {
-			UE_CORE_ASSERT(index <= 3, "Index out of range.");
-			switch (index) {
-				case 0: return x;
-				case 1: return y;
-				case 2: return z;
-				case 3: return w;
-			}
+		float operator [] (int index) const {
+			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
+			return (&x)[index];
 		}
 
 		vector4& operator += (const vector4& other) {
@@ -76,6 +68,22 @@ namespace ue {
 			w -= other.w;
 			return *this;
 		}
+
+		vector4& operator *= (float number) {
+			x *= number;
+			y *= number;
+			z *= number;
+			w *= number;
+			return *this;
+		}
+
+		vector4& operator /= (float number) {
+			x /= number;
+			y /= number;
+			z /= number;
+			w /= number;
+			return *this;
+		}
 	};
 
 	inline vector4 operator + (const vector4& vector) {
@@ -83,7 +91,7 @@ namespace ue {
 	}
 
 	inline vector4 operator + (const vector4& left, const vector4& right) {
-		return vector4(left.x + right.x, left.y + right.y, left.z + right.z, left.w + right.w);
+		return vector4(left) += right;
 	}
 
 	inline vector4 operator - (const vector4& vector) {
@@ -91,15 +99,15 @@ namespace ue {
 	}
 
 	inline vector4 operator - (const vector4& left, const vector4& right) {
-		return vector4(left.x - right.x, left.y - right.y, left.z - right.z, left.w - right.w);
+		return vector4(left) -= right;
 	}
 
 	inline vector4 operator * (const vector4& vector, float number) {
-		return vector4(vector.x * number, vector.y * number, vector.z * number, vector.w * number);
+		return vector4(vector) *= number;
 	}
 
 	inline vector4 operator / (const vector4& vector, float number) {
-		return vector4(vector.x / number, vector.y / number, vector.z / number, vector.w / number);
+		return vector4(vector) /= number;
 	}
 
 	inline bool operator == (const vector4& left, const vector4& right) {
