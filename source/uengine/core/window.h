@@ -1,38 +1,33 @@
 #pragma once
 
-#include "types.h"
-#include "event.h"
+#include "uengine/core/event.h"
+#include "uengine/math/vector2.h"
 
 #include <glfw/glfw3.h>
 
 namespace ue {
 	class window {
 	public:
-		UE_DECLARE_EVENT(close_event, window)
-			close_event on_close;
-		UE_DECLARE_EVENT(resize_event, window, uint32, uint32)
-			resize_event on_resize;
+		UE_DECLARE_EVENT(close_event, window);
+		close_event on_close;
+		UE_DECLARE_EVENT(resize_event, window, int, int);
+		resize_event on_resize;
+	public:
+		window(int width, int height, const char* title);
 
-		window(uint32 width, uint32 height, const char* title);
 		~window();
+
+		static reference<window> create(int width, int height, const char* title);
 
 		static window& get_instance() { return *_instance; }
 
-		uint32 get_width() const { return _width; }
-		uint32 get_height() const { return _height; }
+		int get_width() const { return _width; }
+		int get_height() const { return _height; }
 
-		uint32 get_x() const 
-		{ 
+		vector2 get_position() const {
 			int x, y;
 			glfwGetWindowPos(_handle, &x, &y);
-			return x;
-		}
-
-		uint32 get_y() const
-		{
-			int x, y;
-			glfwGetWindowPos(_handle, &x, &y);
-			return y;
+			return vector2(x, y);
 		}
 
 		bool is_vsync() const { return _vsync; }
@@ -45,12 +40,13 @@ namespace ue {
 		void invoke_close_event() {
 			on_close();
 		}
-		void invoke_resize_event(uint32 width, uint32 height) {
+
+		void invoke_resize_event(int width, int height) {
 			on_resize(width, height);
 		}
 	private:
 		static window* _instance;
-		uint32 _width, _height;
+		int _width, _height;
 		const char* _title;
 		bool _vsync = false;
 		GLFWwindow* _handle;

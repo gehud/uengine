@@ -1,52 +1,46 @@
 #pragma once
 
-#include "delegates.h"
+#include "uengine/core/delegates.h"
 
 namespace ue {
 	template<typename... targs>
 	class event {
-	private:
-		std::vector<ifunction<void, targs...>*> _functions;
 	public:
+		typedef ifunction<void, targs...> function_type;
+
 		event() = default;
-		event(ifunction<void, targs...>* function) {
-			_functions.push_back(function);
-		}
 
 		~event() {
-			for (auto function : _functions) {
+			for (auto function : _functions)
 				delete function;
-				function = nullptr;
-			}
 			_functions.clear();
 		}
 
-		void assign(ifunction<void, targs...>* function) {
+		void assign(function_type* function) {
 			_functions.assign(function);
 		}
 
-		void operator = (ifunction<void, targs...>* function) {
+		void operator = (function_type* function) {
 			assign(function);
 		}
 
-		void add(ifunction<void, targs...>* function) {
+		void add(function_type* function) {
 			_functions.push_back(function);
 		}
 
-		void operator += (ifunction<void, targs...>* function) {
+		void operator += (function_type* function) {
 			add(function);
 		}
 
-		void remove(ifunction<void, targs...>* function) {
+		void remove(function_type* function) {
 			auto it = std::find(_functions.begin(), _functions.end(), function);
 			if (it != _functions.end()) {
+				delete it;
 				_functions.erase(it);
-				delete function;
-				function = nullptr;
 			}
 		}
 
-		void operator -= (ifunction<void, targs...>* function) {
+		void operator -= (function_type* function) {
 			remove(function);
 		}
 	protected:
@@ -58,6 +52,8 @@ namespace ue {
 		void operator () (const targs&... args) const {
 			invoke(std::forward<const targs&>(args)...);
 		}
+	private:
+		std::vector<function_type*> _functions;
 	};
 
 #define UE_DECLARE_EVENT(name, owner, ...) class name : public ue::event<__VA_ARGS__> { friend class owner; };

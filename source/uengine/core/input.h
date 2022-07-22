@@ -8,22 +8,22 @@ namespace ue {
 		friend class window;
 		friend class application;
 	public:
-		UE_DECLARE_EVENT(key_pressed_event, input, int, int)
+		UE_DECLARE_EVENT(key_pressed_event, input, int, int);
 		static key_pressed_event on_key_pressed;
 
-		UE_DECLARE_EVENT(key_released_event, input, int)
+		UE_DECLARE_EVENT(key_released_event, input, int);
 		static key_released_event on_key_released;
 
-		UE_DECLARE_EVENT(mouse_botton_event, input, int)
+		UE_DECLARE_EVENT(mouse_botton_event, input, int);
 		static mouse_botton_event on_mouse_button_pressed;
 		static mouse_botton_event on_mouse_button_released;
 
-		UE_DECLARE_EVENT(mouse_moved_event, input, float, float)
+		UE_DECLARE_EVENT(mouse_moved_event, input, float, float);
 		static mouse_moved_event on_mouse_moved;
 
-		UE_DECLARE_EVENT(mouse_scrolled_event, input, float, float)
+		UE_DECLARE_EVENT(mouse_scrolled_event, input, float, float);
 		static mouse_scrolled_event on_mouse_scrolled;
-	public:
+
 		static bool get_key_down(int key);
 
 		static bool get_key(int key);
@@ -43,7 +43,7 @@ namespace ue {
 		static vector2 last_mouse_position;
 		static vector2 mouse_position;
 		static vector2 mouse_position_delta;
-	protected:
+
 		static void update();
 
 		static void invoke_key_pressed_event(int key, int repeat_count)

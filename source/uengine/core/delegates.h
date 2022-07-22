@@ -15,21 +15,18 @@ namespace ue {
 
 	template<typename treturn, typename... targs>
 	class function_ptr final : public ifunction<treturn, targs...> {
-	private:
-		treturn(*_value)(const targs&...) = nullptr;
 	public:
 		function_ptr(treturn(*value)(const targs&...)) : _value(value) {}
 
 		treturn invoke(const targs&... args) const override {
 			return (*_value)(std::forward<const targs&>(args)...);
 		}
+	private:
+		treturn(*_value)(const targs&...) = nullptr;
 	};
 
 	template<typename tclass, typename treturn, typename... targs>
 	class method_ptr final : public ifunction<treturn, targs...> {
-	private:
-		tclass* _class_instance = nullptr;
-		treturn(tclass::* _value)(const targs&...) = nullptr;
 	public:
 		method_ptr(tclass* class_instance, treturn(tclass::* value)(const targs&...))
 			: _class_instance(class_instance), _value(value) {}
@@ -37,64 +34,61 @@ namespace ue {
 		treturn invoke(const targs&... args) const override {
 			return ((*_class_instance).*_value)(std::forward<const targs&>(args)...);
 		}
+	private:
+		tclass* _class_instance = nullptr;
+		treturn(tclass::* _value)(const targs&...) = nullptr;
 	};
 
 	template<typename treturn, typename... targs>
 	class lambda final : public ifunction<treturn, targs...> {
-	private:
-		std::function<treturn(const targs&...)> _value;
 	public:
-		lambda(const std::function<treturn(const targs&...)>& value) : _value(value) {}
+		lambda(const std::function<treturn(const targs&...)>& value) : _value(value) { }
 
 		treturn invoke(const targs&... args) const override {
 			return _value(std::forward<const targs&>(args)...);
 		}
+	private:
+		std::function<treturn(const targs&...)> _value;
 	};
 
 	template<typename... targs>
 	class action final : public ifunction<void, targs...> {
-	private:
-		std::vector<ifunction<void, targs...>*> _functions;
 	public:
+		typedef ifunction<void, targs...> function_type;
+
 		action() = default;
-		action(ifunction<void, targs...>* function) {
-			_functions.push_back(function);
-		}
 
 		~action() {
-			for (auto function : _functions) {
+			for (auto function : _functions)
 				delete function;
-				function = nullptr;
-			}
 			_functions.clear();
 		}
 
-		void assign(ifunction<void, targs...>* function) {
+		void assign(function_type* function) {
 			_functions.assign(function);
 		}
 
-		void operator = (ifunction<void, targs...>* function) {
+		void operator = (function_type* function) {
 			assign(function);
 		}
 
-		void add(ifunction<void, targs...>* function) {
+		void add(function_type* function) {
 			_functions.push_back(function);
 		}
 
-		void operator += (ifunction<void, targs...>* function) {
+		void operator += (function_type* function) {
 			add(function);
 		}
 
-		void remove(ifunction<void, targs...>* function) {
+		void remove(function_type* function) {
 			auto it = std::find(_functions.begin(), _functions.end(), function);
 			if (it != _functions.end()) {
 				_functions.erase(it);
-				delete function;
-				function = nullptr;
+				delete it;
 			}
 		}
 
-		void operator -= (ifunction<void, targs...>* function) {
+		void operator -= (function_type* function) {
 			remove(function);
 		}
 
@@ -102,5 +96,7 @@ namespace ue {
 			for (auto function : _functions)
 				function->invoke(std::forward<const targs&>(args)...);
 		}
+	private:
+		std::vector<function_type*> _functions;
 	};
 }

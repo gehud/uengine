@@ -1,13 +1,13 @@
 #pragma once
 
-#include "application.h"
+#include "uengine/core/application.h"
 
 namespace ue {
 	extern ue::application* create_application();
 }
 
 int main(void) {
-	auto app = ue::create_application();
-	app->run();
-	delete app;
+	auto application = ue::create_application();
+	application->run();
+	delete application;
 }

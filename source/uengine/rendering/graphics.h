@@ -22,6 +22,8 @@ namespace ue {
 
 	class graphics final {
 	public:
+		graphics() = delete;
+
 		static graphics_api_type get_api_type() { return _api_type; }
 
 		static void initialize() {
@@ -30,14 +32,11 @@ namespace ue {
 			if (is_graphics_initialized)
 				return;
 
+			UE_CORE_ASSERT(&window::get_instance(), "Missing window.");
 			GLFWwindow* window = static_cast<GLFWwindow*>(window::get_instance().get_handle());
 			glfwMakeContextCurrent(window);
 			int gl_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 			UE_CORE_ASSERT(gl_status, "Failed to initialize OpenGL.");
-			UE_CORE_LOG_INFO("OpenGL Info:");
-			UE_CORE_LOG_INFO("	Vendor: {0}", glGetString(GL_VENDOR));
-			UE_CORE_LOG_INFO("	Renderer: {0}", glGetString(GL_RENDERER));
-			UE_CORE_LOG_INFO("	Version: {0}", glGetString(GL_VERSION));
 
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

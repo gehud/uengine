@@ -1,7 +1,7 @@
 #pragma once
 
 #include "uengine/math/vector3.h"
-#include "uengine/math/matrix4x4.h"
+#include "uengine/math/vector4.h"
 #include "uengine/core/assertion.h"
 
 namespace ue {
@@ -19,17 +19,64 @@ namespace ue {
 		quaternion(float x, float y, float z, float w)
 			: x(x), y(y), z(z), w(w) { }
 
-		quaternion(const vector3& euler) {
-			auto c = vector3::cos(euler * 0.5f);
-			auto s = vector3::sin(euler * 0.5f);
+		quaternion(const vector4& vector) 
+			: quaternion(vector.x, vector.y, vector.z, vector.w) { }
+
+		static int get_length() { return 4; }
+
+		static quaternion euler(float x, float y, float z) {
+			vector3 vector(x, y, z);
+
+			auto c = vector3::cos(vector * 0.5f);
+			auto s = vector3::sin(vector * 0.5f);
+
+			return quaternion(s.x * c.y * c.z - c.x * s.y * s.z,
+							  c.x * s.y * c.z + s.x * c.y * s.z,
+							  c.x * c.y * s.z - s.x * s.y * c.z,
+							  c.x * c.y * c.z + s.x * s.y * s.z);
+		}
+
+		static quaternion euler(const vector3& vector) {
+			return euler(vector.x, vector.y, vector.z);
+		}
+
+		float get_pitch() const {
+			float y = 2.0f * (this->y * this->z + this->w * this->x);
+			float x = this->w * this->w - this->x * this->x - this->y * this->y + this->z * this->z;
+
+			if (x == 0 && y == 0)
+				return 2.0f * math::atan2(this->x, this->w);
+
+			return math::atan2(y, x);
+		}
+
+		float get_yaw() const {
+			return math::asin(math::clamp(-2.0f * (x * z - w * y), -1.0f, 1.0f));
+		}
+
+		float get_roll() const {
+			float y = 2.0f * (this->x * this->y + this->w * this->z);
+			float x = this->w * this->w + this->x * this->x - this->y * this->y - this->z * this->z;
+
+			if (x == 0 && y == 0)
+				return 0.0f;
+
+			return math::atan2(y, x);
+		}
+
+		vector3 get_euler_angles() const {
+			return vector3(get_pitch(), get_yaw(), get_roll());
+		}
+
+		void set_euler_angles(const vector3& value) {
+			auto c = vector3::cos(value * 0.5f);
+			auto s = vector3::sin(value * 0.5f);
 
 			x = s.x * c.y * c.z - c.x * s.y * s.z;
 			y = c.x * s.y * c.z + s.x * c.y * s.z;
 			z = c.x * c.y * s.z - s.x * s.y * c.z;
 			w = c.x * c.y * c.z + s.x * s.y * s.z;
 		}
-
-		static int get_length() { return 4; }
 
 		float& operator [] (int index) {
 			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
@@ -39,34 +86,6 @@ namespace ue {
 		float operator [] (int index) const {
 			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
 			return (&x)[index];
-		}
-
-		operator matrix4x4() const {
-			matrix4x4 result(matrix4x4::identity);
-
-			float qxx = x * x;
-			float qyy = y * y;
-			float qzz = z * z;
-			float qxz = x * z;
-			float qxy = x * y;
-			float qyz = y * z;
-			float qwx = w * x;
-			float qwy = w * y;
-			float qwz = w * z;
-
-			result[0][0] = 1.0f - 2.0f * (qyy + qzz);
-			result[0][1] = 2.0f * (qxy + qwz);
-			result[0][2] = 2.0f * (qxz - qwy);
-
-			result[1][0] = 2.0f * (qxy - qwz);
-			result[1][1] = 1.0f - 2.0f * (qxx + qzz);
-			result[1][2] = 2.0f * (qyz + qwx);
-
-			result[2][0] = 2.0f * (qxz + qwy);
-			result[2][1] = 2.0f * (qyz - qwx);
-			result[2][2] = 1.0f - 2.0f * (qxx + qyy);
-
-			return result;
 		}
 
 		quaternion& operator += (const quaternion& other) {

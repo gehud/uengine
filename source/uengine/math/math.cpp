@@ -4,7 +4,7 @@
 #include <numbers>
 
 namespace ue {
-	const float math::pi = std::numbers::pi_v<float>;
+	const float math::pi = math::atan(1) * 4;
 	const float math::epsilon = std::numeric_limits<float>::epsilon();
 	const float math::positive_infinity = std::numeric_limits<float>::infinity();
 	const float math::negative_infinity = -std::numeric_limits<float>::infinity();

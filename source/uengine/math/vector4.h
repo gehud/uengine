@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uengine/math/math.h"
+#include "uengine/math/vector3.h"
 #include "uengine/core/assertion.h"
 
 #include <ostream>
@@ -53,11 +54,27 @@ namespace ue {
 			return (&x)[index];
 		}
 
+		vector4& operator += (float number) {
+			x += number;
+			y += number;
+			z += number;
+			w += number;
+			return *this;
+		}
+
 		vector4& operator += (const vector4& other) {
 			x += other.x;
 			y += other.y;
 			z += other.z;
 			w += other.w;
+			return *this;
+		}
+
+		vector4& operator -= (float number) {
+			x -= number;
+			y -= number;
+			z -= number;
+			w -= number;
 			return *this;
 		}
 
@@ -77,6 +94,14 @@ namespace ue {
 			return *this;
 		}
 
+		vector4& operator *= (const vector4& other) {
+			x *= other.x;
+			y *= other.y;
+			z *= other.z;
+			w *= other.w;
+			return *this;
+		}
+
 		vector4& operator /= (float number) {
 			x /= number;
 			y /= number;
@@ -84,10 +109,26 @@ namespace ue {
 			w /= number;
 			return *this;
 		}
+
+		vector4& operator /= (const vector4& other) {
+			x /= other.x;
+			y /= other.y;
+			z /= other.z;
+			w /= other.w;
+			return *this;
+		}
+
+		operator vector3 () const {
+			return vector3(x, y, z);
+		}
 	};
 
 	inline vector4 operator + (const vector4& vector) {
 		return vector;
+	}
+
+	inline vector4 operator + (const vector4& vector, float number) {
+		return vector4(vector) += number;
 	}
 
 	inline vector4 operator + (const vector4& left, const vector4& right) {
@@ -98,6 +139,10 @@ namespace ue {
 		return vector4(-vector.x, -vector.y, -vector.z, -vector.w);
 	}
 
+	inline vector4 operator - (const vector4& left, float number) {
+		return vector4(left) -= number;
+	}
+
 	inline vector4 operator - (const vector4& left, const vector4& right) {
 		return vector4(left) -= right;
 	}
@@ -106,8 +151,16 @@ namespace ue {
 		return vector4(vector) *= number;
 	}
 
+	inline vector4 operator * (const vector4& left, const vector4& right) {
+		return vector4(left) *= right;
+	}
+
 	inline vector4 operator / (const vector4& vector, float number) {
 		return vector4(vector) /= number;
+	}
+
+	inline vector4 operator / (const vector4& left, const vector4& right) {
+		return vector4(left) /= right;
 	}
 
 	inline bool operator == (const vector4& left, const vector4& right) {
