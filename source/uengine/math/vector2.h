@@ -3,6 +3,8 @@
 #include "uengine/math/math.h"
 #include "uengine/core/assertion.h"
 
+#include <glm/vec2.hpp>
+
 #include <ostream>
 
 namespace ue {
@@ -20,6 +22,8 @@ namespace ue {
 		vector2() = default;
 
 		vector2(float x, float y) : x(x), y(y) { }
+
+		vector2(const glm::vec2& vector) : vector2(vector.x, vector.y) { }
 
 		static int get_length() { return 2; }
 
@@ -77,6 +81,10 @@ namespace ue {
 			x /= number;
 			y /= number;
 			return *this;
+		}
+
+		operator glm::vec2() const {
+			return glm::vec2(x, y);
 		}
 	};
 

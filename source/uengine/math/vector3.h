@@ -1,7 +1,10 @@
 #pragma once
 
 #include "uengine/math/math.h"
+#include "uengine/math/vector2.h"
 #include "uengine/core/assertion.h"
+
+#include <glm/vec3.hpp>
 
 #include <ostream>
 
@@ -23,6 +26,8 @@ namespace ue {
 		vector3() = default;
 		
 		vector3(float x, float y, float z) : x(x), y(y), z(z) { }
+
+		vector3(const glm::vec3& vector) : vector3(vector.x, vector.y, vector.z) { }
 
 		static int get_length() { return 3; }
 
@@ -102,6 +107,14 @@ namespace ue {
 			y /= number;
 			z /= number;
 			return *this;
+		}
+
+		explicit operator vector2() const {
+			return vector2(x, y);
+		}
+
+		operator glm::vec3() const {
+			return glm::vec3(x, y, z);
 		}
 	};
 

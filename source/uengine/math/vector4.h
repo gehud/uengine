@@ -1,8 +1,11 @@
 #pragma once
 
 #include "uengine/math/math.h"
+#include "uengine/math/vector2.h"
 #include "uengine/math/vector3.h"
 #include "uengine/core/assertion.h"
+
+#include <glm/vec4.hpp>
 
 #include <ostream>
 
@@ -19,6 +22,8 @@ namespace ue {
 		vector4() = default;
 
 		vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) { }
+
+		vector4(const glm::vec4& vector) : vector4(vector.x, vector.y, vector.z, vector.w) { }
 
 		static int get_length() { return 4; }
 
@@ -54,27 +59,11 @@ namespace ue {
 			return (&x)[index];
 		}
 
-		vector4& operator += (float number) {
-			x += number;
-			y += number;
-			z += number;
-			w += number;
-			return *this;
-		}
-
 		vector4& operator += (const vector4& other) {
 			x += other.x;
 			y += other.y;
 			z += other.z;
 			w += other.w;
-			return *this;
-		}
-
-		vector4& operator -= (float number) {
-			x -= number;
-			y -= number;
-			z -= number;
-			w -= number;
 			return *this;
 		}
 
@@ -110,25 +99,21 @@ namespace ue {
 			return *this;
 		}
 
-		vector4& operator /= (const vector4& other) {
-			x /= other.x;
-			y /= other.y;
-			z /= other.z;
-			w /= other.w;
-			return *this;
+		explicit operator vector2() const {
+			return vector2(x, y);
 		}
 
-		operator vector3 () const {
+		explicit operator vector3() const {
 			return vector3(x, y, z);
+		}
+
+		operator glm::vec4() const {
+			return glm::vec4(x, y, z, w);
 		}
 	};
 
 	inline vector4 operator + (const vector4& vector) {
 		return vector;
-	}
-
-	inline vector4 operator + (const vector4& vector, float number) {
-		return vector4(vector) += number;
 	}
 
 	inline vector4 operator + (const vector4& left, const vector4& right) {
@@ -137,10 +122,6 @@ namespace ue {
 
 	inline vector4 operator - (const vector4& vector) {
 		return vector4(-vector.x, -vector.y, -vector.z, -vector.w);
-	}
-
-	inline vector4 operator - (const vector4& left, float number) {
-		return vector4(left) -= number;
 	}
 
 	inline vector4 operator - (const vector4& left, const vector4& right) {
@@ -157,10 +138,6 @@ namespace ue {
 
 	inline vector4 operator / (const vector4& vector, float number) {
 		return vector4(vector) /= number;
-	}
-
-	inline vector4 operator / (const vector4& left, const vector4& right) {
-		return vector4(left) /= right;
 	}
 
 	inline bool operator == (const vector4& left, const vector4& right) {

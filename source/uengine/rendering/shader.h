@@ -127,12 +127,7 @@ namespace ue {
 
 		virtual void set_matrix4x4(const char* name, const matrix4x4& value) {
 			GLint location = glGetUniformLocation(_id, name);
-			glUniformMatrix4fv(location, 1, GL_FALSE, value.to_array());
-		}
-
-		virtual void set_matrix4x4(const char* name, const glm::mat4& value) {
-			GLint location = glGetUniformLocation(_id, name);
-			glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+			glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(static_cast<glm::mat4>(value)));
 		}
 	private:
 		uint32 _id;
