@@ -1,126 +1,260 @@
 #pragma once
 
-#include "uengine/math/math.h"
+#include "uengine/math/vector.h"
 #include "uengine/core/assertion.h"
-
-#include <glm/vec2.hpp>
 
 #include <ostream>
 
 namespace ue {
-	struct vector2 {
-		static const vector2 zero;
-		static const vector2 one;
-		static const vector2 left;
-		static const vector2 right;
-		static const vector2 down;
-		static const vector2 up;
+	template<typename T>
+	struct vector<2, T> {
+	public:
+		T x, y;
 
-		float x = 0.0f;
-		float y = 0.0f;
+		constexpr vector() : x(0), y(0) { }
 
-		vector2() = default;
+		constexpr vector(T x, T y) : x(x), y(y) { }
 
-		vector2(float x, float y) : x(x), y(y) { }
+		constexpr vector(T scalar) : x(scalar), y(scalar) { }
 
-		vector2(const glm::vec2& vector) : vector2(vector.x, vector.y) { }
+		constexpr vector(const vector<2, T>& other) : x(other.x), y(other.y) { }
 
-		static int get_length() { return 2; }
+		static constexpr int length() { return 2; }
 
-		static vector2 get_zero() { return zero; }
-		static vector2 get_one() { return one; }
-		static vector2 get_left() { return left; }
-		static vector2 get_right() { return right; }
-		static vector2 get_down() { return down; }
-		static vector2 get_up() { return up; }
+		static constexpr vector<2, T> one() { return vector<2, T>(1, 1); }
 
-		float get_magnitude() const {
-			return math::sqrt(x * x + y * y);
-		}
+		static constexpr vector<2, T> zero() { return vector<2, T>(0, 0); }
 
-		vector2 get_normalized() const {
-			float magnitude = get_magnitude();
-			if (magnitude > 0)
-				return vector2(x / magnitude, y / magnitude);
-			return zero;
-		}
+		static constexpr vector<2, T> right() { return vector<2, T>(1, 0); }
 
-		void normalize() {
-			*this = get_normalized();
-		}
+		static constexpr vector<2, T> left() { return vector<2, T>(-1, 0); }
 
-		float& operator [] (int index) {
-			UE_CORE_ASSERT(index > 0 && index < get_length(), "Index out of range.");
+		static constexpr vector<2, T> up() { return vector<2, T>(0, 1); }
+
+		static constexpr vector<2, T> down() { return vector<2, T>(0, -1); }
+
+		constexpr T& operator [] (int index) {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
 			return (&x)[index];
 		}
 
-		float operator [] (int index) const {
-			UE_CORE_ASSERT(index > 0 && index < get_length(), "Index out of range.");
+		constexpr T operator [] (int index) const {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
 			return (&x)[index];
 		}
 
-		vector2& operator += (const vector2& other) {
-			x += other.x;
-			y += other.y;
+		constexpr vector<2, T>& operator += (T scalar) {
+			this->x += scalar;
+			this->y += scalar;
 			return *this;
 		}
 
-		vector2& operator -= (const vector2& other) {
-			x -= other.x;
-			y -= other.y;
+		constexpr vector<2, T>& operator += (const vector<2, T>& other) {
+			this->x += other.x;
+			this->y += other.y;
 			return *this;
 		}
 
-		vector2& operator *= (float number) {
-			x *= number;
-			y *= number;
+		constexpr vector<2, T>& operator -= (T scalar) {
+			this->x -= scalar;
+			this->y -= scalar;
 			return *this;
 		}
 
-		vector2& operator /= (float number) {
-			x /= number;
-			y /= number;
+		constexpr vector<2, T>& operator -= (const vector<2, T>& other) {
+			this->x -= other.x;
+			this->y -= other.y;
 			return *this;
 		}
 
-		operator glm::vec2() const {
-			return glm::vec2(x, y);
+		constexpr vector<2, T>& operator *= (T scalar) {
+			this->x *= scalar;
+			this->y *= scalar;
+			return *this;
+		}
+
+		constexpr vector<2, T>& operator *= (const vector<2, T>& other) {
+			this->x *= other.x;
+			this->y *= other.y;
+			return *this;
+		}
+
+		constexpr vector<2, T>& operator /= (T scalar) {
+			this->x /= scalar;
+			this->y /= scalar;
+			return *this;
+		}
+
+		constexpr vector<2, T>& operator /= (const vector<2, T>& other) {
+			this->x /= other.x;
+			this->y /= other.y;
+			return *this;
 		}
 	};
 
-	inline vector2 operator + (const vector2& vector) {
-		return vector;
+	template<>
+	struct vector<2, int> {
+	public:
+		int x, y;
+
+		constexpr vector() : x(0), y(0) { }
+
+		constexpr vector(int x, int y) : x(x), y(y) { }
+
+		constexpr vector(int scalar) : x(scalar), y(scalar) { }
+
+		constexpr vector(const vector<2, int>& other) : x(other.x), y(other.y) { }
+
+		static constexpr int length() { return 2; }
+
+		static constexpr vector<2, int> one() { return vector<2, int>(1, 1); }
+
+		static constexpr vector<2, int> zero() { return vector<2, int>(0, 0); }
+
+		static constexpr vector<2, int> right() { return vector<2, int>(1, 0); }
+
+		static constexpr vector<2, int> left() { return vector<2, int>(-1, 0); }
+
+		static constexpr vector<2, int> up() { return vector<2, int>(0, 1); }
+
+		static constexpr vector<2, int> down() { return vector<2, int>(0, -1); }
+
+		constexpr int& operator [] (int index) {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
+			return (&x)[index];
+		}
+
+		constexpr int operator [] (int index) const {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
+			return (&x)[index];
+		}
+
+		constexpr vector<2, int>& operator += (int scalar) {
+			this->x += scalar;
+			this->y += scalar;
+			return *this;
+		}
+
+		constexpr vector<2, int>& operator += (const vector<2, int>& other) {
+			this->x += other.x;
+			this->y += other.y;
+			return *this;
+		}
+
+		constexpr vector<2, int>& operator -= (int scalar) {
+			this->x -= scalar;
+			this->y -= scalar;
+			return *this;
+		}
+
+		constexpr vector<2, int>& operator -= (const vector<2, int>& other) {
+			this->x -= other.x;
+			this->y -= other.y;
+			return *this;
+		}
+
+		constexpr vector<2, int>& operator *= (int scalar) {
+			this->x *= scalar;
+			this->y *= scalar;
+			return *this;
+		}
+
+		constexpr vector<2, int>& operator *= (const vector<2, int>& other) {
+			this->x *= other.x;
+			this->y *= other.y;
+			return *this;
+		}
+
+		constexpr vector<2, int>& operator /= (int scalar) {
+			this->x /= scalar;
+			this->y /= scalar;
+			return *this;
+		}
+
+		constexpr vector<2, int>& operator /= (const vector<2, int>& other) {
+			this->x /= other.x;
+			this->y /= other.y;
+			return *this;
+		}
+
+		constexpr vector<2, int>& operator ++ () {
+			++this->x;
+			++this->y;
+			return *this;
+		}
+
+		constexpr vector<2, int> operator ++ (int) {
+			vector<2, int> result(*this);
+			++(*this);
+			return result;
+		}
+
+		constexpr vector<2, int>& operator -- () {
+			--this->x;
+			--this->y;
+			return *this;
+		}
+
+		constexpr vector<2, int> operator -- (int) {
+			vector<2, int> result(*this);
+			--(*this);
+			return result;
+		}
+	};
+
+	template<typename T>
+	constexpr vector<2, T> operator + (const vector<2, T>& v, T s) {
+		return vector<2, T>(v.x + s, v.y + s);
 	}
 
-	inline vector2 operator + (const vector2& left, const vector2& right) {
-		return vector2(left) += right;
+	template<typename T>
+	constexpr vector<2, T> operator + (const vector<2, T>& l, const vector<2, T>& r) {
+		return vector<2, T>(l.x + r.x, l.y + r.y);
 	}
 
-	inline vector2 operator - (const vector2& vector) {
-		return vector2(-vector.x, -vector.y);
+	template<typename T>
+	constexpr vector<2, T> operator - (const vector<2, T>& v) {
+		return vector<2, T>(-v.x, -v.y);
 	}
 
-	inline vector2 operator - (const vector2& left, const vector2& right) {
-		return vector2(left) -= right;
+	template<typename T>
+	constexpr vector<2, T> operator - (const vector<2, T>& v, T s) {
+		return vector<2, T>(v.x - s, v.y - s);
 	}
 
-	inline vector2 operator * (const vector2& vector, float number) {
-		return vector2(vector) *= number;
+	template<typename T>
+	constexpr vector<2, T> operator - (const vector<2, T>& l, const vector<2, T>& r) {
+		return vector<2, T>(l.x - r.x, l.y - r.y);
 	}
 
-	inline vector2 operator / (const vector2& vector, float number) {
-		return vector2(vector) /= number;
+	template<typename T>
+	constexpr vector<2, T> operator * (const vector<2, T>& v, T s) {
+		return vector<2, T>(v.x * s, v.y * s);
 	}
 
-	inline bool operator == (const vector2& left, const vector2& right) {
-		return left.x == right.x && left.y == right.y;
+	template<typename T>
+	constexpr vector<2, T> operator * (const vector<2, T>& l, const vector<2, T>& r) {
+		return vector<2, T>(l.x * r.x, l.y * r.y);
 	}
 
-	inline bool operator != (const vector2& left, const vector2& right) {
-		return !(left == right);
+	template<typename T>
+	constexpr vector<2, T> operator / (const vector<2, T>& v, T s) {
+		return vector<2, T>(v.x / s, v.y / s);
 	}
 
-	inline std::ostream& operator << (std::ostream& ostream, const vector2& vector) {
-		return ostream << "(" << vector.x << ", " << vector.y << ")";
+	template<typename T>
+	constexpr vector<2, T> operator / (const vector<2, T>& l, const vector<2, T>& r) {
+		return vector<2, T>(l.x / r.x, l.y / r.y);
 	}
+
+	template<typename T>
+	constexpr std::ostream& operator << (std::ostream& ostream, const vector<2, T>& v) {
+		return ostream << "(" << v.x << ", " << v.y << ")";
+	}
+
+	template<typename T>
+	using vector2 = vector<2, T>;
+
+	typedef vector2<int> vector2i;
+	typedef vector2<float> vector2f;
 }

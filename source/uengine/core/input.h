@@ -36,13 +36,13 @@ namespace ue {
 
 		static bool get_mouse_button_up(int button);
 
-		static vector2 get_mouse_position() { return mouse_position; }
+		static vector2f get_mouse_position() { return mouse_position; }
 
-		static vector2 get_mouse_position_delta() { return mouse_position_delta; }
+		static vector2f get_mouse_position_delta() { return mouse_position_delta; }
 	protected:
-		static vector2 last_mouse_position;
-		static vector2 mouse_position;
-		static vector2 mouse_position_delta;
+		static vector2f last_mouse_position;
+		static vector2f mouse_position;
+		static vector2f mouse_position_delta;
 
 		static void update();
 

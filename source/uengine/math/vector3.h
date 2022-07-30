@@ -1,156 +1,303 @@
 #pragma once
 
 #include "uengine/math/math.h"
-#include "uengine/math/vector2.h"
+#include "uengine/math/vector.h"
 #include "uengine/core/assertion.h"
-
-#include <glm/vec3.hpp>
 
 #include <ostream>
 
 namespace ue {
-	struct vector3 {
-		static const vector3 zero;
-		static const vector3 one;
-		static const vector3 left;
-		static const vector3 right;
-		static const vector3 down;
-		static const vector3 up;
-		static const vector3 back;
-		static const vector3 forward;
+	template<typename T>
+	struct vector<3, T> {
+	public:
+		T x, y, z;
 
-		float x = 0.0f;
-		float y = 0.0f;
-		float z = 0.0f;
+		constexpr vector() : x(0), y(0), z(0) { }
 
-		vector3() = default;
-		
-		vector3(float x, float y, float z) : x(x), y(y), z(z) { }
+		constexpr vector(T x, T y, T z) : x(x), y(y), z(z) { }
 
-		vector3(const glm::vec3& vector) : vector3(vector.x, vector.y, vector.z) { }
+		constexpr vector(T scalar) : x(scalar), y(scalar), z(scalar) { }
 
-		static int get_length() { return 3; }
+		constexpr vector(const vector<3, T>& other) : x(other.x), y(other.y), z(other.z) { }
 
-		static vector3 get_zero() { return zero; }
-		static vector3 get_one() { return one; }
-		static vector3 get_left() { return left; }
-		static vector3 get_right() { return right; }
-		static vector3 get_down() { return down; }
-		static vector3 get_up() { return up; }
-		static vector3 get_back() { return back; }
-		static vector3 get_forward() { return forward; }
+		static constexpr int length() { return 3; }
 
-		static float dot(const vector3& a, const vector3& b) {
-			return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
+		static constexpr vector<3, T> one() { return vector<3, T>(1, 1, 1); }
+
+		static constexpr vector<3, T> zero() { return vector<3, T>(0, 0, 0); }
+
+		static constexpr vector<3, T> right() { return vector<3, T>(1, 0, 0); }
+
+		static constexpr vector<3, T> left() { return vector<3, T>(-1, 0, 0); }
+
+		static constexpr vector<3, T> up() { return vector<3, T>(0, 1, 0); }
+
+		static constexpr vector<3, T> down() { return vector<3, T>(0, -1, 0); }
+
+		static constexpr vector<3, T> forward() { return vector<3, T>(0, 0, 1); }
+
+		static constexpr vector<3, T> back() { return vector<3, T>(0, 0, -1); }
+
+		static constexpr vector<3, T> sin(const vector<3, T>& vector) {
+			return ue::vector<3, T>(math::sin(vector.x), math::sin(vector.y), math::sin(vector.z));
 		}
 
-		static float angle(const vector3& a, const vector3& b) {
-			return math::degrees(math::acos(dot(a, b) / ((a.get_magnitude() * b.get_magnitude()))));
+		static constexpr vector<3, T> cos(const vector<3, T>& vector) {
+			return ue::vector<3, T>(math::cos(vector.x), math::cos(vector.y), math::cos(vector.z));
 		}
 
-		static vector3 sin(const vector3& vector) {
-			return vector3(math::sin(vector.x), math::sin(vector.y), math::sin(vector.z));
+		static constexpr vector<3, T> radians(const vector<3, T>& vector) {
+			return ue::vector<3, T>(math::radians(vector.x), math::radians(vector.y), math::radians(vector.z));
 		}
 
-		static vector3 cos(const vector3& vector) {
-			return vector3(math::cos(vector.x), math::cos(vector.y), math::cos(vector.z));
+		static constexpr vector<3, T> degrees(const vector<3, T>& vector) {
+			return ue::vector<3, T>(math::degrees(vector.x), math::degrees(vector.y), math::degrees(vector.z));
 		}
 
-		float get_magnitude() const {
-			return math::sqrt(x * x + y * y + z * z);
-		}
-
-		vector3 get_normalized() const {
-			float magnitude = get_magnitude();
-			if (magnitude > 0)
-				return vector3(x / magnitude, y / magnitude, z / magnitude);
-			return zero;
-		}
-
-		void normalize() {
-			*this = get_normalized();
-		}
-
-		float& operator [] (int index) {
-			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
+		constexpr T& operator [] (int index) {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
 			return (&x)[index];
 		}
 
-		float operator [] (int index) const {
-			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
+		constexpr T operator [] (int index) const {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
 			return (&x)[index];
 		}
 
-		vector3& operator += (const vector3& other) {
-			x += other.x;
-			y += other.y;
-			z += other.z;
+		constexpr vector<3, T>& operator += (T scalar) {
+			this->x += scalar;
+			this->y += scalar;
+			this->z += scalar;
 			return *this;
 		}
 
-		vector3& operator -= (const vector3& other) {
-			x -= other.x;
-			y -= other.y;
-			z -= other.z;
+		constexpr vector<3, T>& operator += (const vector<3, T>& other) {
+			this->x += other.x;
+			this->y += other.y;
+			this->z += other.z;
 			return *this;
 		}
 
-		vector3& operator *= (float number) {
-			x *= number;
-			y *= number;
-			z *= number;
+		constexpr vector<3, T>& operator -= (T scalar) {
+			this->x -= scalar;
+			this->y -= scalar;
+			this->z -= scalar;
 			return *this;
 		}
 
-		vector3& operator /= (float number) {
-			x /= number;
-			y /= number;
-			z /= number;
+		constexpr vector<3, T>& operator -= (const vector<3, T>& other) {
+			this->x -= other.x;
+			this->y -= other.y;
+			this->z -= other.z;
 			return *this;
 		}
 
-		explicit operator vector2() const {
-			return vector2(x, y);
+		constexpr vector<3, T>& operator *= (T scalar) {
+			this->x *= scalar;
+			this->y *= scalar;
+			this->z *= scalar;
+			return *this;
 		}
 
-		operator glm::vec3() const {
-			return glm::vec3(x, y, z);
+		constexpr vector<3, T>& operator *= (const vector<3, T>& other) {
+			this->x *= other.x;
+			this->y *= other.y;
+			this->z *= other.z;
+			return *this;
+		}
+
+		constexpr vector<3, T>& operator /= (T scalar) {
+			this->x /= scalar;
+			this->y /= scalar;
+			this->z /= scalar;
+			return *this;
+		}
+
+		constexpr vector<3, T>& operator /= (const vector<3, T>& other) {
+			this->x /= other.x;
+			this->y /= other.y;
+			this->z /= other.z;
+			return *this;
 		}
 	};
 
-	inline vector3 operator + (const vector3& vector) {
-		return vector;
+	template<>
+	struct vector<3, int> {
+	public:
+		int x, y, z;
+
+		constexpr vector() : x(0), y(0), z(0) { }
+
+		constexpr vector(int x, int y, int z) : x(x), y(y), z(z) { }
+
+		constexpr vector(int scalar) : x(scalar), y(scalar), z(scalar) { }
+
+		constexpr vector(const vector<3, int>& other) : x(other.x), y(other.y), z(other.z) { }
+
+		static constexpr int length() { return 3; }
+
+		static constexpr vector<3, int> one() { return vector<3, int>(1, 1, 1); }
+
+		static constexpr vector<3, int> zero() { return vector<3, int>(0, 0, 0); }
+								   
+		static constexpr vector<3, int> right() { return vector<3, int>(1, 0, 0); }
+								   
+		static constexpr vector<3, int> left() { return vector<3, int>(-1, 0, 0); }
+								   
+		static constexpr vector<3, int> up() { return vector<3, int>(0, 1, 0); }
+								   
+		static constexpr vector<3, int> down() { return vector<3, int>(0, -1, 0); }
+								   
+		static constexpr vector<3, int> forward() { return vector<3, int>(0, 0, 1); }
+								   
+		static constexpr vector<3, int> back() { return vector<3, int>(0, 0, -1); }
+
+		constexpr int& operator [] (int index) {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
+			return (&x)[index];
+		}
+
+		constexpr int operator [] (int index) const {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
+			return (&x)[index];
+		}
+
+		constexpr vector<3, int>& operator += (int scalar) {
+			this->x += scalar;
+			this->y += scalar;
+			this->z += scalar;
+			return *this;
+		}
+
+		constexpr vector<3, int>& operator += (const vector<3, int>& other) {
+			this->x += other.x;
+			this->y += other.y;
+			this->z += other.z;
+			return *this;
+		}
+
+		constexpr vector<3, int>& operator -= (int scalar) {
+			this->x -= scalar;
+			this->y -= scalar;
+			this->z -= scalar;
+			return *this;
+		}
+
+		constexpr vector<3, int>& operator -= (const vector<3, int>& other) {
+			this->x -= other.x;
+			this->y -= other.y;
+			this->z -= other.z;
+			return *this;
+		}
+
+		constexpr vector<3, int>& operator *= (int scalar) {
+			this->x *= scalar;
+			this->y *= scalar;
+			this->z *= scalar;
+			return *this;
+		}
+
+		constexpr vector<3, int>& operator *= (const vector<3, int>& other) {
+			this->x *= other.x;
+			this->y *= other.y;
+			this->z *= other.z;
+			return *this;
+		}
+
+		constexpr vector<3, int>& operator /= (int scalar) {
+			this->x /= scalar;
+			this->y /= scalar;
+			this->z /= scalar;
+			return *this;
+		}
+
+		constexpr vector<3, int>& operator /= (const vector<3, int>& other) {
+			this->x /= other.x;
+			this->y /= other.y;
+			this->z /= other.z;
+			return *this;
+		}
+
+		constexpr vector<3, int>& operator ++ () {
+			++this->x;
+			++this->y;
+			++this->z;
+			return *this;
+		}
+
+		constexpr vector<3, int> operator ++ (int) {
+			vector<3, int> result(*this);
+			++(*this);
+			return result;
+		}
+
+		constexpr vector<3, int>& operator -- () {
+			--this->x;
+			--this->y;
+			--this->z;
+			return *this;
+		}
+
+		constexpr vector<3, int> operator -- (int) {
+			vector<3, int> result(*this);
+			--(*this);
+			return result;
+		}
+	};
+
+	template<typename T>
+	constexpr vector<3, T> operator + (const vector<3, T>& v, T s) {
+		return vector<3, T>(v.x + s, v.y + s, v.z + s);
 	}
 
-	inline vector3 operator + (const vector3& left, const vector3& right) {
-		return vector3(left) += right;
+	template<typename T>
+	constexpr vector<3, T> operator + (const vector<3, T>& l, const vector<3, T>& r) {
+		return vector<3, T>(l.x + r.x, l.y + r.y, l.z + r.z);
 	}
 
-	inline vector3 operator - (const vector3& vector) {
-		return vector3(-vector.x, -vector.y, -vector.z);
+	template<typename T>
+	constexpr vector<3, T> operator - (const vector<3, T>& v) {
+		return vector<3, T>(-v.x, -v.y, -v.z);
 	}
 
-	inline vector3 operator - (const vector3& left, const vector3& right) {
-		return vector3(left) -= right;
+	template<typename T>
+	constexpr vector<3, T> operator - (const vector<3, T>& v, T s) {
+		return vector<3, T>(v.x - s, v.y - s, v.z - s);
 	}
 
-	inline vector3 operator * (const vector3& vector, float number) {
-		return vector3(vector) *= number;
+	template<typename T>
+	constexpr vector<3, T> operator - (const vector<3, T>& l, const vector<3, T>& r) {
+		return vector<3, T>(l.x - r.x, l.y - r.y, l.z - r.z);
 	}
 
-	inline vector3 operator / (const vector3& vector, float number) {
-		return vector3(vector) /= number;
+	template<typename T>
+	constexpr vector<3, T> operator * (const vector<3, T>& v, T s) {
+		return vector<3, T>(v.x * s, v.y * s, v.z * s);
 	}
 
-	inline bool operator == (const vector3& left, const vector3& right) {
-		return left.x == right.x && left.y == right.y && left.z == right.z;
+	template<typename T>
+	constexpr vector<3, T> operator * (const vector<3, T>& l, const vector<3, T>& r) {
+		return vector<3, T>(l.x * r.x, l.y * r.y, l.z * r.z);
 	}
 
-	inline bool operator != (const vector3& left, const vector3& right) {
-		return !(left == right);
+	template<typename T>
+	constexpr vector<3, T> operator / (const vector<3, T>& v, T s) {
+		return vector<3, T>(v.x / s, v.y / s, v.z / s);
 	}
 
-	inline std::ostream& operator << (std::ostream& ostream, const vector3& vector) {
-		return ostream << "(" << vector.x << ", " << vector.y << ", " << vector.z << ")";
+	template<typename T>
+	constexpr vector<3, T> operator / (const vector<3, T>& l, const vector<3, T>& r) {
+		return vector<3, T>(l.x / r.x, l.y / r.y, l.z / r.z);
 	}
+
+	template<typename T>
+	constexpr std::ostream& operator << (std::ostream& ostream, const vector<3, T>& v) {
+		return ostream << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	}
+
+	template<typename T>
+	using vector3 = vector<3, T>;
+
+	typedef vector3<int> vector3i;
+	typedef vector3<float> vector3f;
 }

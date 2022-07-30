@@ -24,10 +24,10 @@ namespace ue {
 		int get_width() const { return _width; }
 		int get_height() const { return _height; }
 
-		vector2 get_position() const {
+		vector2f get_position() const {
 			int x, y;
 			glfwGetWindowPos(_handle, &x, &y);
-			return vector2(x, y);
+			return vector2f(x, y);
 		}
 
 		bool is_vsync() const { return _vsync; }

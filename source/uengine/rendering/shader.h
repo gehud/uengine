@@ -110,24 +110,29 @@ namespace ue {
 			glUniform1f(location, value);
 		}
 
-		virtual void set_vector2(const char* name, const vector2& value) {
+		virtual void set_vector2(const char* name, const vector2f& value) {
 			GLint location = glGetUniformLocation(_id, name);
 			glUniform2f(location, value.x, value.y);
 		}
 
-		virtual void set_vector3(const char* name, const vector3& value) {
+		virtual void set_vector3(const char* name, const vector3f& value) {
 			GLint location = glGetUniformLocation(_id, name);
 			glUniform3f(location, value.x, value.y, value.z);
 		}
 
-		virtual void set_vector4(const char* name, const vector4& value) {
+		virtual void set_vector4(const char* name, const vector4f& value) {
 			GLint location = glGetUniformLocation(_id, name);
 			glUniform4f(location, value.x, value.y, value.z, value.w);
 		}
 
 		virtual void set_matrix4x4(const char* name, const matrix4x4& value) {
 			GLint location = glGetUniformLocation(_id, name);
-			glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(static_cast<glm::mat4>(value)));
+			glUniformMatrix4fv(location, 1, GL_FALSE, value.data());
+		}
+
+		virtual void set_matrix4x4(const char* name, const glm::mat4& value) {
+			GLint location = glGetUniformLocation(_id, name);
+			glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 		}
 	private:
 		uint32 _id;

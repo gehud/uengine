@@ -1,154 +1,284 @@
 #pragma once
 
-#include "uengine/math/math.h"
-#include "uengine/math/vector2.h"
-#include "uengine/math/vector3.h"
+#include "uengine/math/vector.h"
 #include "uengine/core/assertion.h"
-
-#include <glm/vec4.hpp>
 
 #include <ostream>
 
 namespace ue {
-	struct vector4 {
-		static const vector4 zero;
-		static const vector4 one;
+	template<typename T>
+	struct vector<4, T> {
+	public:
+		T x, y, z, w;
 
-		float x = 0.0f;
-		float y = 0.0f;
-		float z = 0.0f;
-		float w = 0.0f;
+		constexpr vector() : x(0), y(0), z(0), w(0) { }
 
-		vector4() = default;
+		constexpr vector(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) { }
 
-		vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) { }
+		constexpr vector(T scalar) : x(scalar), y(scalar), z(scalar), w(scalar) { }
 
-		vector4(const glm::vec4& vector) : vector4(vector.x, vector.y, vector.z, vector.w) { }
+		constexpr vector(const vector<4, T>& other) : x(other.x), y(other.y), z(other.z), w(other.w) { }
 
-		static int get_length() { return 4; }
+		static constexpr int length() { return 4; }
 
-		static vector4 get_zero() { return zero; }
-		static vector4 get_one() { return one; }
+		static constexpr vector<4, T> one() { return vector<4, T>(1, 1, 1, 1); }
+								
+		static constexpr vector<4, T> zero() { return vector<4, T>(0, 0, 0, 0); }
 
-		static float dot(const vector4& a, const vector4& b) {
-			return (a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w);
+		static constexpr float dot(const vector<4, T>& left, const vector<4, T>& right) {
+			return (left.x * right.x) + (left.y * right.y) + (left.z * right.z) + (left.w * right.w);
 		}
 
-		float get_magnitude() const {
-			return math::sqrt(x * x + y * y + z * z + w * w);
-		}
-
-		vector4 get_normalized() const {
-			float magnitude = get_magnitude();
-			if (magnitude > 0)
-				return vector4(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
-			return zero;
-		}
-
-		void normalize() {
-			*this = get_normalized();
-		}
-
-		float& operator [] (int index) {
-			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
+		constexpr T& operator [] (int index) {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
 			return (&x)[index];
 		}
 
-		float operator [] (int index) const {
-			UE_CORE_ASSERT(index >= 0 && index < get_length(), "Index out of range.");
+		constexpr T operator [] (int index) const {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
 			return (&x)[index];
 		}
 
-		vector4& operator += (const vector4& other) {
-			x += other.x;
-			y += other.y;
-			z += other.z;
-			w += other.w;
+		constexpr vector<4, T>& operator += (T scalar) {
+			this->x += scalar;
+			this->y += scalar;
+			this->z += scalar;
+			this->w += scalar;
 			return *this;
 		}
 
-		vector4& operator -= (const vector4& other) {
-			x -= other.x;
-			y -= other.y;
-			z -= other.z;
-			w -= other.w;
+		constexpr vector<4, T>& operator += (const vector<4, T>& other) {
+			this->x += other.x;
+			this->y += other.y;
+			this->z += other.z;
+			this->w += other.w;
 			return *this;
 		}
 
-		vector4& operator *= (float number) {
-			x *= number;
-			y *= number;
-			z *= number;
-			w *= number;
+		constexpr vector<4, T>& operator -= (T scalar) {
+			this->x -= scalar;
+			this->y -= scalar;
+			this->z -= scalar;
+			this->w -= scalar;
 			return *this;
 		}
 
-		vector4& operator *= (const vector4& other) {
-			x *= other.x;
-			y *= other.y;
-			z *= other.z;
-			w *= other.w;
+		constexpr vector<4, T>& operator -= (const vector<4, T>& other) {
+			this->x -= other.x;
+			this->y -= other.y;
+			this->z -= other.z;
+			this->w -= other.w;
 			return *this;
 		}
 
-		vector4& operator /= (float number) {
-			x /= number;
-			y /= number;
-			z /= number;
-			w /= number;
+		constexpr vector<4, T>& operator *= (T scalar) {
+			this->x *= scalar;
+			this->y *= scalar;
+			this->z *= scalar;
+			this->w *= scalar;
 			return *this;
 		}
 
-		explicit operator vector2() const {
-			return vector2(x, y);
+		constexpr vector<4, T>& operator *= (const vector<4, T>& other) {
+			this->x *= other.x;
+			this->y *= other.y;
+			this->z *= other.z;
+			this->w *= other.w;
+			return *this;
 		}
 
-		explicit operator vector3() const {
-			return vector3(x, y, z);
+		constexpr vector<4, T>& operator /= (T scalar) {
+			this->x /= scalar;
+			this->y /= scalar;
+			this->z /= scalar;
+			this->w /= scalar;
+			return *this;
 		}
 
-		operator glm::vec4() const {
-			return glm::vec4(x, y, z, w);
+		constexpr vector<4, T>& operator /= (const vector<4, T>& other) {
+			this->x /= other.x;
+			this->y /= other.y;
+			this->z /= other.z;
+			this->w /= other.w;
+			return *this;
 		}
 	};
 
-	inline vector4 operator + (const vector4& vector) {
-		return vector;
+	template<>
+	struct vector<4, int> {
+	public:
+		int x, y, z, w;
+
+		constexpr vector() : x(0), y(0), z(0), w(0) { }
+
+		constexpr vector(int x, int y, int z, int w) : x(x), y(y), z(z), w(w) { }
+
+		constexpr vector(int scalar) : x(scalar), y(scalar), z(scalar), w(scalar) { }
+
+		constexpr vector(const vector<4, int>& other) : x(other.x), y(other.y), z(other.z), w(other.w) { }
+
+		static constexpr int length() { return 4; }
+
+		static constexpr vector<4, int> one() { return vector<4, int>(1, 1, 1, 1); }
+
+		static constexpr vector<4, int> zero() { return vector<4, int>(0, 0, 0, 0); }
+
+		constexpr int& operator [] (int index) {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
+			return (&x)[index];
+		}
+
+		constexpr int operator [] (int index) const {
+			UE_CORE_ASSERT(index >= 0 && index < length(), "Index out or range.");
+			return (&x)[index];
+		}
+
+		constexpr vector<4, int>& operator += (int scalar) {
+			this->x += scalar;
+			this->y += scalar;
+			this->z += scalar;
+			this->w += scalar;
+			return *this;
+		}
+
+		constexpr vector<4, int>& operator += (const vector<4, int>& other) {
+			this->x += other.x;
+			this->y += other.y;
+			this->z += other.z;
+			this->w += other.w;
+			return *this;
+		}
+
+		constexpr vector<4, int>& operator -= (int scalar) {
+			this->x -= scalar;
+			this->y -= scalar;
+			this->z -= scalar;
+			this->w -= scalar;
+			return *this;
+		}
+
+		constexpr vector<4, int>& operator -= (const vector<4, int>& other) {
+			this->x -= other.x;
+			this->y -= other.y;
+			this->z -= other.z;
+			this->w -= other.w;
+			return *this;
+		}
+
+		constexpr vector<4, int>& operator *= (int scalar) {
+			this->x *= scalar;
+			this->y *= scalar;
+			this->z *= scalar;
+			this->w *= scalar;
+			return *this;
+		}
+
+		constexpr vector<4, int>& operator *= (const vector<4, int>& other) {
+			this->x *= other.x;
+			this->y *= other.y;
+			this->z *= other.z;
+			this->w *= other.w;
+			return *this;
+		}
+
+		constexpr vector<4, int>& operator /= (int scalar) {
+			this->x /= scalar;
+			this->y /= scalar;
+			this->z /= scalar;
+			this->w /= scalar;
+			return *this;
+		}
+
+		constexpr vector<4, int>& operator /= (const vector<4, int>& other) {
+			this->x /= other.x;
+			this->y /= other.y;
+			this->z /= other.z;
+			this->w /= other.w;
+			return *this;
+		}
+
+		constexpr vector<4, int>& operator ++ () {
+			++this->x;
+			++this->y;
+			++this->z;
+			++this->w;
+			return *this;
+		}
+
+		constexpr vector<4, int> operator ++ (int) {
+			vector<4, int> result(*this);
+			++(*this);
+			return result;
+		}
+
+		constexpr vector<4, int>& operator -- () {
+			--this->x;
+			--this->y;
+			--this->z;
+			--this->w;
+			return *this;
+		}
+
+		constexpr vector<4, int> operator -- (int) {
+			vector<4, int> result(*this);
+			--(*this);
+			return result;
+		}
+	};
+
+	template<typename T>
+	constexpr vector<4, T> operator + (const vector<4, T>& v, T s) {
+		return vector<4, T>(v.x + s, v.y + s, v.z + s, v.w + s);
 	}
 
-	inline vector4 operator + (const vector4& left, const vector4& right) {
-		return vector4(left) += right;
+	template<typename T>
+	constexpr vector<4, T> operator + (const vector<4, T>& l, const vector<4, T>& r) {
+		return vector<4, T>(l.x + r.x, l.y + r.y, l.z + r.z, l.w + r.w);
 	}
 
-	inline vector4 operator - (const vector4& vector) {
-		return vector4(-vector.x, -vector.y, -vector.z, -vector.w);
+	template<typename T>
+	constexpr vector<4, T> operator - (const vector<4, T>& v) {
+		return vector<4, T>(-v.x, -v.y, -v.z, -v.w);
 	}
 
-	inline vector4 operator - (const vector4& left, const vector4& right) {
-		return vector4(left) -= right;
+	template<typename T>
+	constexpr vector<4, T> operator - (const vector<4, T>& v, T s) {
+		return vector<4, T>(v.x - s, v.y - s, v.z - s, v.w - s);
 	}
 
-	inline vector4 operator * (const vector4& vector, float number) {
-		return vector4(vector) *= number;
+	template<typename T>
+	constexpr vector<4, T> operator - (const vector<4, T>& l, const vector<4, T>& r) {
+		return vector<4, T>(l.x - r.x, l.y - r.y, l.z - r.z, l.w - r.w);
 	}
 
-	inline vector4 operator * (const vector4& left, const vector4& right) {
-		return vector4(left) *= right;
+	template<typename T>
+	constexpr vector<4, T> operator * (const vector<4, T>& v, T s) {
+		return vector<4, T>(v.x * s, v.y * s, v.z * s, v.w * s);
 	}
 
-	inline vector4 operator / (const vector4& vector, float number) {
-		return vector4(vector) /= number;
+	template<typename T>
+	constexpr vector<4, T> operator * (const vector<4, T>& l, const vector<4, T>& r) {
+		return vector<4, T>(l.x * r.x, l.y * r.y, l.z * r.z, l.w * r.w);
 	}
 
-	inline bool operator == (const vector4& left, const vector4& right) {
-		return left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w;
+	template<typename T>
+	constexpr vector<4, T> operator / (const vector<4, T>& v, T s) {
+		return vector<4, T>(v.x / s, v.y / s, v.z / s, v.w / s);
 	}
 
-	inline bool operator != (const vector4& left, const vector4& right) {
-		return !(left == right);
+	template<typename T>
+	constexpr vector<4, T> operator / (const vector<4, T>& l, const vector<4, T>& r) {
+		return vector<4, T>(l.x / r.x, l.y / r.y, l.z / r.z, l.w / r.w);
 	}
 
-	inline std::ostream& operator << (std::ostream& ostream, const vector4& vector) {
-		return ostream << "(" << vector.x << ", " << vector.y << ", " << vector.z << ", " << vector.w << ")";
+	template<typename T>
+	constexpr std::ostream& operator << (std::ostream& ostream, const vector<4, T>& v) {
+		return ostream << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
 	}
+
+	template<typename T>
+	using vector4 = vector<4, T>;
+
+	typedef vector4<int> vector4i;
+	typedef vector4<float> vector4f;
 }

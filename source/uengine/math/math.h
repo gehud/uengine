@@ -1,15 +1,17 @@
 #pragma once
 
-#include <math.h>
+#include <cmath>
+#include <limits>
 
 namespace ue {
 	class math final {
 	public:
-		static const float pi;
-		static const float epsilon;
-		static const float positive_infinity;
-		static const float negative_infinity;
-	public:
+		math() = delete;
+
+		static constexpr float pi = 3.14159265358979323846;
+		static constexpr float epsilon = std::numeric_limits<float>::epsilon();
+		static constexpr float infinity = std::numeric_limits<float>::infinity();
+
 		static float abs(float x) { return fabsf(x); }
 		static float sqrt(float x) { return sqrtf(x); }
 
@@ -27,7 +29,5 @@ namespace ue {
 
 		static float radians(float degrees) { return degrees * (pi / 180.0f); }
 		static float degrees(float radians) { return radians * (180.0f / pi); }
-	private:
-		math() = default;
 	};
 }
